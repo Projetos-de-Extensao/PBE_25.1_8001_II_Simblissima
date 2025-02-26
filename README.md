@@ -6,26 +6,30 @@ Esse repositório é para ser utilizado pelos grupos como um template inicial, d
  
  (Apague essa seção)
 
-# NomedoProjeto
+# Projeto Simblissima
 
-**Número do Grupo**: XX<br>
-**Código da Disciplina**: FGA0208-T01<br>
+**Número do Grupo**: 2<br>
+**Código da Disciplina**: IBM-8936<br>
 
 ## Alunos
 |Matrícula | Aluno |
 | -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| Bernardo Lobo Marques  |  202401709433  |
+| Bernardo Moreira Guimarães Gonçalves  |  202401500283 |
+| Guilherme Dias Batista | 202402972091 |
+| Michel de Melo Guimarães | 202401569852 |
+| Julia Dominguez Curto |  202402192477 |
+
 
 ## Sobre 
-Descreva o seu projeto em linhas gerais. 
+Nosso projeto consiste de montar API REST para um tema ainda a se confirmar.
 
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em termos de interface e funcionamento.
 
 ## Instalação 
-**Linguagens**: xxxxxx<br>
-**Tecnologias**: xxxxxx<br>
+**Linguagens**: Python<br>
+**Tecnologias**: Django<br>
 Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 Insira um manual ou um script para auxiliar ainda mais.
 
