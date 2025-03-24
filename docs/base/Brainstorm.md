@@ -10,7 +10,7 @@ O brainstorm é uma técnica de elicitação de requisitos que consiste em reuni
  
 ## Metodologia
 <p align = "justify">
-A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .... e terminou..., onde o XXXX XXXX foi o moderador, direcionando a equipe com questões pré-elaboradas, e transcrevendo as respostas para o documento.
+A equipe se reuniu para debater ideias gerais sobre o projeto via encontro presencial durante a aula, começou e terminou uma ideia inicial durante a mesma, onde o Bernardo Lobo foi o moderador, direcionando a equipe com questões pré-elaboradas, e transcrevendo as respostas para o documento.
 </p>
  
 ## Brainstorm
@@ -22,16 +22,16 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### 1. Qual o objetivo principal da aplicação?
  
 <p align = "justify">
-<b>XXXX</b> - Deve ser uma plataforma onde qualquer pessoa possa...
+<b>XXXX</b> - Deve ser uma plataforma onde qualquer pessoa possa acessar e fazer um pedido de um produto que será entregue do continente para a ilha primeira.
 </p>
  
-<b>ZZZ</b> - A plataforma deve fornece...
+<b>ZZZ</b> - A plataforma deve fornecer pontos âncora para recebimento da mercadoria no continente e um serviço de logistica para o translocamento da mesma para outros pontos de entrega na Ilha Primeira.
  
-<b>YYYY</b> - O objetivo da aplicação é....
+<b>YYYY</b> - O objetivo da aplicação é facilitar o acesso a produtos disponibilizados apenas em terra para as pessoas residentes da ilha.
  
-<b>WWWW</b> - O principal objetivo da aplicação é a...
+<b>WWWW</b> - O principal objetivo da aplicação é a democratização do acesso à bens e mercadorias disponiveis de forma equalitaria para a sociedade continental dentro da ilha.
  
-<b>KKKK</b> - A plataforma deve gerenciar...
+<b>KKKK</b> - A plataforma deve gerenciar um sistema de logistica para a entrega dos pedidos aos moradores da ilha.
 </p>
  
 ---
@@ -39,61 +39,29 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### 2. Como será o processo para cadastrar um novo clientetorneio?
  
 <p align = "justify">
-<b>XXXX</b> - O moderador deverá fazer login e...
+<b>XXXX</b> - O morador deve entrar em contato com a assossiação de moradores da ilha, para que estes assim o disponibilizem uma conta de acesso à plataforma.
  
-<b>YYYY</b> - O cliente...
+<b>YYYY</b> - O cliente enquanto usuario da plataforma deve poder adicionar entrega no ponto ancora localizado no continente, que será entregue no ponto escolhido da ilha.
  
-<b>WWWW</b> - Com o usuário logado, ele deverá...
-
-<b>ZZZZ</b> - O cliente...
- 
-<b>KKK</b> - O cliente...
+<b>WWWW</b> - Com o usuário logado, ele deverá poder acessar a área de pagamento do serviço, ver um simples historico de pedidos e também realizar um novo pedido de entrega.
  
 ---
  
-### 3. Como será a forma de adicionar produtos?
+### 3. Como será a forma de adicionar pedidos?
  
 <p align = "justify">
-<b>XXXX</b> - O cliente ao cadastrar...
+<b>XXXX</b> - O cliente ao cadastrar novo pedido, insere todas as informações necessarias para o recebimento do mesmo no local âncora escolhido, também inserindo qual localidade gostaria que o mesmo fosse entregue na ilha.
 </p>
- 
-<p align = "justify">
-<b>YYYYY</b> - O produto tem...
-</p>
- 
-<b>ZZZZ</b> - O produto....
- 
-<b>XXXX</b> - O produto....
-
  
 ---
  
 ### 4. Outras perguntas pertinentes ao contexto
 
 <p align = "justify">
-<b>XXXX</b> - Com a localização...
- 
-<b>YYYY</b> - O cliente...
- 
-<b>ZZZ</b> - O cliente...
+<b>XXXX</b> - Nosso sistema funciona baseado em localidades âncora onde estará presente um ponto de acesso ao trabalho de logistica, que essa fará o transporte dos bens até outro ponto mais acessivel ao morador da ilha.
  
 ---
- 
-### 5. "Outras perguntas pertinentes ao contexto", Como seria a forma de adicionar do cliente adicionar os produtos ?
-<p align = "justify">
-<b>XXX</b> - O cliente....
-</p>
- 
-### 6. Quais informações seriam interessante para o cliente?
-<p align = "justify">
-   <b>XXX</b> - Informações...
-   
-   <b>ZZZZ</b> - O cliente usuário poderá acessar informações...
-
-   <b>WWWWs</b> - O usuário poderá ver scouts de partidas do torneio, ver as regras dos torneios, locais e data das partidas.
-   
-</p>
- 
+  
 ### Requisitos elicitados
  
 |ID|Descrição|
@@ -118,12 +86,8 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 <p align = "justify">
 Através da aplicação da técnica, foi possível elicitar alguns dos primeiros requisitos do projeto.
 </p>
-## Referências Bibliográficas
- 
-> BARBOSA, S. D. J; DA SILVA, B. S. Interação humano-computador. Elsevier, 2010.
- 
  
 ## Autor(es)
 | Data | Versão | Descrição | Autor(es) |
 | -- | -- | -- | -- |
-| DD/MM/YYYY | 1.0 | Criação do documento | XXX XXXX, XXXX XXXX, YYY YYYY e ZZZ XXXX |
+| 24/03/2025 | 1.0 | Criação do documento | Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo |
