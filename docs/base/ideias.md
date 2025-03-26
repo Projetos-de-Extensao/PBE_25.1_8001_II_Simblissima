@@ -1,5 +1,7 @@
-# Principais Ideias do Grupo
-
+---
+id: Ideias
+title: Ideias
+---
 ## Introdução
 Esta é uma página que documenta as principais ideias levantadas pelo grupo durante o processo de brainstorming e a sequência lógica que levou à escolha da ideia final. Nosso objetivo é apresentar de forma clara e organizada as etapas do desenvolvimento conceitual.
 
