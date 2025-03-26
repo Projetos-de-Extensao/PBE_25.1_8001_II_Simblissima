@@ -1,0 +1,17 @@
+@startmindmap
+
+*[#Orange] 1° 
+**[#LightBlue] 2°
+***[#Red] 3°
+***[#Red] 3°
+**[#LightBlue] 2°
+***[#Red] 3°
+***[#Red] 3°
+
+--[#LightBlue] 2°
+---[#Red] 3°
+--[#LightBlue] 2°
+---[#Red] 3°
+
+
+@endmindmap
