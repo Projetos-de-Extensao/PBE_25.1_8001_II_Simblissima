@@ -59,7 +59,7 @@ Por já existir um sistema criado anteriormente, será mais fácil integrar noss
 ---
 
 ## Conclusão
-A escolha da ideia final reflete o consenso do grupo e a viabilidade do projeto.
+A escolha da ideia final reflete o consenso do grupo e a viabilidade do projeto. Este site será atualizado conforme o progresso do desenvolvimento.
 
 ---
 
