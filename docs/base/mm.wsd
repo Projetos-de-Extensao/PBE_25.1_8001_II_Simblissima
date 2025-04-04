@@ -1,24 +1,24 @@
 @startmindmap
 
 *[#Gray] Aplicativo 
-**[#LightBlue]  Cadastrar
-***[#Cyan] Inserir endereço 
-***[#Cyan] Inserir meio de pagamento
-***[#Cyan] Inserir dado para contato
+**[#LightBlue] Morador
+***[#Cyan] Efetuar Login
+****[#Cyan] Cadastrar Entrega
+****[#Cyan] Checar Status da Entrega
+****[#Cyan] Ver Histórico de Entregas
+****[#Cyan] Alterar Informações
+*****[#Cyan] Validar Informações
+****[#Cyan] Pagar
+*****[#Cyan] Verificar Pagamento
+***[#Cyan] Sair da Conta
 
-**[#LightBlue] Fazer Pedido
-***[#Cyan] Escolher pedido
-***[#Cyan] Buscar dados do cadastro
-**[#LightBlue] Buscar categorias
-**[#LightBlue] Acessar Histórico
-***[#Cyan] Refazer pedido
-**[#LightBlue] Notificar Pedido
+**[#LightBlue] Admin
+***[#Cyan] Criar Conta para Morador
+***[#Cyan] Checar Pagamentos dos Clientes
 
-
-
-'--[#LightBlue] 2°
-'---[#Red] 3°
-
-
+**[#LightBlue] Ponto Âncora
+***[#Cyan] Receber Entrega
+****[#Cyan] Alterar Status de Entrega
+***[#Cyan] Efetuar Entrega
 
 @endmindmap
