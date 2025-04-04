@@ -1,0 +1,5 @@
+@startuml FastDelivery_DiagramaClasses
+
+interface Entrega{
+    
+}
