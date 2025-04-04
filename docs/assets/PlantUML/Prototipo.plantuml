@@ -1,0 +1,78 @@
+@startsalt
+{
+  SimblissimaDelivery - Dashboard 📊 
+{T#
++ Total Entregas       | 145 entregas   
++ Pontos Âncora Ativos | 8 unidades 
++ Taxa de Sucesso      | 98.5% 
++ Pagamentos Pendentes | 12
++ Status do Sistema    | Online ✅
+}
+
+[Ver Pontos Âncora 🏪] 
+[Relatórios 📊]
+..
+}
+@endsalt
+
+@startsalt
+{+
+  Menu Morador
+  
+[ 📦 Cadastrar Entrega     ]
+[ 🔍 Checar Status         ]
+[ 📋 Histórico de Entregas ]
+[ 💳 Efetuar Pagamento     ]
+[ ✏️ Alterar Informações   ]
+[ 🚪 Sair                  ]
+}
+@endsalt
+
+@startsalt
+{+
+  Menu Administrador
+  
+[ 👤 Criar Conta Morador   ]
+[ 💰 Verificar Pagamentos  ]
+[ 🏪 Gerenciar P. Âncora  ]
+[ 🚪 Sair                 ]
+}
+@endsalt
+
+@startsalt
+{
+{+
+  Cadastro de Entrega
+  Número do Pedido: | "AUTO"
+  Endereço de Entrega: | "_______"
+  Código de Confirmação: | "AUTO"
+  Status: | "Pendente"
+  Data de Entrega: | ^selecione^
+  
+  Informações de Pagamento
+  Valor: | "_______"
+  Método: | ^selecione^
+}
+
+[ 📤 Confirmar ]
+}
+@endsalt
+
+@startsalt
+{
+{+
+  Ponto Âncora - Controle
+  ID do Ponto: | "_______"
+  Endereço: | "_______"
+  Horário: | "_______"
+  
+  Status da Entrega
+  Número do Pedido: | "_______"
+  Novo Status: | ^selecione^
+}
+
+[ 🔄 Atualizar Status ]
+[ 📦 Receber Entrega  ]
+[ 📤 Efetuar Entrega  ]
+}
+@endsalt
