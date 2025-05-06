@@ -32,4 +32,4 @@ Explique como usar seu projeto caso haja algum passo a passo após o comando de 
 Adicione 1 ou mais vídeos com a execução do projeto final.
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
+https://www.canva.com/design/DAGjtltoot8/rh_b9t3NbySyI2s5XLXq-Q/edit?utm_content=DAGjtltoot8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
