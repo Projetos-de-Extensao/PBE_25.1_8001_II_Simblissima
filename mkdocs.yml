@@ -1,5 +1,6 @@
+site_name: Simblissima
 theme:
-  name: Simblissima
+  name: material
   palette:
     scheme: slate
     primary: blue grey
