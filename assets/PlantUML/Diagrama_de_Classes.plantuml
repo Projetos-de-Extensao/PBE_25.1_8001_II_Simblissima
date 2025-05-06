@@ -1,0 +1,74 @@
+@startuml FastDelivery_DiagramaClasses
+
+interface Entrega{
+    @startuml SimblissimaDelivery
+
+class Morador {
+    + nome: String
+    + cpf: String
+    + email: String
+    + senha: String
+    + telefone: String
+    + endereco: String
+    + dataDeNascimento: Date
+    + efetuarLogin()
+    + sairDaConta()
+    + cadastrarEntrega()
+    + checarStatusDaEntrega()
+    + verHistoricoDeEntregas()
+    + alterarInformacoes()
+    + pagar()
+}
+
+class Admin {
+    + nome: String
+    + email: String
+    + senha: String
+    + criarContaParaMorador()
+    + checarPagamentosDosClientes()
+}
+
+class PontoAncora {
+    + identificador: String
+    + endereco: String
+    + horarioDeFuncionamento: String
+    + funcionarios: List<String>
+    + receberEntrega()
+    + efetuarEntrega()
+    + alterarStatusDeEntrega()
+}
+
+class Pagamento {
+    + valor: Double
+    + data: Date
+    + metodo: String
+    + status: String
+    + verificarPagamento()
+}
+
+class Informacoes {
+    + tipo: String
+    + conteudo: String
+    + validarInformacoes()
+}
+
+class Entrega {
+    + numeroDoPedido: String
+    + enderecoDeEntrega: String
+    + codigoDeConfirmacao: String
+    + status: String
+    + dataDeEntrega: Date
+    + registrarEntrega()
+    + atualizarStatus()
+    + confirmarRecebimento()
+}
+
+Morador --> Pagamento : "usa"
+Morador --> Informacoes : "usa"
+PontoAncora -- Morador : "interage"
+Admin --> Morador : "gerencia"
+Morador --> Entrega : "cadastra/verifica"
+PontoAncora --> Entrega : "processa"
+
+@enduml
+}

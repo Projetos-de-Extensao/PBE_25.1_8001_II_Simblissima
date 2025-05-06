@@ -1,0 +1,24 @@
+@startmindmap
+
+*[#Gray] Aplicativo 
+**[#LightBlue] Morador
+***[#Cyan] Efetuar Login
+****[#Cyan] Cadastrar Entrega
+****[#Cyan] Checar Status da Entrega
+****[#Cyan] Ver Histórico de Entregas
+****[#Cyan] Alterar Informações
+*****[#Cyan] Validar Informações
+****[#Cyan] Pagar
+*****[#Cyan] Verificar Pagamento
+***[#Cyan] Sair da Conta
+
+**[#LightBlue] Admin
+***[#Cyan] Criar Conta para Morador
+***[#Cyan] Checar Pagamentos dos Clientes
+
+**[#LightBlue] Ponto Âncora
+***[#Cyan] Receber Entrega
+****[#Cyan] Alterar Status de Entrega
+***[#Cyan] Efetuar Entrega
+
+@endmindmap
