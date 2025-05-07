@@ -1,41 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simblissima Delivery</title>
+    <title>Produtos Simblissima</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-color: #006eff;
+            --secondary-color: #343a40;
+            --background-color: #f8f9fa;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            box-sizing: border-box;
         }
-        header {
-            background-color: #ff6f61;
-            color: white;
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
             text-align: center;
         }
-        nav {
-            text-align: center;
-            margin: 20px 0;
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
         }
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #ff6f61;
+
+        .produto-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .produto-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .preco {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 0.5rem 0;
+        }
+
+        .descricao {
+            color: #666;
+            margin: 1rem 0;
+        }
+
+        .status {
+            padding: 0.5rem;
+            border-radius: 5px;
+            text-align: center;
             font-weight: bold;
         }
-        main {
-            text-align: center;
-            padding: 20px;
+
+        .disponivel {
+            background-color: #e8f5e9;
+            color: #2e7d32;
         }
+
+        .indisponivel {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
         footer {
-            background-color: #343a40;
+            background-color: var(--secondary-color);
             color: white;
             text-align: center;
-            padding: 10px;
+            padding: 1rem 0;
             position: fixed;
             bottom: 0;
             width: 100%;
@@ -44,31 +103,31 @@
 </head>
 <body>
     <header>
-        <h1>Simblissima Delivery</h1>
-        <p>Comida deliciosa entregue na sua porta!</p>
+        <div class="container">
+            <h1>Produtos Simblissima</h1>
+            <p>Confira nosso cardápio completo</p>
+        </div>
     </header>
-    <nav>
-        <a href="#menu">Menu</a>
-        <a href="#sobre">Sobre Nós</a>
-        <a href="#contato">Contato</a>
-    </nav>
-    <main>
-        <section id="menu">
-            <h2>Nosso Menu</h2>
-            <p>Explore nossas opções deliciosas e peça agora!</p>
-        </section>
-        <section id="sobre">
-            <h2>Sobre Nós</h2>
-            <p>Simblissima Delivery é sua melhor escolha para refeições rápidas e saborosas.</p>
-        </section>
-        <section id="contato">
-            <h2>Contato</h2>
-            <p>Email: contato@simblissimadelivery.com</p>
-            <p>Telefone: (21) 97026-7180</p>
-        </section>
+
+    <main class="container">
+        <div class="produtos-grid">
+            {% for produto in produtos %}
+                <div class="produto-card">
+                    <h3>{{ produto.nome }}</h3>
+                    <p class="preco">R$ {{ produto.preco }}</p>
+                    <p class="descricao">{{ produto.descricao }}</p>
+                    <div class="status {% if produto.disponivel %}disponivel{% else %}indisponivel{% endif %}">
+                        {{ produto.disponivel|yesno:"Disponível,Indisponível" }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </main>
+
     <footer>
-        <p>&copy; 2025 Simblissima Delivery. Todos os direitos reservados.</p>
+        <div class="container">
+            <p>&copy; 2025 Simblissima Delivery. Todos os direitos reservados.</p>
+        </div>
     </footer>
 </body>
 </html>
