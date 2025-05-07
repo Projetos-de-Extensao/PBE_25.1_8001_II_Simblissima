@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Pedidos - Simblissima</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pedido-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-pendente { background-color: #fff3cd; color: #856404; }
+        .status-aguardando { background-color: #cce5ff; color: #004085; }
+        .status-confirmado { background-color: #d4edda; color: #155724; }
+        .status-transito { background-color: #e2e3e5; color: #383d41; }
+        .status-entregue { background-color: #d1e7dd; color: #0f5132; }
+        .status-cancelado { background-color: #f8d7da; color: #721c24; }
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            background-color: #006eff;
+        }
+        .btn:hover {
+            background-color: #0056cc;
+        }
+        .actions-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+        }
+        .header-nav {
+            margin-bottom: 20px;
+        }
+        .header-nav a {
+            text-decoration: none;
+            color: #006eff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-nav">
+            <a href="{% url 'home' %}">← Voltar para Home</a>
+        </div>
+
+        <div class="actions-bar">
+            <h2>Meus Pedidos</h2>
+            <a href="{% url 'novo_pedido' %}" class="btn">Novo Pedido</a>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if pedidos %}
+            {% for pedido in pedidos %}
+            <div class="pedido-card">
+                <div class="pedido-header">
+                    <div>
+                        <h3>Pedido #{{ pedido.id }}</h3>
+                        <p>Data: {{ pedido.data_criacao|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <span class="status status-{{ pedido.status|lower }}">
+                        {{ pedido.get_status_display }}
+                    </span>
+                </div>
+                
+                <div class="pedido-info">
+                    <p><strong>Valor Total:</strong> R$ {{ pedido.valor_total }}</p>
+                    {% if pedido.valor_final %}
+                    <p><strong>Valor Final:</strong> R$ {{ pedido.valor_final }}</p>
+                    {% endif %}
+                </div>
+
+                {% if pedido.status == 'AGUARDANDO_PAGAMENTO' %}
+                <div class="pedido-actions" style="margin-top: 10px;">
+                    <p style="color: #004085; background-color: #cce5ff; padding: 10px; border-radius: 4px;">
+                        Este pedido aguarda sua confirmação do valor final.
+                    </p>
+                </div>
+                {% endif %}
+                
+                <div class="pedido-actions" style="margin-top: 10px;">
+                    <a href="{% url 'detalhe_pedido' pedido.id %}" class="btn">Ver Detalhes</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <h3>Você ainda não tem pedidos</h3>
+                <p>Que tal fazer seu primeiro pedido agora?</p>
+                <a href="{% url 'novo_pedido' %}" class="btn">Criar Pedido</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

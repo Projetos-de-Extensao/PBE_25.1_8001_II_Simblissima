@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Pedido - Simblissima</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .item-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .item-row input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .descricao {
+            flex: 3;
+        }
+        .preco {
+            flex: 1;
+        }
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn-add {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-remove {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-submit {
+            background-color: #006eff;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+        }
+        .total {
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Novo Pedido</h2>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form id="pedidoForm" method="post">
+            {% csrf_token %}
+            <div id="itens">
+                <div class="item-row">
+                    <input type="text" name="descricao[]" class="descricao" placeholder="Descrição do item" required>
+                    <input type="number" name="preco[]" class="preco" placeholder="Preço" step="0.01" min="0" required>
+                    <button type="button" class="btn-remove" onclick="removeItem(this)">Remover</button>
+                </div>
+            </div>
+            
+            <button type="button" class="btn-add" onclick="addItem()">Adicionar Item</button>
+            
+            <div class="total">
+                Total: R$ <span id="totalValue">0.00</span>
+            </div>
+            
+            <button type="submit" class="btn-submit">Criar Pedido</button>
+        </form>
+    </div>
+
+    <script>
+        function addItem() {
+            const itensDiv = document.getElementById('itens');
+            const newRow = document.createElement('div');
+            newRow.className = 'item-row';
+            newRow.innerHTML = `
+                <input type="text" name="descricao[]" class="descricao" placeholder="Descrição do item" required>
+                <input type="number" name="preco[]" class="preco" placeholder="Preço" step="0.01" min="0" required onchange="calculateTotal()">
+                <button type="button" class="btn-remove" onclick="removeItem(this)">Remover</button>
+            `;
+            itensDiv.appendChild(newRow);
+        }
+
+        function removeItem(button) {
+            const row = button.parentElement;
+            if (document.getElementsByClassName('item-row').length > 1) {
+                row.remove();
+                calculateTotal();
+            }
+        }
+
+        function calculateTotal() {
+            const precos = document.getElementsByClassName('preco');
+            let total = 0;
+            for (let preco of precos) {
+                total += Number(preco.value) || 0;
+            }
+            document.getElementById('totalValue').textContent = total.toFixed(2);
+        }
+
+        // Add event listeners to price inputs
+        document.querySelectorAll('.preco').forEach(input => {
+            input.addEventListener('change', calculateTotal);
+        });
+    </script>
+</body>
+</html>

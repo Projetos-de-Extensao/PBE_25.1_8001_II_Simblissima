@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produtos Simblissima</title>
+    <title>Simblissima Delivery</title>
     <style>
         :root {
             --primary-color: #006eff;
@@ -36,58 +36,63 @@
             text-align: center;
         }
 
-        .produtos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            padding: 2rem 0;
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
         }
 
-        .produto-card {
-            background-color: white;
-            border-radius: 10px;
+        .user-info {
+            text-align: right;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            background: white;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
             transition: transform 0.3s ease;
         }
 
-        .produto-card:hover {
+        .action-card:hover {
             transform: translateY(-5px);
         }
 
-        .produto-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .preco {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: var(--secondary-color);
-            margin: 0.5rem 0;
-        }
-
-        .descricao {
-            color: #666;
-            margin: 1rem 0;
-        }
-
-        .status {
-            padding: 0.5rem;
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
             border-radius: 5px;
-            text-align: center;
-            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
-        .disponivel {
-            background-color: #e8f5e9;
-            color: #2e7d32;
+        .btn:hover {
+            background-color: #0056cc;
         }
 
-        .indisponivel {
-            background-color: #ffebee;
-            color: #c62828;
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
         }
 
         footer {
@@ -99,29 +104,92 @@
             bottom: 0;
             width: 100%;
         }
+        
+        .welcome-message {
+            text-align: center;
+            margin: 2rem 0;
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>Produtos Simblissima</h1>
-            <p>Confira nosso cardápio completo</p>
+        <div class="nav-container">
+            <h1>Simblissima Delivery</h1>
+            <div class="user-info">
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <span>Admin: {{ user.get_full_name }}</span>
+                    {% else %}
+                        <span>Olá, {{ user.get_full_name }}</span>
+                    {% endif %}
+                    <a href="{% url 'logout' %}" class="btn btn-danger">Sair</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn">Login</a>
+                    <a href="{% url 'register' %}" class="btn">Cadastrar</a>
+                {% endif %}
+            </div>
         </div>
     </header>
 
-    <main class="container">
-        <div class="produtos-grid">
-            {% for produto in produtos %}
-                <div class="produto-card">
-                    <h3>{{ produto.nome }}</h3>
-                    <p class="preco">R$ {{ produto.preco }}</p>
-                    <p class="descricao">{{ produto.descricao }}</p>
-                    <div class="status {% if produto.disponivel %}disponivel{% else %}indisponivel{% endif %}">
-                        {{ produto.disponivel|yesno:"Disponível,Indisponível" }}
-                    </div>
-                </div>
+    <main class="main-content">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
             {% endfor %}
         </div>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                <div class="welcome-message">
+                    <h2>Painel do Administrador</h2>
+                </div>
+                <div class="actions-grid">
+                    <div class="action-card">
+                        <h3>Pedidos</h3>
+                        <p>Visualize e gerencie todos os pedidos</p>
+                        <a href="{% url 'admin_pedidos' %}" class="btn">Ver Pedidos</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="welcome-message">
+                    <h2>Bem-vindo ao Simblissima Delivery</h2>
+                    <p>O que você deseja fazer hoje?</p>
+                </div>
+                <div class="actions-grid">
+                    <div class="action-card">
+                        <h3>Novo Pedido</h3>
+                        <p>Crie um novo pedido de entrega</p>
+                        <a href="{% url 'novo_pedido' %}" class="btn">Criar Pedido</a>
+                    </div>
+                    <div class="action-card">
+                        <h3>Meus Pedidos</h3>
+                        <p>Veja o histórico dos seus pedidos</p>
+                        <a href="{% url 'meus_pedidos' %}" class="btn">Ver Histórico</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="welcome-message">
+                <h2>Bem-vindo ao Simblissima Delivery</h2>
+                <p>Faça login ou cadastre-se para fazer pedidos.</p>
+            </div>
+            <div class="actions-grid">
+                <div class="action-card">
+                    <h3>Já tem uma conta?</h3>
+                    <p>Faça login para acessar sua conta</p>
+                    <a href="{% url 'login' %}" class="btn">Login</a>
+                </div>
+                <div class="action-card">
+                    <h3>Novo por aqui?</h3>
+                    <p>Crie sua conta para começar</p>
+                    <a href="{% url 'register' %}" class="btn">Cadastrar</a>
+                </div>
+            </div>
+        {% endif %}
     </main>
 
     <footer>
