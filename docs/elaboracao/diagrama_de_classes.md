@@ -55,5 +55,5 @@ Através do diagrama de classes, foi possível representar a estrutura do sistem
 
 | Data | Versão | Descrição | Autor(es) |
 | -- | -- | -- | -- |
-| 06/05/25 | 1.0 | Criação do documento | Guilherme Dias Batista |
+| 06/05/25 | 1.0 | Criação do documento | Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo |
 
