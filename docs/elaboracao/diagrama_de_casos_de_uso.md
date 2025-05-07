@@ -47,4 +47,4 @@ Com o diagrama de caso de uso, foi possível visualizar as interações dos usu�
 
 | Data | Versão | Descrição | Autor(es) |
 | -- | -- | -- | -- |
-| 06/05/25 | 1.0 | Criação do documento | Guilherme Dias Batista |
+| 06/05/25 | 1.0 | Criação do documento | Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo |
