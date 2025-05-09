@@ -122,7 +122,7 @@
                     {% else %}
                         <span>Olá, {{ user.get_full_name }}</span>
                     {% endif %}
-                    <a href="{% url 'logout' %}" class="btn btn-danger">Sair</a>
+                    <a href="{% url 'logout' %}" class="btn btn-danger">logout</a>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn">Login</a>
                     <a href="{% url 'register' %}" class="btn">Cadastrar</a>
@@ -170,6 +170,7 @@
                         <p>Veja o histórico dos seus pedidos</p>
                         <a href="{% url 'meus_pedidos' %}" class="btn">Ver Histórico</a>
                     </div>
+                    
                 </div>
             {% endif %}
         {% else %}

@@ -19,4 +19,5 @@ urlpatterns = [
     
     # Cliente
     path('pedido/<int:pedido_id>/confirmar/', views.confirmar_valor, name='confirmar_valor'),
+    path('excluir-conta/', views.excluir_cliente, name='excluir_cliente'),
 ]

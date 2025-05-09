@@ -21,6 +21,19 @@ class PedidoAdmin(admin.ModelAdmin):
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ['user', 'cpf', 'telefone']
     search_fields = ['user__first_name', 'user__last_name', 'cpf']
+    
+    def delete_model(self, request, obj):
+        # Guarda referência ao usuário
+        user = obj.user
+        # Deleta o cliente
+        obj.delete()
+        # Deleta o usuário associado
+        user.delete()
+    
+    def delete_queryset(self, request, queryset):
+        # Para exclusão em massa
+        for obj in queryset:
+            self.delete_model(request, obj)
 
 admin.site.register(Produto)
 admin.site.register(StatusPedido)

@@ -177,3 +177,30 @@ def custom_logout(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('home')
+
+@login_required
+def excluir_cliente(request):
+    if request.method == 'POST':
+        try:
+            with transaction.atomic():
+                # Pegar o cliente e usuário associado
+                cliente = request.user.cliente
+                user = request.user
+                
+                # Primeiro, fazer logout do usuário
+                logout(request)
+                
+                # Excluir o cliente (isso também excluirá seus pedidos devido ao CASCADE)
+                cliente.delete()
+                
+                # Excluir o usuário
+                user.delete()
+                
+                messages.success(request, 'Sua conta foi excluída com sucesso.')
+                return redirect('home')
+                
+        except Exception as e:
+            messages.error(request, f'Erro ao excluir conta: {str(e)}')
+            return redirect('home')
+            
+    return redirect('home')
