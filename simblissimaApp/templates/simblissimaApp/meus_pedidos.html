@@ -71,14 +71,13 @@
         }
         .header-nav a {
             text-decoration: none;
-            color: #006eff;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-nav">
-            <a href="{% url 'home' %}">← Voltar para Home</a>
+            <a href="{% url 'home' %}" class="btn">Voltar</a>
         </div>
 
         <div class="actions-bar">
@@ -98,8 +97,7 @@
 
         {% if pedidos %}
             {% for pedido in pedidos %}
-            <div class="pedido-card">
-                <div class="pedido-header">
+            <div class="pedido-card">                
                     <div>
                         <h3>Pedido #{{ pedido.id }}</h3>
                         <p>Data: {{ pedido.data_criacao|date:"d/m/Y H:i" }}</p>

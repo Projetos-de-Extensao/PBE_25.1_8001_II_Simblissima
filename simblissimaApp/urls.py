@@ -12,10 +12,9 @@ urlpatterns = [
     path('pedido/novo/', views.novo_pedido, name='novo_pedido'),
     path('pedido/<int:pedido_id>/', views.detalhe_pedido, name='detalhe_pedido'),
     path('pedidos/meus/', views.meus_pedidos, name='meus_pedidos'),
-    
-    # Admin
-    path('admin/pedidos/', views.admin_pedidos, name='admin_pedidos'),
-    path('admin/pedido/<int:pedido_id>/atualizar/', views.atualizar_pedido, name='atualizar_pedido'),
+      # Admin
+    path('gerenciar/pedidos/', views.admin_pedidos, name='admin_pedidos'),
+    path('gerenciar/pedido/<int:pedido_id>/atualizar/', views.atualizar_pedido, name='atualizar_pedido'),
     
     # Cliente
     path('pedido/<int:pedido_id>/confirmar/', views.confirmar_valor, name='confirmar_valor'),
