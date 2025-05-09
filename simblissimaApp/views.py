@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import transaction
+from django.core.exceptions import ValidationError
 from .models import Produto, Cliente, Pedido, ItemPedido, StatusPedido
 from decimal import Decimal
 
@@ -23,6 +24,10 @@ def register(request):
         telefone = request.POST['telefone']
 
         try:
+            # Check if CPF already exists
+            if User.objects.filter(username=cpf).exists():
+                raise ValidationError('Já existe uma conta com este CPF.')
+
             with transaction.atomic():
                 # Create User instance
                 user = User.objects.create_user(
@@ -32,7 +37,7 @@ def register(request):
                     first_name=first_name,
                     last_name=last_name
                 )
-                
+
                 # Create Cliente instance
                 Cliente.objects.create(
                     user=user,
@@ -40,12 +45,14 @@ def register(request):
                     endereco=endereco,
                     telefone=telefone
                 )
-                
+
                 messages.success(request, 'Conta criada com sucesso!')
                 return redirect('login')
+        except ValidationError as e:
+            messages.error(request, str(e))
         except Exception as e:
             messages.error(request, f'Erro ao criar conta: {str(e)}')
-            
+
     return render(request, 'simblissimaApp/register.html')
 
 @login_required
@@ -165,3 +172,8 @@ def meus_pedidos(request):
     
     pedidos = Pedido.objects.filter(cliente__user=request.user).order_by('-data_criacao')
     return render(request, 'simblissimaApp/meus_pedidos.html', {'pedidos': pedidos})
+
+def custom_logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('home')
