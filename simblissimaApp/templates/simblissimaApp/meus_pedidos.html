@@ -97,7 +97,8 @@
 
         {% if pedidos %}
             {% for pedido in pedidos %}
-            <div class="pedido-card">                
+            <div class="pedido-card">
+                <div class="pedido-header">
                     <div>
                         <h3>Pedido #{{ pedido.id }}</h3>
                         <p>Data: {{ pedido.data_criacao|date:"d/m/Y H:i" }}</p>
@@ -106,14 +107,12 @@
                         {{ pedido.get_status_display }}
                     </span>
                 </div>
-                
                 <div class="pedido-info">
                     <p><strong>Valor Total:</strong> R$ {{ pedido.valor_total }}</p>
                     {% if pedido.valor_final %}
                     <p><strong>Valor Final:</strong> R$ {{ pedido.valor_final }}</p>
                     {% endif %}
                 </div>
-
                 {% if pedido.status == 'AGUARDANDO_PAGAMENTO' %}
                 <div class="pedido-actions" style="margin-top: 10px;">
                     <p style="color: #004085; background-color: #cce5ff; padding: 10px; border-radius: 4px;">
@@ -121,7 +120,6 @@
                     </p>
                 </div>
                 {% endif %}
-                
                 <div class="pedido-actions" style="margin-top: 10px;">
                     <a href="{% url 'detalhe_pedido' pedido.id %}" class="btn">Ver Detalhes</a>
                 </div>
