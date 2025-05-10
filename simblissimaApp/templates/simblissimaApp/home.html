@@ -6,14 +6,14 @@
     <title>Simblissima Delivery</title>
     <style>
         :root {
-            --primary-color: #006eff;
-            --secondary-color: #343a40;
-            --background-color: #f8f9fa;
-            --text-color: #212529;
-            --card-shadow: rgba(0, 0, 0, 0.1);
+            --primary-color: #ff2e2e; /* iFood red */
+            --secondary-color: #333333; /* Dark gray */
+            --background-color: #f7f7f7; /* Light gray */
+            --text-color: #4a4a4a; /* Neutral dark */
+            --card-shadow: rgba(0, 0, 0, 0.15);
             --transition-speed: 0.3s;
-            --button-hover-scale: 1.05;
-            --button-border-radius: 8px;
+            --button-hover-scale: 1.1;
+            --button-border-radius: 12px;
         }
 
         * {
@@ -23,10 +23,10 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
         .container {
@@ -38,16 +38,16 @@
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
             text-align: center;
-            box-shadow: 0 4px 6px var(--card-shadow);
+            box-shadow: 0 4px 8px var(--card-shadow);
         }
 
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 1.5rem;
+            padding: 0 2rem;
         }
 
         .user-info {
@@ -55,71 +55,79 @@
         }
 
         .main-content {
-            padding: 1.5rem;
-            max-width: 800px;
+            padding: 2rem;
+            max-width: 900px;
             margin: 0 auto;
         }
 
         .actions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
         .action-card {
             background: white;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: var(--button-border-radius);
-            box-shadow: 0 4px 6px var(--card-shadow);
+            box-shadow: 0 4px 8px var(--card-shadow);
             text-align: center;
             transition: transform var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px var(--card-shadow);
+            transform: translateY(-8px);
+            box-shadow: 0 6px 16px var(--card-shadow);
         }
 
         .btn {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: var(--primary-color);
             color: white;
             text-decoration: none;
             border-radius: var(--button-border-radius);
             transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
-            box-shadow: 0 4px 6px var(--card-shadow);
+            box-shadow: 0 4px 8px var(--card-shadow);
         }
 
         .btn:hover {
-            background-color: #0056cc;
+            background-color: #e62b2b; /* Slightly darker red */
             transform: scale(var(--button-hover-scale));
-            box-shadow: 0 6px 12px var(--card-shadow);
+            box-shadow: 0 6px 16px var(--card-shadow);
         }
 
         .btn-danger {
-            background-color: #dc3545;
+            background-color: #ff4d4d; /* Lighter red */
         }
 
         .btn-danger:hover {
-            background-color: #bb2d3b;
+            background-color: #e62b2b;
+        }
+
+        .btn-login, .btn-register {
+            background-color: #e62b2b; /* Wine color */
+        }
+
+        .btn-login:hover, .btn-register:hover {
+            background-color: #e62b2b; /* Slightly darker wine */
         }
 
         footer {
             background-color: var(--secondary-color);
             color: white;
             text-align: center;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             position: fixed;
             bottom: 0;
             width: 100%;
-            box-shadow: 0 -2px 4px var(--card-shadow);
+            box-shadow: 0 -4px 8px var(--card-shadow);
         }
         
         .welcome-message {
             text-align: center;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
         }
     </style>
 </head>
@@ -136,8 +144,8 @@
                     {% endif %}
                     <a href="{% url 'logout' %}" class="btn btn-danger">logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn">Login</a>
-                    <a href="{% url 'register' %}" class="btn">Cadastrar</a>
+                    <a href="{% url 'login' %}" class="btn btn-login">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-register">Cadastrar</a>
                 {% endif %}
             </div>
         </div>
@@ -194,12 +202,12 @@
                 <div class="action-card">
                     <h3>Já tem uma conta?</h3>
                     <p>Faça login para acessar sua conta</p>
-                    <a href="{% url 'login' %}" class="btn">Login</a>
+                    <a href="{% url 'login' %}" class="btn btn-login">Login</a>
                 </div>
                 <div class="action-card">
                     <h3>Novo por aqui?</h3>
                     <p>Crie sua conta para começar</p>
-                    <a href="{% url 'register' %}" class="btn">Cadastrar</a>
+                    <a href="{% url 'register' %}" class="btn btn-register">Cadastrar</a>
                 </div>
             </div>
         {% endif %}

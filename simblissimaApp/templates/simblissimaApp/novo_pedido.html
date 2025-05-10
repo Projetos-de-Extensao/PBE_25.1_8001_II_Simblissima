@@ -6,28 +6,43 @@
     <title>Novo Pedido - Simblissima</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f2f5;
+            background-color: #f7f7f7; /* Light gray */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .item-row {
             display: flex;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         .item-row input {
-            padding: 8px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .item-row input:focus {
+            border-color: #ff2e2e; /* iFood red */
+            box-shadow: 0 0 8px rgba(255, 46, 46, 0.3);
+            outline: none;
         }
         .descricao {
             flex: 3;
@@ -36,30 +51,50 @@
             flex: 1;
         }
         button {
-            padding: 8px 15px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             margin: 5px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
         }
         .btn-add {
-            background-color: #4CAF50;
+            background-color: #ff2e2e; /* iFood red */
             color: white;
+        }
+        .btn-add:hover {
+            background-color: #e62b2b; /* Slightly darker red */
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .btn-remove {
-            background-color: #f44336;
+            background-color: #f44336; /* Red */
             color: white;
         }
+        .btn-remove:hover {
+            background-color: #e53935; /* Darker red */
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
         .btn-submit {
-            background-color: #006eff;
+            background-color: #ff2e2e; /* iFood red */
             color: white;
             font-size: 16px;
-            padding: 10px 20px;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .btn-submit:hover {
+            background-color: #e62b2b; /* Slightly darker red */
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .total {
             font-size: 1.2em;
             margin-top: 20px;
             text-align: right;
+            font-weight: bold;
         }
     </style>
 </head>

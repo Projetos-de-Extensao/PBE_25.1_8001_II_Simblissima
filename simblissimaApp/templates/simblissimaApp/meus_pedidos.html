@@ -6,24 +6,35 @@
     <title>Meus Pedidos - Simblissima</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f2f5;
+            background-color: #f7f7f7; /* Light gray */
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .pedido-card {
             border: 1px solid #ddd;
             padding: 15px;
             margin-bottom: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .pedido-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .pedido-header {
             display: flex;
@@ -34,7 +45,7 @@
         .status {
             display: inline-block;
             padding: 5px 10px;
-            border-radius: 4px;
+            border-radius: 8px;
             font-weight: bold;
         }
         .status-pendente { background-color: #fff3cd; color: #856404; }
@@ -45,16 +56,20 @@
         .status-cancelado { background-color: #f8d7da; color: #721c24; }
         .btn {
             display: inline-block;
-            padding: 8px 15px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
             color: white;
-            background-color: #006eff;
+            background-color: #ff2e2e; /* iFood red */
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         .btn:hover {
-            background-color: #0056cc;
+            background-color: #e62b2b; /* Slightly darker red */
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .actions-bar {
             margin-bottom: 20px;
@@ -71,6 +86,17 @@
         }
         .header-nav a {
             text-decoration: none;
+            color: white;
+            background-color: #ff2e2e; /* iFood red */
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav a:hover {
+            background-color: #e62b2b; /* Slightly darker red */
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>

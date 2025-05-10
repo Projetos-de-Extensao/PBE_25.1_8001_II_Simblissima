@@ -6,56 +6,92 @@
     <title>Login - Simblissima</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f2f5;
+            background-color: #f7f7f7; /* Light gray */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
             max-width: 400px;
             margin: 0 auto;
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
+            color: #4a4a4a; /* Neutral dark */
         }
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 8px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #ff2e2e; /* iFood red */
+            box-shadow: 0 0 8px rgba(255, 46, 46, 0.3);
+            outline: none;
         }
         button {
-            background-color: #006eff;
+            background-color: #ff2e2e; /* iFood red */
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         button:hover {
-            background-color: #0056cc;
+            background-color: #e62b2b; /* Slightly darker red */
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .alert {
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 14px;
         }
         .alert-error {
             background-color: #fee;
             color: #c00;
             border: 1px solid #fcc;
+        }
+        p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        p a {
+            color: #ff2e2e; /* iFood red */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        p a:hover {
+            color: #e62b2b; /* Slightly darker red */
         }
     </style>
 </head>
