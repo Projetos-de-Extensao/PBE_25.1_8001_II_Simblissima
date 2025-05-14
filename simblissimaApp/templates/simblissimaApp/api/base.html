@@ -128,12 +128,17 @@
             }
             return response.json();
         }        async function fetchAPI(endpoint, options = {}) {
+            const defaultHeaders = {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            };
+
             options = {
                 ...options,
                 credentials: 'include',  // Always include credentials
                 headers: {
+                    ...defaultHeaders,
                     ...options.headers,
-                    'X-CSRFToken': getCookie('csrftoken'),
                 }
             };
             const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
