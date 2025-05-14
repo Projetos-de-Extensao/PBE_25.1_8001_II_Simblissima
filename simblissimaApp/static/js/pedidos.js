@@ -598,26 +598,50 @@ function addItemField() {
 
 async function handleAddPedido(event) {
     event.preventDefault();
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Criando pedido...';
+
     const items = [];
     const descricoes = document.querySelectorAll('.descricao');
     const precos = document.querySelectorAll('.preco');
     
+    if (descricoes.length === 0 || precos.length === 0) {
+        showMessage('Adicione pelo menos um item ao pedido', 'warning');
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Criar Pedido';
+        return;
+    }
+
     for (let i = 0; i < descricoes.length; i++) {
+        const descricao = descricoes[i].value.trim();
+        const preco = parseFloat(precos[i].value);
+        
+        if (!descricao || isNaN(preco) || preco <= 0) {
+            showMessage('Todos os campos são obrigatórios e o preço deve ser maior que zero', 'warning');
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Criar Pedido';
+            return;
+        }
+        
         items.push({
-            descricao: descricoes[i].value,
-            preco: precos[i].value
+            descricao: descricao,
+            preco: preco
         });
     }
 
-    try {
-        // Criar o pedido
-        const pedidoResponse = await fetchAPI('/pedidos/', {
+    try {        const pedidoResponse = await fetchAPI('/pedidos/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({})  // O pedido será criado com o cliente atual
+            body: JSON.stringify({})
         });
+
+        if (!pedidoResponse || !pedidoResponse.id) {
+            throw new Error('Resposta inválida do servidor');
+        }
 
         // Adicionar os itens ao pedido
         for (const item of items) {
@@ -633,6 +657,9 @@ async function handleAddPedido(event) {
         showMessage('Pedido criado com sucesso!');
         loadPedidos();
     } catch (error) {
-        showMessage('Erro ao criar pedido', 'danger');
+        console.error('Erro ao criar pedido:', error);
+        showMessage('Erro ao criar pedido: ' + (error.message || 'Erro desconhecido'), 'danger');
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Criar Pedido';
     }
 }
