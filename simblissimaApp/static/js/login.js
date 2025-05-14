@@ -159,9 +159,8 @@ async function handleRegister(event) {
         password: document.getElementById('password').value,
         endereco: document.getElementById('endereco').value.trim(),
         telefone: document.getElementById('telefone').value.trim()
-    };
-
-    try {
+    };    try {
+        console.log('Enviando dados:', formData);
         const response = await fetch('/api/register/', {
             method: 'POST',
             headers: {
@@ -173,6 +172,7 @@ async function handleRegister(event) {
         });
 
         const data = await response.json();
+        console.log('Resposta do servidor:', data);
         
         if (!response.ok) {
             // Se o erro for de validação, mostra as mensagens de erro
@@ -183,7 +183,17 @@ async function handleRegister(event) {
         loadLogin();
     } catch (error) {
         console.error('Erro no registro:', error);
-        showMessage(error.message || 'Erro ao cadastrar usuário. Por favor, tente novamente.', 'danger');
+        let errorMessage = error.message;
+        if (typeof errorMessage === 'string' && errorMessage.includes('\n')) {
+            // Se a mensagem de erro contiver múltiplas linhas, cria uma lista
+            const errors = errorMessage.split('\n').filter(msg => msg.trim());
+            const errorHtml = `<ul class="mb-0 list-unstyled">
+                ${errors.map(err => `<li>${err}</li>`).join('')}
+            </ul>`;
+            showMessage(errorHtml, 'danger', true);
+        } else {
+            showMessage(errorMessage || 'Erro ao cadastrar usuário. Por favor, tente novamente.', 'danger');
+        }
         
         // Se houver erros de validação, mostra o formulário como inválido
         form.classList.add('was-validated');

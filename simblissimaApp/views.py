@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -144,7 +144,10 @@ class StatusPedidoViewSet(viewsets.ModelViewSet):
         return StatusPedido.objects.filter(pedido__cliente__user=self.request.user)
 
 @api_view(['POST'])
+@permission_classes([permissions.AllowAny])
 def register_user(request):
+    print("Iniciando registro de usuário...")
+    print(f"Dados recebidos: {request.data}")
     try:
         with transaction.atomic():
             # Validar os dados
@@ -155,30 +158,37 @@ def register_user(request):
             for field in required_fields:
                 if not request.data.get(field):
                     validation_errors.append(f'O campo {field} é obrigatório.')
+                    print(f"Campo {field} faltando")
 
             # Validações específicas
             cpf = request.data.get('cpf', '')
             if not cpf.isdigit() or len(cpf) != 11:
                 validation_errors.append('CPF deve conter exatamente 11 dígitos numéricos.')
+                print("CPF inválido")
 
             if User.objects.filter(username=cpf).exists():
                 validation_errors.append('CPF já cadastrado.')
+                print("CPF já existe como username")
 
             if Cliente.objects.filter(cpf=cpf).exists():
                 validation_errors.append('CPF já cadastrado.')
+                print("CPF já existe como cliente")
 
             email = request.data.get('email', '')
             if User.objects.filter(email=email).exists():
                 validation_errors.append('Este email já está em uso.')
+                print("Email já existe")
 
             # Verifica se há erros de validação
             if validation_errors:
+                print(f"Erros de validação encontrados: {validation_errors}")
                 return Response({
                     'message': '\n'.join(validation_errors)
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             # Criar usuário
             try:
+                print("Tentando criar usuário...")
                 user = User.objects.create_user(
                     username=cpf,
                     email=request.data['email'],
@@ -186,14 +196,17 @@ def register_user(request):
                     first_name=request.data['first_name'],
                     last_name=request.data['last_name']
                 )
+                print(f"Usuário criado com ID: {user.id}")
 
                 # Criar cliente
+                print("Tentando criar cliente...")
                 cliente = Cliente.objects.create(
                     user=user,
                     cpf=cpf,
                     telefone=request.data['telefone'],
                     endereco=request.data['endereco']
                 )
+                print(f"Cliente criado com ID: {cliente.id}")
                 
                 return Response({
                     'message': 'Usuário registrado com sucesso!',
@@ -206,23 +219,27 @@ def register_user(request):
                     }
                 }, status=status.HTTP_201_CREATED)
             except Exception as e:
+                print(f"Erro ao criar usuário ou cliente: {str(e)}")
                 # Se algo der errado na criação do usuário ou cliente, desfaz a transação
                 if 'user' in locals() and user:
                     user.delete()
                 raise ValidationError(f'Erro ao criar usuário ou cliente: {str(e)}')
                 
     except ValidationError as e:
+        print(f"Erro de validação: {str(e)}")
         return Response({
             'message': str(e)
         }, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
+        print(f"Erro geral: {str(e)}")
         return Response({
             'message': f'Erro ao registrar usuário: {str(e)}'
         }, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def current_user(request):
     if request.user.is_authenticated:
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
-    return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+    return Response(None, status=status.HTTP_200_OK)
