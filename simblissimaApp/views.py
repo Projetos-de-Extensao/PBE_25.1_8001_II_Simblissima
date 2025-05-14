@@ -147,31 +147,77 @@ class StatusPedidoViewSet(viewsets.ModelViewSet):
 def register_user(request):
     try:
         with transaction.atomic():
+            # Validar os dados
+            required_fields = ['cpf', 'email', 'password', 'first_name', 'last_name', 'telefone', 'endereco']
+            validation_errors = []
+
+            # Verifica campos obrigatórios
+            for field in required_fields:
+                if not request.data.get(field):
+                    validation_errors.append(f'O campo {field} é obrigatório.')
+
+            # Validações específicas
+            cpf = request.data.get('cpf', '')
+            if not cpf.isdigit() or len(cpf) != 11:
+                validation_errors.append('CPF deve conter exatamente 11 dígitos numéricos.')
+
+            if User.objects.filter(username=cpf).exists():
+                validation_errors.append('CPF já cadastrado.')
+
+            if Cliente.objects.filter(cpf=cpf).exists():
+                validation_errors.append('CPF já cadastrado.')
+
+            email = request.data.get('email', '')
+            if User.objects.filter(email=email).exists():
+                validation_errors.append('Este email já está em uso.')
+
+            # Verifica se há erros de validação
+            if validation_errors:
+                return Response({
+                    'message': '\n'.join(validation_errors)
+                }, status=status.HTTP_400_BAD_REQUEST)
+
             # Criar usuário
-            user = User.objects.create_user(
-                username=request.data['cpf'],
-                email=request.data['email'],
-                password=request.data['password'],
-                first_name=request.data['first_name'],
-                last_name=request.data['last_name']
-            )
-            
-            # Criar cliente
-            cliente = Cliente.objects.create(
-                user=user,
-                cpf=request.data['cpf'],
-                telefone=request.data['telefone'],
-                endereco=request.data['endereco']
-            )
-            
-            return Response({
-                'message': 'Usuário registrado com sucesso!'
-            }, status=status.HTTP_201_CREATED)
-            
-    except Exception as e:
-        # Se algo der errado, desfaz a transação e retorna erro
+            try:
+                user = User.objects.create_user(
+                    username=cpf,
+                    email=request.data['email'],
+                    password=request.data['password'],
+                    first_name=request.data['first_name'],
+                    last_name=request.data['last_name']
+                )
+
+                # Criar cliente
+                cliente = Cliente.objects.create(
+                    user=user,
+                    cpf=cpf,
+                    telefone=request.data['telefone'],
+                    endereco=request.data['endereco']
+                )
+                
+                return Response({
+                    'message': 'Usuário registrado com sucesso!',
+                    'user': {
+                        'id': user.id,
+                        'username': user.username,
+                        'email': user.email,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name
+                    }
+                }, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                # Se algo der errado na criação do usuário ou cliente, desfaz a transação
+                if 'user' in locals() and user:
+                    user.delete()
+                raise ValidationError(f'Erro ao criar usuário ou cliente: {str(e)}')
+                
+    except ValidationError as e:
         return Response({
             'message': str(e)
+        }, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({
+            'message': f'Erro ao registrar usuário: {str(e)}'
         }, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
