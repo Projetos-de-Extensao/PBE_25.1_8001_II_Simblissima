@@ -5,9 +5,9 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.core.exceptions import ValidationError
 from django.shortcuts import render
-from .models import Produto, Cliente, Pedido, ItemPedido, StatusPedido
+from .models import Cliente, Pedido, ItemPedido, StatusPedido
 from .serializers import (
-    UserSerializer, ProdutoSerializer, ClienteSerializer,
+    UserSerializer, ClienteSerializer,
     PedidoSerializer, ItemPedidoSerializer, StatusPedidoSerializer
 )
 from decimal import Decimal
@@ -31,10 +31,6 @@ class IsOwnerOrStaff(permissions.BasePermission):
         
         return False
 
-class ProdutoViewSet(viewsets.ModelViewSet):
-    queryset = Produto.objects.all()
-    serializer_class = ProdutoSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()

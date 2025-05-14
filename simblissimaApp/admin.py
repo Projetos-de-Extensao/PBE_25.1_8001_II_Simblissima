@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Produto, Cliente, Pedido, ItemPedido, StatusPedido
+from .models import Cliente, Pedido, ItemPedido, StatusPedido
 
 class ItemPedidoInline(admin.TabularInline):
     model = ItemPedido
@@ -35,5 +35,5 @@ class ClienteAdmin(admin.ModelAdmin):
         for obj in queryset:
             self.delete_model(request, obj)
 
-admin.site.register(Produto)
+# admin.site.register(Produto)
 admin.site.register(StatusPedido)
