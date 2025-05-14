@@ -1,212 +1,35 @@
 // pedidos.js
-const STATUS_CLASSES = {
-    'PENDENTE': 'status-pendente',
-    'AGUARDANDO_PAGAMENTO': 'status-aguardando',
-    'CONFIRMADO': 'status-confirmado',
-    'EM_TRANSITO': 'status-transito',
-    'ENTREGUE': 'status-entregue',
-    'CANCELADO': 'status-cancelado'
-};
-
-const STATUS_DISPLAY = {
-    'PENDENTE': 'Pendente',
-    'AGUARDANDO_PAGAMENTO': 'Aguardando Pagamento',
-    'CONFIRMADO': 'Confirmado',
-    'EM_TRANSITO': 'Em Trânsito',
-    'ENTREGUE': 'Entregue',
-    'CANCELADO': 'Cancelado'
-};
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleString('pt-BR');
-}
-
-function formatPrice(price) {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(price);
-}
-
 async function loadPedidos() {
     try {
-        const pedidos = await fetchAPI('/pedidos/');
+        const user = await getCurrentUser();
+        if (!user) {
+            loadLogin();
+            return;
+        }
+
         const content = document.getElementById('content');
-        
-        // Adicionar os estilos específicos da página
         content.innerHTML = `
-            <style>
-                .pedido-card {
-                    border: 1px solid #ddd;
-                    padding: 15px;
-                    margin-bottom: 15px;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    transition: transform 0.3s, box-shadow 0.3s;
-                }
-                .pedido-card:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-                }
-                .pedido-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 10px;
-                }
-                .status {
-                    display: inline-block;
-                    padding: 5px 10px;
-                    border-radius: 8px;
-                    font-weight: bold;
-                }
-                .status-pendente { background-color: #fff3cd; color: #856404; }
-                .status-aguardando { background-color: #cce5ff; color: #004085; }
-                .status-confirmado { background-color: #d4edda; color: #155724; }
-                .status-transito { background-color: #e2e3e5; color: #383d41; }
-                .status-entregue { background-color: #d1e7dd; color: #0f5132; }
-                .status-cancelado { background-color: #f8d7da; color: #721c24; }
-            </style>
             <div class="container">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Meus Pedidos</h2>
-                    <button class="btn btn-primary" onclick="showNovoPedidoForm()">Novo Pedido</button>
-                </div>
-                ${pedidos.results.length === 0 ? `
-                    <div class="alert alert-info">
-                        Você ainda não tem pedidos. Que tal fazer um agora?
+                <div class="row mb-4">
+                    <div class="col">
+                        <h2>Meus Pedidos</h2>
+                        <button class="btn btn-primary" onclick="showNovoPedidoForm()">Novo Pedido</button>
                     </div>
-                ` : `
-                    <div class="pedidos-list">
-                        ${pedidos.results.map(pedido => `
-                            <div class="pedido-card">
-                                <div class="pedido-header">
-                                    <h5>Pedido #${pedido.id}</h5>
-                                    <span class="status ${STATUS_CLASSES[pedido.status]}">
-                                        ${STATUS_DISPLAY[pedido.status]}
-                                    </span>
-                                </div>
-                                <div class="pedido-body">
-                                    <p><strong>Data:</strong> ${formatDate(pedido.data_criacao)}</p>
-                                    <p><strong>Valor Total:</strong> ${formatPrice(pedido.valor_total)}</p>
-                                    ${pedido.valor_final ? `
-                                        <p><strong>Valor Final:</strong> ${formatPrice(pedido.valor_final)}</p>
-                                    ` : ''}
-                                    <div class="mt-3">
-                                        <button class="btn btn-info" onclick="viewPedido(${pedido.id})">
-                                            Ver Detalhes
-                                        </button>
-                                        ${pedido.status === 'AGUARDANDO_PAGAMENTO' ? `
-                                            <button class="btn btn-success" onclick="confirmarPedido(${pedido.id})">
-                                                Confirmar Pedido
-                                            </button>
-                                            <button class="btn btn-danger" onclick="rejeitarPedido(${pedido.id})">
-                                                Rejeitar
-                                            </button>
-                                        ` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `}
-            </div>
-        `;
-    } catch (error) {
-        showMessage('Erro ao carregar pedidos', 'danger');
-    }
-}
-
-async function viewPedido(id) {
-    try {
-        const pedido = await fetchAPI(`/pedidos/${id}/`);
-        const content = document.getElementById('content');
-        
-        content.innerHTML = `
-            <style>
-                .item {
-                    border: 1px solid #ddd;
-                    padding: 10px;
-                    margin-bottom: 10px;
-                    border-radius: 4px;
-                }
-                .status {
-                    display: inline-block;
-                    padding: 5px 10px;
-                    border-radius: 4px;
-                    font-weight: bold;
-                }
-                .valores {
-                    text-align: right;
-                    font-size: 1.1em;
-                    margin: 20px 0;
-                }
-            </style>
-            <div class="container">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Pedido #${pedido.id}</h2>
-                    <button class="btn btn-secondary" onclick="loadPedidos()">Voltar</button>
                 </div>
-                
-                <div class="card">
-                    <div class="card-body">
-                        <div class="pedido-info">
-                            <p><strong>Cliente:</strong> ${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
-                            <p><strong>Data:</strong> ${formatDate(pedido.data_criacao)}</p>
-                            <p><strong>Status:</strong> 
-                                <span class="status ${STATUS_CLASSES[pedido.status]}">
-                                    ${STATUS_DISPLAY[pedido.status]}
-                                </span>
-                            </p>
+                <div class="row">
+                    <div class="col">
+                        <div id="listaPedidos">
+                            Carregando pedidos...
                         </div>
-
-                        <h4>Itens do Pedido</h4>
-                        ${pedido.itens.map(item => `
-                            <div class="item">
-                                <p>${item.descricao}</p>
-                                <p class="text-end"><strong>Valor:</strong> ${formatPrice(item.preco)}</p>
-                            </div>
-                        `).join('')}
-
-                        <div class="valores">
-                            <p><strong>Valor Total:</strong> ${formatPrice(pedido.valor_total)}</p>
-                            ${pedido.valor_final ? `
-                                <p><strong>Valor Final:</strong> ${formatPrice(pedido.valor_final)}</p>
-                            ` : ''}
-                        </div>
-
-                        <h4>Histórico de Status</h4>
-                        <div class="historico">
-                            ${pedido.historico_status.map(status => `
-                                <div class="item">
-                                    <p><strong>Status:</strong> 
-                                        <span class="status ${STATUS_CLASSES[status.status]}">
-                                            ${STATUS_DISPLAY[status.status]}
-                                        </span>
-                                    </p>
-                                    <p><strong>Data:</strong> ${formatDate(status.data)}</p>
-                                    ${status.comentario ? `<p><strong>Comentário:</strong> ${status.comentario}</p>` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        ${pedido.status === 'AGUARDANDO_PAGAMENTO' ? `
-                            <div class="mt-4">
-                                <button class="btn btn-success" onclick="confirmarPedido(${pedido.id})">
-                                    Confirmar Pedido
-                                </button>
-                                <button class="btn btn-danger" onclick="rejeitarPedido(${pedido.id})">
-                                    Rejeitar Pedido
-                                </button>
-                            </div>
-                        ` : ''}
                     </div>
                 </div>
             </div>
         `;
+
+        carregarPedidos();
     } catch (error) {
-        showMessage('Erro ao carregar detalhes do pedido', 'danger');
+        console.error('Erro ao carregar pedidos:', error);
+        showMessage('Erro ao carregar a página de pedidos', 'danger');
     }
 }
 
@@ -214,452 +37,183 @@ function showNovoPedidoForm() {
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Novo Pedido</h2>
-                <button class="btn btn-secondary" onclick="loadPedidos()">Voltar</button>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <form id="novoPedidoForm" onsubmit="handleNovoPedido(event)">
-                        <div id="itens">
-                            <div class="item-pedido mb-3">
-                                <h5>Item 1</h5>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label>Descrição</label>
-                                            <textarea name="descricao[]" class="form-control" required></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Preço</label>
-                                            <input type="number" name="preco[]" class="form-control" step="0.01" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="button" class="btn btn-secondary mb-3" onclick="addItemField()">
-                            Adicionar Item
-                        </button>
-
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Criar Pedido</button>
-                        </div>
-                    </form>
+            <h2>Novo Pedido</h2>
+            <form id="novoPedidoForm">
+                <div class="mb-3">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea class="form-control" id="observacoes" rows="3"></textarea>
                 </div>
-            </div>
+
+                <div id="itensPedido">
+                    <h3>Itens do Pedido</h3>
+                    <div class="itens-list"></div>
+                    <button type="button" class="btn btn-secondary mb-3" onclick="adicionarItem()">
+                        Adicionar Item
+                    </button>
+                </div>
+
+                <div class="mb-3">
+                    <label for="metodoPagamento" class="form-label">Método de Pagamento</label>
+                    <select class="form-control" id="metodoPagamento">
+                        <option value="PIX">Pix</option>
+                        <option value="CARTAO">Cartão</option>
+                        <option value="BOLETO">Boleto</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Criar Pedido</button>
+                <button type="button" class="btn btn-secondary" onclick="loadPedidos()">Cancelar</button>
+            </form>
         </div>
     `;
+
+    document.getElementById('novoPedidoForm').addEventListener('submit', criarPedido);
+    adicionarItem(); // Adiciona o primeiro item automaticamente
 }
 
-function addItemField() {
-    const itensDiv = document.getElementById('itens');
-    const itemCount = itensDiv.children.length + 1;
-    
-    const newItem = document.createElement('div');
-    newItem.className = 'item-pedido mb-3';
-    newItem.innerHTML = `
-        <h5>Item ${itemCount}</h5>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <label>Descrição</label>
-                    <textarea name="descricao[]" class="form-control" required></textarea>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Preço</label>
-                    <input type="number" name="preco[]" class="form-control" step="0.01" required>
-                </div>
-            </div>
+function adicionarItem() {
+    const itemsList = document.querySelector('#itensPedido .itens-list');
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item-pedido mb-3 p-3 border rounded';
+    itemDiv.innerHTML = `
+        <div class="mb-2">
+            <label class="form-label">Descrição</label>
+            <textarea class="form-control item-descricao" rows="2"></textarea>
         </div>
+        <div class="mb-2">
+            <label class="form-label">Preço</label>
+            <input type="number" class="form-control item-preco" step="0.01" min="0">
+        </div>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">
+            Remover Item
+        </button>
     `;
-    
-    itensDiv.appendChild(newItem);
+    itemsList.appendChild(itemDiv);
 }
 
-async function handleNovoPedido(event) {
+async function criarPedido(event) {
     event.preventDefault();
-    const form = event.target;
-    const descricoes = Array.from(form.querySelectorAll('textarea[name="descricao[]"]')).map(el => el.value);
-    const precos = Array.from(form.querySelectorAll('input[name="preco[]"]')).map(el => parseFloat(el.value));
+
+    const itens = [];
+    document.querySelectorAll('.item-pedido').forEach(itemDiv => {
+        itens.push({
+            descricao: itemDiv.querySelector('.item-descricao').value,
+            preco: parseFloat(itemDiv.querySelector('.item-preco').value)
+        });
+    });
+
+    const pedidoData = {
+        observacoes: document.getElementById('observacoes').value,
+        metodo_pagamento: document.getElementById('metodoPagamento').value,
+        itens: itens
+    };
 
     try {
-        // Primeiro criar o pedido
-        const pedido = await fetchAPI('/pedidos/', {
+        const response = await fetchAPI('/pedidos/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                status: 'PENDENTE'
-            })
+            body: JSON.stringify(pedidoData)
         });
-
-        // Depois adicionar os itens
-        for (let i = 0; i < descricoes.length; i++) {
-            await fetchAPI(`/pedidos/${pedido.id}/add_item/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    descricao: descricoes[i],
-                    preco: precos[i]
-                })
-            });
-        }
-
-        showMessage('Pedido criado com sucesso!');
+        
+        showMessage('Pedido criado com sucesso!', 'success');
         loadPedidos();
     } catch (error) {
         showMessage('Erro ao criar pedido', 'danger');
     }
 }
 
-async function confirmarPedido(id) {
+async function carregarPedidos() {
     try {
-        await fetchAPI(`/pedidos/${id}/update_status/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                status: 'CONFIRMADO',
-                comentario: 'Pedido confirmado pelo cliente'
-            })
-        });
+        const data = await fetchAPI('/pedidos/');
+        const listaPedidos = document.getElementById('listaPedidos');
         
-        showMessage('Pedido confirmado com sucesso!');
-        viewPedido(id);
-    } catch (error) {
-        showMessage('Erro ao confirmar pedido', 'danger');
-    }
-}
-
-async function rejeitarPedido(id) {
-    if (confirm('Tem certeza que deseja rejeitar este pedido?')) {
-        try {
-            await fetchAPI(`/pedidos/${id}/update_status/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    status: 'CANCELADO',
-                    comentario: 'Pedido rejeitado pelo cliente'
-                })
-            });
-            
-            showMessage('Pedido rejeitado com sucesso!');
-            viewPedido(id);
-        } catch (error) {
-            showMessage('Erro ao rejeitar pedido', 'danger');
+        if (data.results && data.results.length > 0) {
+            listaPedidos.innerHTML = `
+                <div class="list-group">
+                    ${data.results.map(pedido => `
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Pedido #${pedido.id}</h5>
+                                <small>${new Date(pedido.data_criacao).toLocaleDateString()}</small>
+                            </div>
+                            <p class="mb-1">Status: ${pedido.status}</p>
+                            <p class="mb-1">Valor Total: R$ ${pedido.valor_total}</p>
+                            ${pedido.metodo_pagamento ? 
+                                `<p class="mb-1">Método de Pagamento: ${pedido.metodo_pagamento}</p>` : ''}
+                            ${pedido.observacoes ? 
+                                `<p class="mb-1">Observações: ${pedido.observacoes}</p>` : ''}
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-info" onclick="verDetalhesPedido(${pedido.id})">
+                                    Ver Detalhes
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            listaPedidos.innerHTML = '<p>Nenhum pedido encontrado.</p>';
         }
-    }
-}
-async function loadPedidos() {
-    try {
-        const pedidos = await fetchAPI('/pedidos/');
-        const content = document.getElementById('content');
-        content.innerHTML = `
-            <h2>Pedidos</h2>
-            <button class="btn btn-primary mb-3" onclick="showAddPedidoForm()">Novo Pedido</button>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Cliente</th>
-                            <th>Status</th>
-                            <th>Valor Total</th>
-                            <th>Data</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${pedidos.results.map(pedido => `
-                            <tr>
-                                <td>${pedido.id}</td>
-                                <td>${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</td>
-                                <td>${pedido.status}</td>
-                                <td>R$ ${pedido.valor_total}</td>
-                                <td>${new Date(pedido.data_criacao).toLocaleDateString()}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-info" onclick="viewPedido(${pedido.id})">
-                                        Ver
-                                    </button>
-                                    <button class="btn btn-sm btn-warning" onclick="updateStatus(${pedido.id})">
-                                        Status
-                                    </button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
     } catch (error) {
         showMessage('Erro ao carregar pedidos', 'danger');
     }
 }
 
-async function viewPedido(id) {
+async function verDetalhesPedido(pedidoId) {
     try {
-        const pedido = await fetchAPI(`/pedidos/${id}/`);
+        const pedido = await fetchAPI(`/pedidos/${pedidoId}/`);
         const content = document.getElementById('content');
+        
         content.innerHTML = `
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3>Pedido #${pedido.id}</h3>
-                    <button class="btn btn-secondary" onclick="loadPedidos()">Voltar</button>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h5>Cliente</h5>
-                            <p>${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
-                            <p>CPF: ${pedido.cliente.cpf}</p>
-                            <p>Endereço: ${pedido.cliente.endereco}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>Status do Pedido</h5>
-                            <p>Status Atual: ${pedido.status}</p>
-                            <p>Data de Criação: ${new Date(pedido.data_criacao).toLocaleString()}</p>
-                            <p>Última Atualização: ${new Date(pedido.data_atualizacao).toLocaleString()}</p>
-                        </div>
+            <div class="container">
+                <h2>Detalhes do Pedido #${pedido.id}</h2>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Informações Gerais</h5>
+                        <p>Status: ${pedido.status}</p>
+                        <p>Data de Criação: ${new Date(pedido.data_criacao).toLocaleString()}</p>
+                        <p>Valor Total: R$ ${pedido.valor_total}</p>
+                        <p>Método de Pagamento: ${pedido.metodo_pagamento || 'Não definido'}</p>
+                        ${pedido.observacoes ? `<p>Observações: ${pedido.observacoes}</p>` : ''}
                     </div>
+                </div>
 
-                    <h5>Itens do Pedido</h5>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>Preço</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Itens do Pedido</h5>
+                        <div class="list-group">
                             ${pedido.itens.map(item => `
-                                <tr>
-                                    <td>${item.descricao}</td>
-                                    <td>R$ ${item.preco}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Total</th>
-                                <th>R$ ${pedido.valor_total}</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-
-                    <h5>Histórico de Status</h5>
-                    <div class="list-group">
-                        ${pedido.historico_status.map(status => `
-                            <div class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">${status.status}</h6>
-                                    <small>${new Date(status.data).toLocaleString()}</small>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">${item.descricao}</h6>
+                                        <span>R$ ${item.preco}</span>
+                                    </div>
                                 </div>
-                                ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
-                            </div>
-                        `).join('')}
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Histórico de Status</h5>
+                        <div class="list-group">
+                            ${pedido.historico_status.map(status => `
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">${status.status}</h6>
+                                        <small>${new Date(status.data).toLocaleString()}</small>
+                                    </div>
+                                    ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="loadPedidos()">Voltar</button>
             </div>
         `;
     } catch (error) {
         showMessage('Erro ao carregar detalhes do pedido', 'danger');
-    }
-}
-
-async function updateStatus(id) {
-    try {
-        const pedido = await fetchAPI(`/pedidos/${id}/`);
-        const content = document.getElementById('content');
-        content.innerHTML = `
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">Atualizar Status do Pedido #${id}</div>
-                        <div class="card-body">
-                            <form id="statusForm" onsubmit="handleStatusUpdate(event, ${id})">
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Novo Status</label>
-                                    <select class="form-select" id="status" required>
-                                        <option value="">Selecione um status</option>
-                                        <option value="PENDENTE">Pendente</option>
-                                        <option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
-                                        <option value="CONFIRMADO">Confirmado</option>
-                                        <option value="EM_TRANSITO">Em Trânsito</option>
-                                        <option value="ENTREGUE">Entregue</option>
-                                        <option value="CANCELADO">Cancelado</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="comentario" class="form-label">Comentário</label>
-                                    <textarea class="form-control" id="comentario"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Atualizar</button>
-                                <button type="button" class="btn btn-secondary" onclick="loadPedidos()">Cancelar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    } catch (error) {
-        showMessage('Erro ao carregar formulário de status', 'danger');
-    }
-}
-
-async function handleStatusUpdate(event, id) {
-    event.preventDefault();
-    const data = {
-        status: document.getElementById('status').value,
-        comentario: document.getElementById('comentario').value
-    };
-
-    try {
-        await fetchAPI(`/pedidos/${id}/update_status/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        showMessage('Status atualizado com sucesso!');
-        viewPedido(id);
-    } catch (error) {
-        showMessage('Erro ao atualizar status', 'danger');
-    }
-}
-
-function showAddPedidoForm() {
-    const content = document.getElementById('content');
-    content.innerHTML = `
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Novo Pedido</div>
-                    <div class="card-body">
-                        <form id="pedidoForm" onsubmit="handleAddPedido(event)">
-                            <div id="itens">
-                                <div class="item-pedido mb-3">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <label class="form-label">Descrição</label>
-                                            <input type="text" class="form-control descricao" required>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Preço</label>
-                                            <input type="number" step="0.01" class="form-control preco" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-secondary mb-3" onclick="addItemField()">
-                                + Adicionar Item
-                            </button>
-                            <button type="submit" class="btn btn-primary">Criar Pedido</button>
-                            <button type="button" class="btn btn-secondary" onclick="loadPedidos()">Cancelar</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function addItemField() {
-    const itensDiv = document.getElementById('itens');
-    const newItem = document.createElement('div');
-    newItem.className = 'item-pedido mb-3';
-    newItem.innerHTML = `
-        <div class="row">
-            <div class="col-md-8">
-                <label class="form-label">Descrição</label>
-                <input type="text" class="form-control descricao" required>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Preço</label>
-                <input type="number" step="0.01" class="form-control preco" required>
-            </div>
-        </div>
-    `;
-    itensDiv.appendChild(newItem);
-}
-
-async function handleAddPedido(event) {
-    event.preventDefault();
-    const form = event.target;
-    const submitButton = form.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Criando pedido...';
-
-    const items = [];
-    const descricoes = document.querySelectorAll('.descricao');
-    const precos = document.querySelectorAll('.preco');
-    
-    if (descricoes.length === 0 || precos.length === 0) {
-        showMessage('Adicione pelo menos um item ao pedido', 'warning');
-        submitButton.disabled = false;
-        submitButton.innerHTML = 'Criar Pedido';
-        return;
-    }
-
-    for (let i = 0; i < descricoes.length; i++) {
-        const descricao = descricoes[i].value.trim();
-        const preco = parseFloat(precos[i].value);
-        
-        if (!descricao || isNaN(preco) || preco <= 0) {
-            showMessage('Todos os campos são obrigatórios e o preço deve ser maior que zero', 'warning');
-            submitButton.disabled = false;
-            submitButton.innerHTML = 'Criar Pedido';
-            return;
-        }
-        
-        items.push({
-            descricao: descricao,
-            preco: preco
-        });
-    }
-
-    try {        const pedidoResponse = await fetchAPI('/pedidos/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({})
-        });
-
-        if (!pedidoResponse || !pedidoResponse.id) {
-            throw new Error('Resposta inválida do servidor');
-        }
-
-        // Adicionar os itens ao pedido
-        for (const item of items) {
-            await fetchAPI(`/pedidos/${pedidoResponse.id}/add_item/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(item)
-            });
-        }
-
-        showMessage('Pedido criado com sucesso!');
-        loadPedidos();
-    } catch (error) {
-        console.error('Erro ao criar pedido:', error);
-        showMessage('Erro ao criar pedido: ' + (error.message || 'Erro desconhecido'), 'danger');
-        submitButton.disabled = false;
-        submitButton.innerHTML = 'Criar Pedido';
     }
 }

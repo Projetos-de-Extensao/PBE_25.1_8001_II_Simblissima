@@ -242,4 +242,4 @@ def current_user(request):
     if request.user.is_authenticated:
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
-    return Response(None, status=status.HTTP_200_OK)
+    return Response({'detail': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)

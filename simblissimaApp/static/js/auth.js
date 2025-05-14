@@ -1,4 +1,19 @@
 // auth.js
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 async function getCurrentUser() {
     try {
         const response = await fetch('/api/current-user/', {
@@ -10,7 +25,13 @@ async function getCurrentUser() {
         });
         
         if (response.ok) {
-            return await response.json();
+            const data = await response.json();
+            // Atualiza o token se estiver presente na resposta
+            if (data.token) {
+                authToken = data.token;
+                localStorage.setItem('authToken', authToken);
+            }
+            return data;
         }
         return null;
     } catch (error) {

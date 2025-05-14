@@ -57,17 +57,24 @@ async function handleLogin(event) {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
             body: formData,
-            credentials: 'include' // Importante para autenticação por sessão
+            credentials: 'include'
         });
 
         if (response.ok) {
-            updateNavigation(); // Atualiza a navegação
-            window.location.href = '/'; // Redireciona para a página inicial
-            showMessage('Login realizado com sucesso!');
+            // Esperamos a navegação ser atualizada antes de continuar
+            const success = await updateNavigation();
+            if (success) {
+                showMessage('Login realizado com sucesso!');
+                loadHome();
+            } else {
+                throw new Error('Erro ao verificar usuário após login');
+            }
         } else {
-            throw new Error('Credenciais inválidas');
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Credenciais inválidas');
         }
     } catch (error) {
+        console.error('Erro no login:', error);
         showMessage(error.message, 'danger');
     }
 }
