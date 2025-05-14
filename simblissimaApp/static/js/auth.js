@@ -30,7 +30,13 @@ async function logout() {
         });
 
         if (response.ok) {
-            window.location.href = '/';
+            // Limpa dados de autenticação
+            authToken = null;
+            localStorage.removeItem('authToken');
+            // Atualiza a navegação
+            updateNavigation();
+            // Carrega a página de login
+            loadLogin();
             showMessage('Logout realizado com sucesso!');
         }
     } catch (error) {

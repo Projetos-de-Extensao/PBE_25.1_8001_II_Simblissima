@@ -145,15 +145,4 @@ async function handleRegister(event) {
     }
 }
 
-async function logout() {
-    try {
-        await fetch('/api-auth/logout/', { method: 'POST' });
-        authToken = null;
-        localStorage.removeItem('authToken');
-        updateNavigation();
-        loadLogin();
-        showMessage('Logout realizado com sucesso!');
-    } catch (error) {
-        showMessage('Erro ao fazer logout', 'danger');
-    }
-}
+// Logout function moved to auth.js
