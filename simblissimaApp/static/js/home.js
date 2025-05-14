@@ -9,17 +9,7 @@ function loadHome() {
             <p>Utilize o menu acima para navegar pelo sistema.</p>
         </div>
         
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Produtos</h5>
-                        <p class="card-text">Gerencie o catálogo de produtos.</p>
-                        <button class="btn btn-primary" onclick="loadProdutos()">Ver Produtos</button>
-                    </div>
-                </div>
-            </div>
-            
+        <div class="row mt-4">            
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">

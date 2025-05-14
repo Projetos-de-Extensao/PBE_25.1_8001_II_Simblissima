@@ -23,5 +23,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('simblissimaApp.urls')),
+    path('api-auth/login/', auth_views.LoginView.as_view(next_page='/'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

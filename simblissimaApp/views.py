@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -146,3 +146,41 @@ class StatusPedidoViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return StatusPedido.objects.all()
         return StatusPedido.objects.filter(pedido__cliente__user=self.request.user)
+
+@api_view(['POST'])
+def register_user(request):
+    try:
+        with transaction.atomic():
+            # Criar usuário
+            user = User.objects.create_user(
+                username=request.data['cpf'],
+                email=request.data['email'],
+                password=request.data['password'],
+                first_name=request.data['first_name'],
+                last_name=request.data['last_name']
+            )
+            
+            # Criar cliente
+            cliente = Cliente.objects.create(
+                user=user,
+                cpf=request.data['cpf'],
+                telefone=request.data['telefone'],
+                endereco=request.data['endereco']
+            )
+            
+            return Response({
+                'message': 'Usuário registrado com sucesso!'
+            }, status=status.HTTP_201_CREATED)
+            
+    except Exception as e:
+        # Se algo der errado, desfaz a transação e retorna erro
+        return Response({
+            'message': str(e)
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def current_user(request):
+    if request.user.is_authenticated:
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    return Response(None, status=status.HTTP_401_UNAUTHORIZED)

@@ -135,23 +135,14 @@
     <header>
         <div class="nav-container">
             <h1>Simblissima Delivery</h1>
-            <div class="user-info">
-                {% if user.is_authenticated %}
-                    {% if user.is_staff %}
-                        <span>Admin: {{ user.get_full_name }}</span>
-                    {% else %}
-                        <span>Olá, {{ user.get_full_name }}</span>
-                    {% endif %}
-                    <a href="{% url 'logout' %}" class="btn btn-danger">logout</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-login">Login</a>
-                    <a href="{% url 'register' %}" class="btn btn-register">Cadastrar</a>
-                {% endif %}
+            <div class="auth-container">
+                <button class="btn btn-login" onclick="loadLogin()">Login</button>
+                <button class="btn btn-register" onclick="loadRegister()">Cadastrar</button>
             </div>
         </div>
     </header>
 
-    <main class="main-content">
+    <main id="content" class="main-content">
         {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -212,6 +203,11 @@
             </div>
         {% endif %}
     </main>
+
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/login.js"></script>
+    <script src="/static/js/home.js"></script>
+    <script src="/static/js/pedidos.js"></script>
 
     <footer>
         <div class="container">

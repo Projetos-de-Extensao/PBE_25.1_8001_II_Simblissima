@@ -90,8 +90,7 @@
             text-decoration: none;
             transition: color 0.3s;
         }
-        p a:hover {
-            color: #e62b2b; /* Slightly darker red */
+        p a:hover {            color: #e62b2b; /* Slightly darker red */
         }
     </style>
 </head>
@@ -109,7 +108,7 @@
         </div>
         {% endif %}
 
-        <form method="post">
+        <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">CPF:</label>
