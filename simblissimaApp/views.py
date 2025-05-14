@@ -1,208 +1,148 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required, user_passes_test
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.db import transaction
 from django.core.exceptions import ValidationError
+from django.shortcuts import render
 from .models import Produto, Cliente, Pedido, ItemPedido, StatusPedido
+from .serializers import (
+    UserSerializer, ProdutoSerializer, ClienteSerializer,
+    PedidoSerializer, ItemPedidoSerializer, StatusPedidoSerializer
+)
 from decimal import Decimal
 
-def home(request):
-    context = {'user': request.user}
-    return render(request, 'simblissimaApp/home.html', context)
+def spa_view(request):
+    return render(request, 'simblissimaApp/api/base.html')
 
-def register(request):
-    if request.method == 'POST':
-        # Get form data
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        cpf = request.POST['cpf']
-        email = request.POST['email']
-        password = request.POST['password']
-        endereco = request.POST['endereco']
-        telefone = request.POST['telefone']
-
-        try:
-            # Check if CPF already exists
-            if User.objects.filter(username=cpf).exists():
-                raise ValidationError('Já existe uma conta com este CPF.')
-
-            with transaction.atomic():
-                # Create User instance
-                user = User.objects.create_user(
-                    username=cpf,
-                    email=email,
-                    password=password,
-                    first_name=first_name,
-                    last_name=last_name
-                )
-
-                # Create Cliente instance
-                Cliente.objects.create(
-                    user=user,
-                    cpf=cpf,
-                    endereco=endereco,
-                    telefone=telefone
-                )
-
-                messages.success(request, 'Conta criada com sucesso!')
-                return redirect('login')
-        except ValidationError as e:
-            messages.error(request, str(e))
-        except Exception as e:
-            messages.error(request, f'Erro ao criar conta: {str(e)}')
-
-    return render(request, 'simblissimaApp/register.html')
-
-@login_required
-def novo_pedido(request):
-    if request.method == 'POST':
-        try:
-            with transaction.atomic():
-                cliente = request.user.cliente
-                pedido = Pedido.objects.create(
-                    cliente=cliente,
-                    status='PENDENTE'
-                )
-                
-                # Process items from form
-                itens_descricao = request.POST.getlist('descricao[]')
-                itens_preco = request.POST.getlist('preco[]')
-                
-                valor_total = Decimal('0.00')
-                for desc, preco in zip(itens_descricao, itens_preco):
-                    if desc and preco:
-                        preco_decimal = Decimal(preco)
-                        ItemPedido.objects.create(
-                            pedido=pedido,
-                            descricao=desc,
-                            preco=preco_decimal
-                        )
-                        valor_total += preco_decimal
-                
-                pedido.valor_total = valor_total
-                pedido.save()
-                
-                StatusPedido.objects.create(
-                    pedido=pedido,
-                    status='PENDENTE',
-                    comentario='Pedido criado'
-                )
-                
-                messages.success(request, 'Pedido criado com sucesso!')
-                return redirect('detalhe_pedido', pedido_id=pedido.id)
-        except Exception as e:
-            messages.error(request, f'Erro ao criar pedido: {str(e)}')
-    
-    return render(request, 'simblissimaApp/novo_pedido.html')
-
-@login_required
-def detalhe_pedido(request, pedido_id):
-    pedido = get_object_or_404(Pedido, id=pedido_id)
-    if not request.user.is_staff and pedido.cliente.user != request.user:
-        messages.error(request, 'Você não tem permissão para ver este pedido.')
-        return redirect('home')
-    
-    return render(request, 'simblissimaApp/detalhe_pedido.html', {'pedido': pedido})
-
-@user_passes_test(lambda u: u.is_staff)
-def admin_pedidos(request):
-    pedidos = Pedido.objects.all().order_by('-data_criacao')
-    return render(request, 'simblissimaApp/admin_pedidos.html', {'pedidos': pedidos})
-
-@user_passes_test(lambda u: u.is_staff)
-def atualizar_pedido(request, pedido_id):
-    pedido = get_object_or_404(Pedido, id=pedido_id)
-    if request.method == 'POST':
-        novo_status = request.POST.get('status')
-        valor_final = request.POST.get('valor_final')
-        comentario = request.POST.get('comentario')
+class IsOwnerOrStaff(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # Allow staff users to perform any action
+        if request.user.is_staff:
+            return True
         
-        if novo_status:
+        # For Cliente objects
+        if isinstance(obj, Cliente):
+            return obj.user == request.user
+        
+        # For Pedido objects
+        if isinstance(obj, Pedido):
+            return obj.cliente.user == request.user
+        
+        return False
+
+class ProdutoViewSet(viewsets.ModelViewSet):
+    queryset = Produto.objects.all()
+    serializer_class = ProdutoSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class ClienteViewSet(viewsets.ModelViewSet):
+    queryset = Cliente.objects.all()
+    serializer_class = ClienteSerializer
+    permission_classes = [IsOwnerOrStaff]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Cliente.objects.all()
+        return Cliente.objects.filter(user=self.request.user)
+
+class PedidoViewSet(viewsets.ModelViewSet):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+    permission_classes = [IsOwnerOrStaff]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Pedido.objects.all()
+        return Pedido.objects.filter(cliente__user=self.request.user)
+
+    def perform_create(self, serializer):
+        with transaction.atomic():
+            pedido = serializer.save(cliente=self.request.user.cliente)
+            StatusPedido.objects.create(
+                pedido=pedido,
+                status='PENDENTE',
+                comentario='Pedido criado'
+            )
+
+    @action(detail=True, methods=['post'])
+    def add_item(self, request, pk=None):
+        pedido = self.get_object()
+        serializer = ItemPedidoSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save(pedido=pedido)
+            # Recalculate total value
+            total = sum(item.preco for item in pedido.itens.all())
+            pedido.valor_total = total
+            pedido.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def update_status(self, request, pk=None):
+        pedido = self.get_object()
+        novo_status = request.data.get('status')
+        
+        if novo_status not in dict(Pedido.STATUS_CHOICES):
+            return Response(
+                {'error': 'Status inválido'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        with transaction.atomic():
             pedido.status = novo_status
-            if valor_final:
-                pedido.valor_final = Decimal(valor_final)
             pedido.save()
             
             StatusPedido.objects.create(
                 pedido=pedido,
                 status=novo_status,
-                comentario=comentario
+                comentario=request.data.get('comentario', '')
             )
             
-            messages.success(request, 'Pedido atualizado com sucesso!')
+        return Response(PedidoSerializer(pedido).data)
+
+    @action(detail=True, methods=['post'])
+    def confirmar_pagamento(self, request, pk=None):
+        pedido = self.get_object()
+        metodo_pagamento = request.data.get('metodo_pagamento')
         
-    return redirect('admin_pedidos')
+        if metodo_pagamento not in dict(Pedido.METODO_PAGAMENTO_CHOICES):
+            return Response(
+                {'error': 'Método de pagamento inválido'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-@login_required
-def confirmar_valor(request, pedido_id):
-    pedido = get_object_or_404(Pedido, id=pedido_id)
-    if pedido.cliente.user != request.user:
-        messages.error(request, 'Você não tem permissão para confirmar este pedido.')
-        return redirect('home')
-    
-    if request.method == 'POST':
-        acao = request.POST.get('acao')
-        if acao == 'confirmar':
-            pedido.status = 'CONFIRMADO'
+        with transaction.atomic():
+            pedido.metodo_pagamento = metodo_pagamento
+            pedido.status = 'AGUARDANDO_PAGAMENTO'
+            pedido.valor_final = pedido.valor_total
             pedido.save()
+            
             StatusPedido.objects.create(
                 pedido=pedido,
-                status='CONFIRMADO',
-                comentario='Valor final confirmado pelo cliente'
+                status='AGUARDANDO_PAGAMENTO',
+                comentario=f'Pagamento confirmado via {metodo_pagamento}'
             )
-            messages.success(request, 'Pedido confirmado com sucesso!')
-        elif acao == 'rejeitar':
-            pedido.status = 'CANCELADO'
-            pedido.save()
-            StatusPedido.objects.create(
-                pedido=pedido,
-                status='CANCELADO',
-                comentario='Valor final rejeitado pelo cliente'
-            )
-            messages.info(request, 'Pedido cancelado.')
             
-    return redirect('detalhe_pedido', pedido_id=pedido.id)
+        return Response(PedidoSerializer(pedido).data)
 
-@login_required
-def meus_pedidos(request):
-    if request.user.is_staff:
-        return redirect('admin_pedidos')
-    
-    pedidos = Pedido.objects.filter(cliente__user=request.user).order_by('-data_criacao')
-    return render(request, 'simblissimaApp/meus_pedidos.html', {'pedidos': pedidos})
+class ItemPedidoViewSet(viewsets.ModelViewSet):
+    queryset = ItemPedido.objects.all()
+    serializer_class = ItemPedidoSerializer
+    permission_classes = [IsOwnerOrStaff]
 
-def custom_logout(request):
-    if request.user.is_authenticated:
-        logout(request)
-    return redirect('home')
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return ItemPedido.objects.all()
+        return ItemPedido.objects.filter(pedido__cliente__user=self.request.user)
 
-@user_passes_test(lambda u: u.is_staff)
-def excluir_cliente(request):
-    if request.method == 'POST':
-        cliente_id = request.POST.get('cliente_id')
-        if not cliente_id:
-            messages.error(request, 'ID do cliente não fornecido.')
-            return redirect('admin_pedidos')
-            
-        try:
-            with transaction.atomic():
-                # Pegar o cliente pelo ID
-                cliente = get_object_or_404(Cliente, id=cliente_id)
-                user = cliente.user
-                
-                # Excluir o cliente (isso também excluirá seus pedidos devido ao CASCADE)
-                cliente.delete()
-                
-                # Excluir o usuário
-                user.delete()
-                
-                messages.success(request, f'A conta do cliente {user.get_full_name()} foi excluída com sucesso.')
-                return redirect('admin_pedidos')
-                
-        except Exception as e:
-            messages.error(request, f'Erro ao excluir conta: {str(e)}')
-            return redirect('home')
-            
-    return redirect('home')
+class StatusPedidoViewSet(viewsets.ModelViewSet):
+    queryset = StatusPedido.objects.all()
+    serializer_class = StatusPedidoSerializer
+    permission_classes = [IsOwnerOrStaff]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return StatusPedido.objects.all()
+        return StatusPedido.objects.filter(pedido__cliente__user=self.request.user)
