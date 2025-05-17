@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views import api_login, perfil_cliente
 
 router = DefaultRouter()
 router.register(r'clientes', views.ClienteViewSet)
@@ -14,4 +15,6 @@ urlpatterns = [
     path('api/current-user/', views.current_user, name='current-user'),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    path('api/login/', api_login, name='api_login'),
+    path('api/perfil/', perfil_cliente, name='perfil_cliente'),
 ]

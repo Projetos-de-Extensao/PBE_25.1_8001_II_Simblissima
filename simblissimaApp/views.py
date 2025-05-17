@@ -11,6 +11,8 @@ from .serializers import (
     PedidoSerializer, ItemPedidoSerializer, StatusPedidoSerializer
 )
 from decimal import Decimal
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login
 
 def spa_view(request):
     return render(request, 'simblissimaApp/api/base.html')
@@ -68,11 +70,12 @@ class PedidoViewSet(viewsets.ModelViewSet):
         
         if serializer.is_valid():
             serializer.save(pedido=pedido)
-            # Recalculate total value
+            # Recalcula o valor total do pedido
             total = sum(item.preco for item in pedido.itens.all())
             pedido.valor_total = total
             pedido.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # Retorna o pedido atualizado, incluindo o novo total
+            return Response(PedidoSerializer(pedido).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['post'])
@@ -182,9 +185,7 @@ def register_user(request):
             # Verifica se há erros de validação
             if validation_errors:
                 print(f"Erros de validação encontrados: {validation_errors}")
-                return Response({
-                    'message': '\n'.join(validation_errors)
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message': '\n'.join(validation_errors)}, status=status.HTTP_400_BAD_REQUEST)
 
             # Criar usuário
             try:
@@ -243,3 +244,36 @@ def current_user(request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
     return Response({'detail': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def api_login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return Response({'message': 'Login realizado com sucesso!'})
+    return Response({'error': 'Credenciais inválidas.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def perfil_cliente(request):
+    try:
+        cliente = Cliente.objects.get(user=request.user)
+    except Cliente.DoesNotExist:
+        return Response({'detail': 'Cliente não encontrado.'}, status=404)
+
+    if request.method == 'GET':
+        serializer = ClienteSerializer(cliente)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = ClienteSerializer(cliente, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
