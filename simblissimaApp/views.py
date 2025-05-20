@@ -54,15 +54,47 @@ class PedidoViewSet(viewsets.ModelViewSet):
             return Pedido.objects.all()
         return Pedido.objects.filter(cliente__user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        # Log dos dados recebidos para debug
+        print(f"DEBUG - POST /pedidos/ - Dados recebidos: {request.data}")
+        print(f"DEBUG - Usuário: {request.user}, Autenticado: {request.user.is_authenticated}")
+        if hasattr(request.user, 'cliente'):
+            print(f"DEBUG - Cliente encontrado: {request.user.cliente.id} - {request.user.cliente}")
+        else:
+            print("DEBUG - Usuário não tem cliente associado")
+            
+        # Verificar se o usuário tem um cliente associado
+        if not hasattr(request.user, 'cliente'):
+            return Response(
+                {"detail": "Usuário não tem um cliente associado. Faça login novamente."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            print(f"DEBUG - Dados validados: {serializer.validated_data}")
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except Exception as e:
+            print(f"DEBUG - Erro ao criar pedido: {str(e)}")
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
     def perform_create(self, serializer):
         with transaction.atomic():
             pedido = serializer.save(cliente=self.request.user.cliente)
-            StatusPedido.objects.create(
+            print(f"DEBUG - Pedido criado com ID: {pedido.id}")
+            # Criar um status inicial para o pedido
+            status_pedido = StatusPedido.objects.create(
                 pedido=pedido,
                 status='PENDENTE',
                 comentario='Pedido criado'
             )
-
+            print(f"DEBUG - Status pedido criado com ID: {status_pedido.id}")
+            # Se chegarmos aqui, tudo foi criado com sucesso
+            print(f"DEBUG - Pedido e status criados com sucesso")
+            
     @action(detail=True, methods=['post'])
     def add_item(self, request, pk=None):
         pedido = self.get_object()

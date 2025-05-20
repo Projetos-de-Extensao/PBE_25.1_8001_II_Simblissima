@@ -96,11 +96,21 @@ async function criarPedido(event) {
 
     const itens = [];
     document.querySelectorAll('.item-pedido').forEach(itemDiv => {
-        itens.push({
-            descricao: itemDiv.querySelector('.item-descricao').value,
-            preco: parseFloat(itemDiv.querySelector('.item-preco').value)
-        });
+        const descricao = itemDiv.querySelector('.item-descricao').value;
+        const preco = parseFloat(itemDiv.querySelector('.item-preco').value);
+        
+        if (descricao && !isNaN(preco)) {
+            itens.push({
+                descricao: descricao,
+                preco: preco
+            });
+        }
     });
+
+    if (itens.length === 0) {
+        showMessage('Adicione pelo menos um item ao pedido', 'danger');
+        return;
+    }
 
     const pedidoData = {
         observacoes: document.getElementById('observacoes').value,
@@ -109,15 +119,42 @@ async function criarPedido(event) {
     };
 
     try {
-        const response = await fetchAPI('/pedidos/', {
-            method: 'POST',
-            body: JSON.stringify(pedidoData)
-        });
+        console.log('Enviando dados do pedido:', JSON.stringify(pedidoData));
         
-        showMessage('Pedido criado com sucesso!', 'success');
-        loadPedidos();
+        // Usar XMLHttpRequest para obter o texto completo do erro
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `${API_BASE_URL}/pedidos/`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        xhr.withCredentials = true;
+        
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                console.log('Resposta do servidor:', xhr.responseText);
+                showMessage('Pedido criado com sucesso!', 'success');
+                loadPedidos();
+            } else {
+                console.error('Erro do servidor:', xhr.status, xhr.responseText);
+                let errorMsg = 'Erro ao criar pedido';
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    errorMsg = JSON.stringify(errorData);
+                } catch (e) {
+                    errorMsg = xhr.responseText || errorMsg;
+                }
+                showMessage(`Erro ao criar pedido: ${errorMsg}`, 'danger');
+            }
+        };
+        
+        xhr.onerror = function() {
+            console.error('Erro na requisição');
+            showMessage('Erro na comunicação com o servidor', 'danger');
+        };
+        
+        xhr.send(JSON.stringify(pedidoData));
     } catch (error) {
-        showMessage('Erro ao criar pedido', 'danger');
+        console.error('Erro ao criar pedido:', error);
+        showMessage(`Erro ao criar pedido: ${error.message}`, 'danger');
     }
 }
 

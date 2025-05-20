@@ -67,39 +67,23 @@ async function logout() {
 }
 
 function updateNavigation() {
-    const navContainer = document.querySelector('.nav-container');
+    const navContainer = document.querySelector('.navbar-nav.ms-auto');
     const userNav = document.getElementById('userNav');
     
     getCurrentUser().then(user => {
         if (user) {
             // Usuário está logado
-            if (!userNav) {
-                const userNavElement = document.createElement('div');
-                userNavElement.id = 'userNav';
-                userNavElement.classList.add('user-nav');
-                userNavElement.innerHTML = `
-                    <span class="user-name">Olá, ${user.first_name} ${user.last_name}</span>
-                    <button onclick="logout()" class="btn btn-danger">Sair</button>
-                `;
-                navContainer.appendChild(userNavElement);
-            }
-            
-            // Remove botões de login e registro se existirem
-            const loginBtn = document.querySelector('.btn-login');
-            const registerBtn = document.querySelector('.btn-register');
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (registerBtn) registerBtn.style.display = 'none';
+            document.getElementById('loginNav').classList.add('d-none');
+            document.getElementById('registroNav').classList.add('d-none');
+            document.getElementById('userInfo').classList.remove('d-none');
+            document.getElementById('logoutNav').classList.remove('d-none');
+            document.getElementById('userName').textContent = `${user.first_name} ${user.last_name}`;
         } else {
             // Usuário não está logado
-            if (userNav) {
-                userNav.remove();
-            }
-            
-            // Mostra botões de login e registro
-            const loginBtn = document.querySelector('.btn-login');
-            const registerBtn = document.querySelector('.btn-register');
-            if (loginBtn) loginBtn.style.display = 'block';
-            if (registerBtn) registerBtn.style.display = 'block';
+            document.getElementById('loginNav').classList.remove('d-none');
+            document.getElementById('registroNav').classList.remove('d-none');
+            document.getElementById('userInfo').classList.add('d-none');
+            document.getElementById('logoutNav').classList.add('d-none');
         }
     });
 }

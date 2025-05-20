@@ -30,7 +30,11 @@ class ClienteSerializer(serializers.ModelSerializer):
 class ItemPedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemPedido
-        fields = '__all__'
+        fields = ('id', 'descricao', 'preco', 'pedido')
+        read_only_fields = ('id',)
+        extra_kwargs = {
+            'pedido': {'required': False}
+        }
 
 class StatusPedidoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,7 +42,7 @@ class StatusPedidoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PedidoSerializer(serializers.ModelSerializer):
-    itens = ItemPedidoSerializer(many=True, read_only=True)
+    itens = ItemPedidoSerializer(many=True, required=False)
     historico_status = StatusPedidoSerializer(many=True, read_only=True)
     cliente = ClienteSerializer(read_only=True)
 
@@ -46,3 +50,41 @@ class PedidoSerializer(serializers.ModelSerializer):
         model = Pedido
         fields = '__all__'
         read_only_fields = ('valor_total', 'data_criacao', 'data_atualizacao')
+
+    def create(self, validated_data):
+        # Pega o cliente do contexto se não estiver em validated_data
+        cliente = None
+        request = self.context.get('request')
+        
+        if 'cliente' in validated_data:
+            cliente = validated_data.pop('cliente')
+        elif request and hasattr(request.user, 'cliente'):
+            cliente = request.user.cliente
+        
+        if not cliente:
+            raise serializers.ValidationError({"detail": "Cliente não encontrado. Faça login e tente novamente."})
+            
+        # Remove os itens para criar o pedido separadamente
+        itens_data = validated_data.pop('itens', [])
+        
+        # Cria o pedido com o cliente e outros dados
+        pedido = Pedido.objects.create(cliente=cliente, **validated_data)
+        
+        # Cria os itens associados ao pedido
+        valor_total = 0
+        for item_data in itens_data:
+            # Remove o campo pedido se existir para evitar conflito
+            if 'pedido' in item_data:
+                item_data.pop('pedido')
+            item = ItemPedido.objects.create(pedido=pedido, **item_data)
+            valor_total += float(item.preco)
+            
+        # Atualiza o valor total
+        pedido.valor_total = valor_total
+        pedido.save()
+        
+        return pedido
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        return rep
