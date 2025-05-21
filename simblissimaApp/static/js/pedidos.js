@@ -160,7 +160,15 @@ async function criarPedido(event) {
 
 async function carregarPedidos() {
     try {
-        const data = await fetchAPI('/pedidos/');
+        // Obter o usuário atual
+        const user = await getCurrentUser();
+        if (!user) {
+            showMessage('Usuário não autenticado', 'danger');
+            return;
+        }
+        
+        // Buscar apenas os pedidos do usuário atual usando um parâmetro de filtro
+        const data = await fetchAPI(`/pedidos/?cliente=${user.id}`);
         const listaPedidos = document.getElementById('listaPedidos');
         
         if (data.results && data.results.length > 0) {
@@ -191,6 +199,7 @@ async function carregarPedidos() {
             listaPedidos.innerHTML = '<p>Nenhum pedido encontrado.</p>';
         }
     } catch (error) {
+        console.error('Erro ao carregar pedidos:', error);
         showMessage('Erro ao carregar pedidos', 'danger');
     }
 }
