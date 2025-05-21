@@ -1,4 +1,6 @@
 // pedidos.js
+let refreshInterval;
+
 async function loadPedidos() {
     try {
         const user = await getCurrentUser();
@@ -26,14 +28,34 @@ async function loadPedidos() {
             </div>
         `;
 
-        carregarPedidos();
+        // Start auto-refresh when loading the pedidos view
+        startAutoRefresh();
+        await carregarPedidos();
     } catch (error) {
         console.error('Erro ao carregar pedidos:', error);
         showMessage('Erro ao carregar a página de pedidos', 'danger');
     }
 }
 
+function startAutoRefresh() {
+    // Clear any existing interval
+    if (refreshInterval) {
+        clearInterval(refreshInterval);
+    }
+    // Refresh every 30 seconds
+    refreshInterval = setInterval(carregarPedidos, 30000);
+}
+
+function stopAutoRefresh() {
+    if (refreshInterval) {
+        clearInterval(refreshInterval);
+        refreshInterval = null;
+    }
+}
+
+// Update showNovoPedidoForm to stop refresh when creating new order
 function showNovoPedidoForm() {
+    stopAutoRefresh();
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="container">
@@ -215,9 +237,9 @@ async function verDetalhesPedido(pedidoId) {
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Informações Gerais</h5>
-                        <p>Status: ${pedido.status}</p>
+                        <p>Status: <span id="statusPedido">${pedido.status}</span></p>
                         <p>Data de Criação: ${new Date(pedido.data_criacao).toLocaleString()}</p>
-                        <p>Valor Total: R$ ${pedido.valor_total}</p>
+                        <p>Valor Total: R$ <span id="valorPedido">${pedido.valor_final || pedido.valor_total}</span></p>
                         <p>Método de Pagamento: ${pedido.metodo_pagamento || 'Não definido'}</p>
                         ${pedido.observacoes ? `<p>Observações: ${pedido.observacoes}</p>` : ''}
                     </div>
@@ -225,8 +247,7 @@ async function verDetalhesPedido(pedidoId) {
 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">Itens do Pedido</h5>
-                        <div class="list-group">
+                        <h5 class="card-title">Itens do Pedido</h5>                        <div class="list-group">
                             ${pedido.itens.map(item => `
                                 <div class="list-group-item">
                                     <div class="d-flex w-100 justify-content-between">
@@ -239,10 +260,28 @@ async function verDetalhesPedido(pedidoId) {
                     </div>
                 </div>
 
+                ${pedido.status === 'PENDENTE' && pedido.valor_final ? `
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Confirmação de Valor Final</h5>
+                        <p>O gerente definiu um valor final para seu pedido:</p>
+                        <p class="h4 mb-3">R$ ${pedido.valor_final}</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success" onclick="confirmarValorFinal(${pedido.id})">
+                                Confirmar Valor e Prosseguir para Pagamento
+                            </button>
+                            <button class="btn btn-danger" onclick="recusarValorFinal(${pedido.id})">
+                                Recusar Valor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Histórico de Status</h5>
-                        <div class="list-group">
+                        <div class="list-group" id="historicoStatus">
                             ${pedido.historico_status.map(status => `
                                 <div class="list-group-item">
                                     <div class="d-flex w-100 justify-content-between">
@@ -259,7 +298,102 @@ async function verDetalhesPedido(pedidoId) {
                 <button class="btn btn-primary" onclick="loadPedidos()">Voltar</button>
             </div>
         `;
+
+        // Set up auto-refresh for order details
+        startDetailAutoRefresh(pedidoId);
     } catch (error) {
         showMessage('Erro ao carregar detalhes do pedido', 'danger');
+    }
+}
+
+async function refreshOrderDetails(pedidoId) {
+    try {
+        const pedido = await fetchAPI(`/pedidos/${pedidoId}/`);
+        
+        // Update status and price
+        document.getElementById('statusPedido').textContent = pedido.status;
+        document.getElementById('valorPedido').textContent = pedido.valor_final || pedido.valor_total;
+
+        // Update history
+        const historicoStatus = document.getElementById('historicoStatus');
+        historicoStatus.innerHTML = pedido.historico_status.map(status => `
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">${status.status}</h6>
+                    <small>${new Date(status.data).toLocaleString()}</small>
+                </div>
+                ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
+            </div>
+        `).join('');
+
+        // Notify user of changes
+        const latestStatus = pedido.historico_status[pedido.historico_status.length - 1];
+        showMessage(`Pedido atualizado! Novo status: ${latestStatus.status}`, 'info');
+    } catch (error) {
+        console.error('Erro ao atualizar detalhes do pedido:', error);
+    }
+}
+
+function startDetailAutoRefresh(pedidoId) {
+    // Clear any existing interval
+    if (refreshInterval) {
+        clearInterval(refreshInterval);
+    }
+    // Refresh every 15 seconds for order details
+    refreshInterval = setInterval(() => refreshOrderDetails(pedidoId), 15000);
+}
+
+// Stop auto-refresh when leaving the page
+window.addEventListener('beforeunload', stopAutoRefresh);
+
+async function confirmarValorFinal(pedidoId) {
+    try {
+        const button = event.target;
+        button.disabled = true;
+        button.textContent = 'Processando...';
+
+        // Confirma o pagamento e atualiza o status
+        await fetchAPI(`/pedidos/${pedidoId}/confirmar_pagamento/`, {
+            method: 'POST',
+            body: JSON.stringify({
+                metodo_pagamento: 'PENDENTE_ESCOLHA'
+            })
+        });
+
+        showMessage('Valor final confirmado! Por favor, escolha o método de pagamento.', 'success');
+        verDetalhesPedido(pedidoId); // Recarrega a página de detalhes
+    } catch (error) {
+        console.error('Erro ao confirmar valor final:', error);
+        showMessage('Erro ao confirmar valor final', 'danger');
+        button.disabled = false;
+        button.textContent = 'Confirmar Valor e Prosseguir para Pagamento';
+    }
+}
+
+async function recusarValorFinal(pedidoId) {
+    try {
+        const motivo = prompt('Por favor, informe o motivo da recusa do valor:');
+        if (!motivo) return; // Se cancelar o prompt, não faz nada
+
+        const button = event.target;
+        button.disabled = true;
+        button.textContent = 'Processando...';
+
+        // Atualiza o status do pedido para PENDENTE e adiciona o comentário
+        await fetchAPI(`/pedidos/${pedidoId}/update_status/`, {
+            method: 'POST',
+            body: JSON.stringify({
+                status: 'PENDENTE',
+                comentario: `Valor final recusado. Motivo: ${motivo}`
+            })
+        });
+
+        showMessage('Valor final recusado. O gerente será notificado.', 'info');
+        verDetalhesPedido(pedidoId); // Recarrega a página de detalhes
+    } catch (error) {
+        console.error('Erro ao recusar valor final:', error);
+        showMessage('Erro ao recusar valor final', 'danger');
+        button.disabled = false;
+        button.textContent = 'Recusar Valor';
     }
 }

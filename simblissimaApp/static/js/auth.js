@@ -14,8 +14,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-async function getCurrentUser() {
-    try {
+async function getCurrentUser() {    try {
         const response = await fetch('/api/current-user/', {
             method: 'GET',
             headers: {
@@ -31,6 +30,7 @@ async function getCurrentUser() {
                 authToken = data.token;
                 localStorage.setItem('authToken', authToken);
             }
+            console.log('Current user data:', data); // Debug log
             return data;
         }
         return null;
@@ -71,6 +71,7 @@ function updateNavigation() {
     const userNav = document.getElementById('userNav');
     
     getCurrentUser().then(user => {
+        console.log('Updating navigation with user:', user); // Debug log
         if (user) {
             // Usuário está logado
             document.getElementById('loginNav').classList.add('d-none');
@@ -78,12 +79,28 @@ function updateNavigation() {
             document.getElementById('userInfo').classList.remove('d-none');
             document.getElementById('logoutNav').classList.remove('d-none');
             document.getElementById('userName').textContent = `${user.first_name} ${user.last_name}`;
+            
+            // Mostra o link do dashboard para usuários staff
+            const managerNav = document.getElementById('managerNav');
+            if (managerNav) {
+                if (user.is_staff) {
+                    console.log('User is staff, showing manager nav'); // Debug log
+                    managerNav.classList.remove('d-none');
+                } else {
+                    console.log('User is not staff, hiding manager nav'); // Debug log
+                    managerNav.classList.add('d-none');
+                }
+            }
         } else {
             // Usuário não está logado
             document.getElementById('loginNav').classList.remove('d-none');
             document.getElementById('registroNav').classList.remove('d-none');
             document.getElementById('userInfo').classList.add('d-none');
             document.getElementById('logoutNav').classList.add('d-none');
+            const managerNav = document.getElementById('managerNav');
+            if (managerNav) {
+                managerNav.classList.add('d-none');
+            }
         }
     });
 }
@@ -165,5 +182,25 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Atualiza a navegação quando a página carrega
-document.addEventListener('DOMContentLoaded', updateNavigation);
+// Initialization code
+async function initializeApp() {
+    console.log('Initializing app...');
+    const user = await getCurrentUser();
+    console.log('Current user:', user);
+
+    if (user && user.is_staff) {
+        console.log('Staff user detected, showing manager nav');
+        const managerNav = document.getElementById('managerNav');
+        if (managerNav) {
+            managerNav.style.display = 'block';
+            managerNav.classList.remove('d-none');
+        }
+    }
+}
+
+// Call initialization when DOM is loaded
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOM loaded, initializing app...');
+    await initializeApp();
+    await updateNavigation();
+});

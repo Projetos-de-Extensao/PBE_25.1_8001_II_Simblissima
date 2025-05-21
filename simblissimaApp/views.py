@@ -47,12 +47,16 @@ class ClienteViewSet(viewsets.ModelViewSet):
 class PedidoViewSet(viewsets.ModelViewSet):
     queryset = Pedido.objects.all()
     serializer_class = PedidoSerializer
-    permission_classes = [IsOwnerOrStaff]
-
+    permission_classes = [IsOwnerOrStaff]    
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return Pedido.objects.all()
-        return Pedido.objects.filter(cliente__user=self.request.user)
+        queryset = Pedido.objects.all() if self.request.user.is_staff else Pedido.objects.filter(cliente__user=self.request.user)
+        
+        # Aplicar filtro por status se fornecido
+        status_filter = self.request.query_params.get('status', None)
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+            
+        return queryset.order_by('-data_criacao')  # Ordenar por data de criação mais recente por padrão
 
     def create(self, request, *args, **kwargs):
         # Log dos dados recebidos para debug
@@ -273,6 +277,7 @@ def register_user(request):
 @permission_classes([permissions.AllowAny])
 def current_user(request):
     if request.user.is_authenticated:
+        print(f"Current user: {request.user.username}, is_staff: {request.user.is_staff}")  # Debug log
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
     return Response({'detail': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -286,7 +291,11 @@ def api_login(request):
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        return Response({'message': 'Login realizado com sucesso!'})
+        serializer = UserSerializer(user)
+        return Response({
+            'message': 'Login realizado com sucesso!',
+            'user': serializer.data
+        })
     return Response({'error': 'Credenciais inválidas.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 from rest_framework.decorators import api_view, permission_classes

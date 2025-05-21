@@ -5,8 +5,8 @@ from .models import Cliente, Pedido, ItemPedido, StatusPedido
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name')
-        read_only_fields = ('id',)
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff')
+        read_only_fields = ('id', 'is_staff')
 
 class ClienteSerializer(serializers.ModelSerializer):
     user = UserSerializer()
