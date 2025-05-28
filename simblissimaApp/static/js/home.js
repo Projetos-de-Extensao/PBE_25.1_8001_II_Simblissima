@@ -1,5 +1,14 @@
 // home.js
-function loadHome() {
+async function loadHome() {
+    const user = await getCurrentUser();
+    
+    if (user && user.is_staff) {
+        // Se for gerente, carrega apenas o dashboard
+        console.log('User is staff, loading manager dashboard');
+        loadManagerDashboard();
+        return;
+    }
+
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="jumbotron">

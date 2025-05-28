@@ -8,6 +8,14 @@ async function loadPedidos() {
             loadLogin();
             return;
         }
+        
+        // Bloqueia acesso para gerentes, eles só devem usar o dashboard
+        if (user.is_staff) {
+            console.log('Staff user detected, access denied to regular orders page');
+            showMessage('Área restrita para clientes. Use o Dashboard do Gerente.', 'warning');
+            loadManagerDashboard();
+            return;
+        }
 
         const content = document.getElementById('content');
         content.innerHTML = `

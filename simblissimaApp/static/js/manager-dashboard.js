@@ -6,10 +6,18 @@ async function loadManagerDashboard() {
             showMessage('Acesso negado. Área restrita para gerentes.', 'danger');
             loadLogin();
             return;
+        }        const mainContent = document.getElementById('content');
+        
+        // Para evitar recargas desnecessárias, verifica se já estamos no dashboard
+        let dashboardLayout = document.querySelector('.container h2');
+        if (dashboardLayout?.textContent === 'Dashboard do Gerente') {
+            // Atualiza apenas os dados
+            await carregarDadosDashboard();
+            await filtrarPedidos();
+            return;
         }
 
-        const content = document.getElementById('content');
-        content.innerHTML = `
+        mainContent.innerHTML = `
             <div class="container">
                 <h2>Dashboard do Gerente</h2>
                 
@@ -103,16 +111,16 @@ async function loadManagerDashboard() {
 
 async function carregarDadosDashboard() {
     try {
+        console.log('Carregando dados do dashboard...');
         const response = await fetchAPI('/pedidos/');
-        console.log('Resposta da API:', response); // Debug log
+        console.log('Resposta da API:', response);
         
         if (!response || !response.results) {
-            console.error('Resposta inválida da API');
-            return;
+            throw new Error('Resposta inválida da API');
         }
         
         const pedidos = response.results;
-        console.log('Total de pedidos:', pedidos.length); // Debug log
+        console.log('Pedidos carregados:', pedidos.length);
 
         // Total de pedidos
         document.getElementById('totalPedidos').textContent = pedidos.length;
@@ -192,32 +200,39 @@ async function aplicarFiltros() {
 
 async function filtrarPedidos() {
     try {
-        const statusFilter = document.getElementById('statusFilter').value;
-        const sortOrder = document.getElementById('sortOrder').value;
+        // Obter os elementos de filtro
+        const statusFilterElement = document.getElementById('statusFilter');
+        const sortOrderElement = document.getElementById('sortOrder');
+        
+        // Se os elementos não existirem, aguarda um momento e tenta novamente
+        if (!statusFilterElement || !sortOrderElement) {
+            console.log('Aguardando elementos de filtro carregarem...');
+            await new Promise(resolve => setTimeout(resolve, 100));
+            return await filtrarPedidos();
+        }
         
         // Construir URL com filtros
         const params = new URLSearchParams();
-        if (statusFilter) {
-            params.append('status', statusFilter);
+        if (statusFilterElement.value) {
+            params.append('status', statusFilterElement.value);
         }
         
-        const url = `/pedidos/${params.toString() ? '?' + params.toString() : ''}`;
-
-        const response = await fetchAPI(url);
-        const pedidos = response.results;
+        const url = `/pedidos/${params.toString() ? '?' + params.toString() : ''}`;        const response = await fetchAPI(url);
+        if (!response || !response.results) {
+            throw new Error('Resposta inválida da API');
+        }                        const pedidos = response.results;
+        console.log('Dados dos pedidos:', JSON.stringify(pedidos, null, 2)); // Log mais detalhado dos dados
 
         if (!pedidos || pedidos.length === 0) {
             document.getElementById('listaPedidos').innerHTML = '<p>Nenhum pedido encontrado.</p>';
             return;
-        }
-
-        // Ordenar pedidos
+        }        // Ordenar pedidos
         pedidos.sort((a, b) => {
-            if (sortOrder === 'data_criacao') {
+            if (sortOrderElement.value === 'data_criacao') {
                 return new Date(b.data_criacao) - new Date(a.data_criacao);
-            } else if (sortOrder === 'valor_total') {
+            } else if (sortOrderElement.value === 'valor_total') {
                 return b.valor_total - a.valor_total;
-            } else if (sortOrder === 'status') {
+            } else if (sortOrderElement.value === 'status') {
                 return a.status.localeCompare(b.status);
             }
             return 0;
@@ -232,11 +247,34 @@ async function filtrarPedidos() {
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Cliente:</strong> ${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
+                    <div class="col-md-6">                        <p><strong>Cliente:</strong> ${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
                         <p><strong>Status Atual:</strong> ${pedido.status}</p>
                         <p><strong>Valor dos Produtos:</strong> R$ ${pedido.valor_total}</p>
                         <p><strong>Valor Final:</strong> R$ ${pedido.valor_final || 'Não definido'}</p>
+                          <!-- Itens do Pedido -->
+                        <div class="mt-2">
+                            <h6>Itens do Pedido</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Descrição</th>
+                                            <th>Preço</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${pedido.itens && pedido.itens.length > 0 ? 
+                                            pedido.itens.map(item => `
+                                                <tr>
+                                                    <td>${item.descricao}</td>
+                                                    <td>R$ ${parseFloat(item.preco).toFixed(2)}</td>
+                                                </tr>
+                                            `).join('') 
+                                            : '<tr><td colspan="2" class="text-center">Nenhum item encontrado</td></tr>'}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <!-- Form de atualização -->

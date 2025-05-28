@@ -14,7 +14,8 @@ function getCookie(name) {
     return cookieValue;
 }
 
-async function getCurrentUser() {    try {
+async function getCurrentUser() {
+    try {
         const response = await fetch('/api/current-user/', {
             method: 'GET',
             headers: {
@@ -30,7 +31,6 @@ async function getCurrentUser() {    try {
                 authToken = data.token;
                 localStorage.setItem('authToken', authToken);
             }
-            console.log('Current user data:', data); // Debug log
             return data;
         }
         return null;
@@ -189,7 +189,8 @@ async function initializeApp() {
     console.log('Current user:', user);
 
     if (user && user.is_staff) {
-        console.log('Staff user detected, showing manager nav');
+        console.log('Staff user detected, loading manager dashboard');
+        loadManagerDashboard();
         const managerNav = document.getElementById('managerNav');
         if (managerNav) {
             managerNav.style.display = 'block';
