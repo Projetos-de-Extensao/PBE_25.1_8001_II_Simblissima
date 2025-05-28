@@ -247,7 +247,8 @@ async function verDetalhesPedido(pedidoId) {
 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">Itens do Pedido</h5>                        <div class="list-group">
+                        <h5 class="card-title">Itens do Pedido</h5>
+                        <div class="list-group">
                             ${pedido.itens.map(item => `
                                 <div class="list-group-item">
                                     <div class="d-flex w-100 justify-content-between">
@@ -260,7 +261,7 @@ async function verDetalhesPedido(pedidoId) {
                     </div>
                 </div>
 
-                ${pedido.status === 'PENDENTE' && pedido.valor_final ? `
+                ${pedido.status === 'AGUARDANDO_PAGAMENTO' && pedido.valor_final ? `
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Confirmação de Valor Final</h5>
@@ -268,7 +269,7 @@ async function verDetalhesPedido(pedidoId) {
                         <p class="h4 mb-3">R$ ${pedido.valor_final}</p>
                         <div class="d-flex gap-2">
                             <button class="btn btn-success" onclick="confirmarValorFinal(${pedido.id})">
-                                Confirmar Valor e Prosseguir para Pagamento
+                                Confirmar Valor
                             </button>
                             <button class="btn btn-danger" onclick="recusarValorFinal(${pedido.id})">
                                 Recusar Valor
@@ -352,21 +353,22 @@ async function confirmarValorFinal(pedidoId) {
         button.disabled = true;
         button.textContent = 'Processando...';
 
-        // Confirma o pagamento e atualiza o status
-        await fetchAPI(`/pedidos/${pedidoId}/confirmar_pagamento/`, {
+        // Update status to CONFIRMADO
+        await fetchAPI(`/pedidos/${pedidoId}/update_status/`, {
             method: 'POST',
             body: JSON.stringify({
-                metodo_pagamento: 'PENDENTE_ESCOLHA'
+                status: 'CONFIRMADO',
+                comentario: 'Valor final confirmado pelo cliente'
             })
         });
 
-        showMessage('Valor final confirmado! Por favor, escolha o método de pagamento.', 'success');
+        showMessage('Valor final confirmado! O pedido foi confirmado.', 'success');
         verDetalhesPedido(pedidoId); // Recarrega a página de detalhes
     } catch (error) {
         console.error('Erro ao confirmar valor final:', error);
         showMessage('Erro ao confirmar valor final', 'danger');
         button.disabled = false;
-        button.textContent = 'Confirmar Valor e Prosseguir para Pagamento';
+        button.textContent = 'Confirmar Valor';
     }
 }
 
