@@ -66,6 +66,7 @@ async function logout() {
     }
 }
 
+// Atualiza o nome do usuário com saudação personalizada
 function updateNavigation() {
     const navContainer = document.querySelector('.navbar-nav.ms-auto');
     const userNav = document.getElementById('userNav');
@@ -78,7 +79,7 @@ function updateNavigation() {
             document.getElementById('registroNav').classList.add('d-none');
             document.getElementById('userInfo').classList.remove('d-none');
             document.getElementById('logoutNav').classList.remove('d-none');
-            document.getElementById('userName').textContent = `${user.first_name} ${user.last_name}`;
+            document.getElementById('userName').textContent = `Olá, ${user.first_name} ${user.last_name}`;
             
             // Mostra o link do dashboard para usuários staff
             const managerNav = document.getElementById('managerNav');
@@ -162,22 +163,27 @@ style.textContent = `
 
     .btn-login {
         background-color: white;
-        color: var(--primary-color);
+        color: #1976d2;
     }
 
     .btn-register {
         background-color: transparent;
+        color: #1976d2;
+        border: 2px solid #1976d2;
+    }
+
+    .btn-register:hover {
+        background-color: #1976d2;
         color: white;
-        border: 2px solid white;
     }
 
     .btn-danger {
-        background-color: #dc3545;
+        background-color: #d32f2f;
         color: white;
     }
 
     .btn-danger:hover {
-        background-color: #c82333;
+        background-color: #b71c1c;
     }
 `;
 document.head.appendChild(style);

@@ -2,10 +2,10 @@
 function loadLogin() {
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="card">
-                    <div class="card-header">Login</div>
+                    <div class="card-header text-center"><h4 class="mb-0">Login</h4></div>
                     <div class="card-body">
                         <form id="loginForm" onsubmit="handleLogin(event)">
                             <div class="mb-3">
@@ -16,8 +16,10 @@ function loadLogin() {
                                 <label for="password" class="form-label">Senha</label>
                                 <input type="password" class="form-control" id="password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Entrar</button>
-                            <button type="button" class="btn btn-secondary" onclick="loadRegister()">Registrar</button>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Entrar</button>
+                                <button type="button" class="btn btn-secondary" onclick="loadRegister()">Registrar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -82,12 +84,10 @@ async function handleLogin(event) {
 function loadRegister() {
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="card">
-                    <div class="card-header">
-                        <h4 class="mb-0">Cadastro de Novo Cliente</h4>
-                    </div>
+                    <div class="card-header text-center"><h4 class="mb-0">Cadastro de Novo Cliente</h4></div>
                     <div class="card-body">
                         <form id="registerForm" onsubmit="handleRegister(event)" novalidate>
                             <div class="mb-3">
@@ -102,14 +102,12 @@ function loadRegister() {
                             </div>
                             <div class="mb-3">
                                 <label for="cpf" class="form-label">CPF *</label>
-                                <input type="text" class="form-control" id="cpf" required maxlength="11" pattern="\\d{11}" 
-                                    oninput="this.value = this.value.replace(/\\D/g, '')">
+                                <input type="text" class="form-control" id="cpf" required maxlength="11" pattern="\\d{11}" oninput="this.value = this.value.replace(/\\D/g, '')">
                                 <div class="invalid-feedback">Por favor, insira um CPF válido (11 dígitos numéricos)</div>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">E-mail *</label>
-                                <input type="email" class="form-control" id="email" required 
-                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$">
+                                <input type="email" class="form-control" id="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$">
                                 <div class="invalid-feedback">Por favor, insira um e-mail válido</div>
                             </div>
                             <div class="mb-3">
@@ -124,13 +122,10 @@ function loadRegister() {
                             </div>
                             <div class="mb-3">
                                 <label for="telefone" class="form-label">Telefone *</label>
-                                <input type="text" class="form-control" id="telefone" required
-                                    pattern="\\d{10,11}" oninput="this.value = this.value.replace(/\\D/g, '')">
+                                <input type="text" class="form-control" id="telefone" required pattern="\\d{10,11}" oninput="this.value = this.value.replace(/\\D/g, '')">
                                 <div class="invalid-feedback">Por favor, insira um telefone válido (10 ou 11 dígitos)</div>
                             </div>
-                            <div class="alert alert-info">
-                                Campos marcados com * são obrigatórios
-                            </div>
+                            <div class="alert alert-info">Campos marcados com * são obrigatórios</div>
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">Cadastrar</button>
                                 <button type="button" class="btn btn-secondary" onclick="loadLogin()">Voltar</button>

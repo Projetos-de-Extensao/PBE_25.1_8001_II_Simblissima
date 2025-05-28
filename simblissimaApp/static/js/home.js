@@ -9,32 +9,37 @@ async function loadHome() {
         return;
     }
 
+    // Adiciona imagem de fundo apenas na home
+    document.body.classList.add('home-bg');
+
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="jumbotron">
-            <h1 class="display-4">Bem-vindo à Simblissima!</h1>
-            <p class="lead">Sistema de gerenciamento de pedidos e produtos.</p>
-            <hr class="my-4">
-            <p>Utilize o menu acima para navegar pelo sistema.</p>
-        </div>
-        
-        <div class="row mt-4">            
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Pedidos</h5>
-                        <p class="card-text">Acompanhe e gerencie os pedidos.</p>
-                        <button class="btn btn-primary" onclick="loadPedidos()">Ver Pedidos</button>
-                    </div>
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+                <div class="jumbotron bg-white p-4 rounded shadow-sm mb-4 text-center">
+                    <h1 class="display-4">Bem-vindo à Simblissima!</h1>
+                    <p class="lead">Sistema de gerenciamento de pedidos e produtos.</p>
+                    <hr class="my-4">
+                    <p>Utilize o menu acima para navegar pelo sistema.</p>
                 </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Minha Conta</h5>
-                        <p class="card-text">Gerencie suas informações.</p>
-                        <button class="btn btn-primary" onclick="loadPerfil()">Ver Perfil</button>
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-6 col-lg-5 mb-3 d-flex justify-content-center">
+                        <div class="card h-100 w-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Pedidos</h5>
+                                <p class="card-text">Acompanhe e gerencie os pedidos.</p>
+                                <button class="btn btn-primary" onclick="loadPedidos()">Ver Pedidos</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-5 mb-3 d-flex justify-content-center">
+                        <div class="card h-100 w-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Minha Conta</h5>
+                                <p class="card-text">Gerencie suas informações.</p>
+                                <button class="btn btn-primary" onclick="loadPerfil()">Ver Perfil</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,16 +53,24 @@ async function loadPerfil() {
 
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="mb-0">Meu Perfil</h3>
-                    </div>
-                    <div class="card-body">
-                        <div id="perfilData" class="text-center">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Carregando...</span>
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="mb-0">Meu Perfil</h3>
+                                <div>
+                                    <button type="submit" form="perfilForm" class="btn btn-primary me-2">Salvar Alterações</button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadHome()">Voltar</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="perfilData" class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Carregando...</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -113,10 +126,6 @@ async function loadPerfil() {
                     <input type="password" class="form-control" id="password" minlength="6">
                     <small class="text-muted">Deixe em branco para manter a senha atual</small>
                     <div class="invalid-feedback">A senha deve ter pelo menos 6 caracteres</div>
-                </div>
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                    <button type="button" class="btn btn-secondary" onclick="loadHome()">Voltar</button>
                 </div>
             </form>
         `;

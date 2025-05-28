@@ -21,27 +21,52 @@
             updateNavigation();
         });
     </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        body, .jumbotron, .card, .card-body, .display-4, .lead, .btn, .form-label, .form-control, h1, h3, h5, p {
+            font-family: 'Poppins', Arial, sans-serif !important;
+        }
         body {
-            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
+            /* Removido background da imagem, agora controlado por .home-bg */
+            min-height: 100vh;
+        }
+        .home-bg {
+            background: url('/static/img/telaInicial.png') no-repeat left center !important;
+            background-size: contain !important;
+            background-repeat: no-repeat !important;
+            min-height: 100vh;
+        }
+        @media (max-width: 768px) {
+            .home-bg {
+                background: #f7f7f7 !important;
+            }
+        }
+        .container, .navbar, #content {
+            position: relative;
+            z-index: 1;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-        }        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .navbar {
-            background-color: #ff2e2e !important;
+            background-color: #1565c0 !important;
+            min-height: 48px !important;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        .navbar-brand, .nav-link {
+        .navbar .nav-link, .navbar .navbar-brand {
             color: white !important;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
+            font-size: 1rem !important;
         }        .btn {
             transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s;
         }
@@ -50,12 +75,21 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .btn-primary {
-            background-color: #ff2e2e;
-            border-color: #ff2e2e;
+            background-color: #1976d2;
+            border-color: #1976d2;
         }
         .btn-primary:hover {
-            background-color: #e62b2b;
-            border-color: #e62b2b;
+            background-color: #1565c0;
+            border-color: #1565c0;
+        }
+        /* Caso haja outros botões customizados, garantir que não fiquem vermelhos */
+        .btn-danger {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
+        }
+        .btn-danger:hover {
+            background-color: #b71c1c;
+            border-color: #b71c1c;
         }
         .status {
             display: inline-block;
@@ -75,26 +109,21 @@
             <a class="navbar-brand" href="#" onclick="loadHome()">Simblissima</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>            <div class="collapse navbar-collapse" id="navbarNav">                <ul class="navbar-nav me-auto">
-                    <li class="nav-item" id="pedidosNav">
-                        <a class="nav-link" href="#" onclick="loadPedidos()">Pedidos</a>
-                    </li>
-                    <li class="nav-item" id="managerNav">
-                        <a class="nav-link" href="#" onclick="loadManagerDashboard()">Dashboard do Gerente</a>
-                    </li>
-                </ul>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto"></ul>
                 <ul class="navbar-nav ms-auto">
-                    <!-- Container para usuário logado -->
                     <li class="nav-item d-none" id="userInfo">
                         <span class="nav-link">
                             <span id="userName"></span>
                         </span>
                     </li>
+                    <li class="nav-item" id="pedidosNav">
+                        <a class="nav-link" href="#" onclick="loadPedidos()">Pedidos</a>
+                    </li>
                     <li class="nav-item d-none" id="logoutNav">
                         <a class="nav-link" href="#" onclick="logout()">Sair</a>
                     </li>
-                    
-                    <!-- Container para usuário não logado -->
                     <li class="nav-item" id="loginNav">
                         <a class="nav-link" href="#" onclick="loadLogin()">Login</a>
                     </li>
@@ -105,7 +134,6 @@
             </div>
         </div>
     </nav>
-
     <div class="container mt-4">
         <div id="content"></div>
     </div>    <script>
@@ -176,6 +204,11 @@
         }
 
         document.addEventListener('DOMContentLoaded', init);
+
+        // Atualização do nome do usuário
+        function updateUserName(user) {
+            document.getElementById('userName').textContent = `Olá, ${user.first_name} ${user.last_name}`;
+        }
     </script>
 </body>
 </html>

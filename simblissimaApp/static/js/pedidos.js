@@ -19,26 +19,34 @@ async function loadPedidos() {
 
         const content = document.getElementById('content');
         content.innerHTML = `
-            <div class="container">
-                <div class="row mb-4">
-                    <div class="col">
-                        <h2>Meus Pedidos</h2>
-                        <button class="btn btn-primary" onclick="showNovoPedidoForm()">Novo Pedido</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div id="listaPedidos">
-                            Carregando pedidos...
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="mb-0">Meus Pedidos</h3>
+                                <div>
+                                    <button class="btn btn-primary me-2" onclick="novoPedido()">Novo Pedido</button>
+                                    <button class="btn btn-secondary" onclick="loadHome()">Voltar</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="listaPedidos" class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Carregando...</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         `;
-
+    carregarPedidos();
         // Start auto-refresh when loading the pedidos view
         startAutoRefresh();
-        await carregarPedidos();
     } catch (error) {
         console.error('Erro ao carregar pedidos:', error);
         showMessage('Erro ao carregar a página de pedidos', 'danger');
@@ -61,46 +69,40 @@ function stopAutoRefresh() {
     }
 }
 
-// Update showNovoPedidoForm to stop refresh when creating new order
-function showNovoPedidoForm() {
-    stopAutoRefresh();
+// Função para criar um novo pedido
+function novoPedido() {
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="container">
-            <h2>Novo Pedido</h2>
-            <form id="novoPedidoForm">
-                <div class="mb-3">
-                    <label for="observacoes" class="form-label">Observações</label>
-                    <textarea class="form-control" id="observacoes" rows="3"></textarea>
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Novo Pedido</h3>
+                        <div>
+                            <button type="submit" form="novoPedidoForm" class="btn btn-primary me-2">Salvar Pedido</button>
+                            <button type="button" class="btn btn-secondary" onclick="loadPedidos()">Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="novoPedidoForm" onsubmit="handleNovoPedido(event)" class="needs-validation" novalidate>
+                            <div id="itensPedido">
+                                <h5>Itens do Pedido</h5>
+                                <div class="itens-list"></div>
+                                <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="adicionarItem()">Adicionar Item</button>
+                            </div>
+                            <div class="mb-3 mt-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" id="observacoes" rows="2"></textarea>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
-                <div id="itensPedido">
-                    <h3>Itens do Pedido</h3>
-                    <div class="itens-list"></div>
-                    <button type="button" class="btn btn-secondary mb-3" onclick="adicionarItem()">
-                        Adicionar Item
-                    </button>
-                </div>
-
-                <div class="mb-3">
-                    <label for="metodoPagamento" class="form-label">Método de Pagamento</label>
-                    <select class="form-control" id="metodoPagamento">
-                        <option value="PIX">Pix</option>
-                        <option value="CARTAO">Cartão</option>
-                        <option value="BOLETO">Boleto</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Criar Pedido</button>
-                <button type="button" class="btn btn-secondary" onclick="loadPedidos()">Cancelar</button>
-            </form>
+            </div>
         </div>
     `;
-
-    document.getElementById('novoPedidoForm').addEventListener('submit', criarPedido);
-    adicionarItem(); // Adiciona o primeiro item automaticamente
 }
 
+// Função para adicionar item ao pedido
 function adicionarItem() {
     const itemsList = document.querySelector('#itensPedido .itens-list');
     const itemDiv = document.createElement('div');
@@ -121,70 +123,29 @@ function adicionarItem() {
     itemsList.appendChild(itemDiv);
 }
 
-async function criarPedido(event) {
+// Função para salvar novo pedido
+async function handleNovoPedido(event) {
     event.preventDefault();
-
-    const itens = [];
-    document.querySelectorAll('.item-pedido').forEach(itemDiv => {
-        const descricao = itemDiv.querySelector('.item-descricao').value;
-        const preco = parseFloat(itemDiv.querySelector('.item-preco').value);
-        
-        if (descricao && !isNaN(preco)) {
-            itens.push({
-                descricao: descricao,
-                preco: preco
-            });
-        }
-    });
-
-    if (itens.length === 0) {
-        showMessage('Adicione pelo menos um item ao pedido', 'danger');
+    const form = event.target;
+    if (!form.checkValidity()) {
+        event.stopPropagation();
+        form.classList.add('was-validated');
         return;
     }
-
-    const pedidoData = {
-        observacoes: document.getElementById('observacoes').value,
-        metodo_pagamento: document.getElementById('metodoPagamento').value,
-        itens: itens
-    };
-
+    const itens = Array.from(document.querySelectorAll('.item-pedido')).map(item => ({
+        descricao: item.querySelector('.item-descricao').value.trim(),
+        preco: parseFloat(item.querySelector('.item-preco').value)
+    })).filter(item => item.descricao && !isNaN(item.preco));
+    const observacoes = document.getElementById('observacoes').value.trim();
     try {
-        console.log('Enviando dados do pedido:', JSON.stringify(pedidoData));
-        
-        // Usar XMLHttpRequest para obter o texto completo do erro
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', `${API_BASE_URL}/pedidos/`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        xhr.withCredentials = true;
-        
-        xhr.onload = function() {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                console.log('Resposta do servidor:', xhr.responseText);
-                showMessage('Pedido criado com sucesso!', 'success');
-                loadPedidos();
-            } else {
-                console.error('Erro do servidor:', xhr.status, xhr.responseText);
-                let errorMsg = 'Erro ao criar pedido';
-                try {
-                    const errorData = JSON.parse(xhr.responseText);
-                    errorMsg = JSON.stringify(errorData);
-                } catch (e) {
-                    errorMsg = xhr.responseText || errorMsg;
-                }
-                showMessage(`Erro ao criar pedido: ${errorMsg}`, 'danger');
-            }
-        };
-        
-        xhr.onerror = function() {
-            console.error('Erro na requisição');
-            showMessage('Erro na comunicação com o servidor', 'danger');
-        };
-        
-        xhr.send(JSON.stringify(pedidoData));
+        await fetchAPI('/pedidos/', {
+            method: 'POST',
+            body: JSON.stringify({ itens, observacoes })
+        });
+        showMessage('Pedido criado com sucesso!', 'success');
+        loadPedidos();
     } catch (error) {
-        console.error('Erro ao criar pedido:', error);
-        showMessage(`Erro ao criar pedido: ${error.message}`, 'danger');
+        showMessage('Erro ao criar pedido. Tente novamente.', 'danger');
     }
 }
 
@@ -201,11 +162,12 @@ async function carregarPedidos() {
         const data = await fetchAPI(`/pedidos/?cliente=${user.id}`);
         const listaPedidos = document.getElementById('listaPedidos');
         
+        // Adiciona espaçamento entre os pedidos na listagem
         if (data.results && data.results.length > 0) {
             listaPedidos.innerHTML = `
                 <div class="list-group">
                     ${data.results.map(pedido => `
-                        <div class="list-group-item">
+                        <div class="list-group-item mb-3">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">Pedido #${pedido.id}</h5>
                                 <small>${new Date(pedido.data_criacao).toLocaleDateString()}</small>
@@ -240,77 +202,75 @@ async function verDetalhesPedido(pedidoId) {
     try {
         const pedido = await fetchAPI(`/pedidos/${pedidoId}/`);
         const content = document.getElementById('content');
-        
         content.innerHTML = `
-            <div class="container">
-                <h2>Detalhes do Pedido #${pedido.id}</h2>
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Informações Gerais</h5>
-                        <p>Status: <span id="statusPedido">${pedido.status}</span></p>
-                        <p>Data de Criação: ${new Date(pedido.data_criacao).toLocaleString()}</p>
-                        <p>Valor dos Produtos: R$ <span id="valorPedido">${pedido.valor_total}</span></p>
-                        ${pedido.valor_final ? `<p>Valor Final: R$ ${pedido.valor_final}</p>` : ''}
-                        <p>Método de Pagamento: ${pedido.metodo_pagamento || 'Não definido'}</p>
-                        ${pedido.observacoes ? `<p>Observações: ${pedido.observacoes}</p>` : ''}
+            <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+                <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="mb-0">Detalhes do Pedido #${pedido.id}</h3>
+                            <button class="btn btn-secondary" onclick="loadPedidos()">Voltar</button>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Informações Gerais</h5>
+                            <p>Status: <span id="statusPedido">${pedido.status}</span></p>
+                            <p>Data de Criação: ${new Date(pedido.data_criacao).toLocaleString()}</p>
+                            <p>Valor dos Produtos: R$ <span id="valorPedido">${pedido.valor_total}</span></p>
+                            ${pedido.valor_final ? `<p>Valor Final: R$ ${pedido.valor_final}</p>` : ''}
+                            <p>Método de Pagamento: ${pedido.metodo_pagamento || 'Não definido'}</p>
+                            ${pedido.observacoes ? `<p>Observações: ${pedido.observacoes}</p>` : ''}
+                        </div>
                     </div>
-                </div>
-
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Itens do Pedido</h5>
-                        <div class="list-group">
-                            ${pedido.itens.map(item => `
-                                <div class="list-group-item">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">${item.descricao}</h6>
-                                        <span>R$ ${item.preco}</span>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Itens do Pedido</h5>
+                            <div class="list-group">
+                                ${pedido.itens.map(item => `
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">${item.descricao}</h6>
+                                            <span>R$ ${item.preco}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            `).join('')}
+                                `).join('')}
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                ${pedido.status === 'AGUARDANDO_PAGAMENTO' && pedido.valor_final ? `
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Confirmação de Valor Final</h5>
-                        <p>O gerente definiu um valor final para seu pedido:</p>
-                        <p class="h4 mb-3">R$ ${pedido.valor_final}</p>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-success" onclick="confirmarValorFinal(${pedido.id})">
-                                Confirmar Valor
-                            </button>
-                            <button class="btn btn-danger" onclick="recusarValorFinal(${pedido.id})">
-                                Recusar Valor
-                            </button>
+                    ${pedido.status === 'AGUARDANDO_PAGAMENTO' && pedido.valor_final ? `
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Confirmação de Valor Final</h5>
+                            <p>O gerente definiu um valor final para seu pedido:</p>
+                            <p class="h4 mb-3">R$ ${pedido.valor_final}</p>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-success" onclick="confirmarValorFinal(${pedido.id})">
+                                    Confirmar Valor
+                                </button>
+                                <button class="btn btn-danger" onclick="recusarValorFinal(${pedido.id})">
+                                    Recusar Valor
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                ` : ''}
-
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Histórico de Status</h5>
-                        <div class="list-group" id="historicoStatus">
-                            ${pedido.historico_status.map(status => `
-                                <div class="list-group-item">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">${status.status}</h6>
-                                        <small>${new Date(status.data).toLocaleString()}</small>
+                    ` : ''}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Histórico de Status</h5>
+                            <div class="list-group" id="historicoStatus">
+                                ${pedido.historico_status.map(status => `
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">${status.status}</h6>
+                                            <small>${new Date(status.data).toLocaleString()}</small>
+                                        </div>
+                                        ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
                                     </div>
-                                    ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
-                                </div>
-                            `).join('')}
+                                `).join('')}
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <button class="btn btn-primary" onclick="loadPedidos()">Voltar</button>
             </div>
         `;
-
         // Set up auto-refresh for order details
         startDetailAutoRefresh(pedidoId);
     } catch (error) {
