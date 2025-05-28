@@ -2,17 +2,16 @@
 async function loadHome() {
     const user = await getCurrentUser();
     
-    if (user && user.is_staff) {
-        // Se for gerente, carrega apenas o dashboard
-        console.log('User is staff, loading manager dashboard');
-        loadManagerDashboard();
-        return;
-    }
-
     // Adiciona imagem de fundo apenas na home
     document.body.classList.add('home-bg');
 
     const content = document.getElementById('content');
+    let pedidosButton = '';
+    if (user && user.is_staff) {
+        pedidosButton = `<button class="btn btn-primary" onclick="loadManagerDashboard()">Dashboard do Cliente</button>`;
+    } else {
+        pedidosButton = `<button class="btn btn-primary" onclick="loadPedidos()">Ver Pedidos</button>`;
+    }
     content.innerHTML = `
         <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
             <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
@@ -28,7 +27,7 @@ async function loadHome() {
                             <div class="card-body">
                                 <h5 class="card-title">Pedidos</h5>
                                 <p class="card-text">Acompanhe e gerencie os pedidos.</p>
-                                <button class="btn btn-primary" onclick="loadPedidos()">Ver Pedidos</button>
+                                ${pedidosButton}
                             </div>
                         </div>
                     </div>

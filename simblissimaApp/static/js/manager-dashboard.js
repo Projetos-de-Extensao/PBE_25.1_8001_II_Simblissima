@@ -18,9 +18,9 @@ async function loadManagerDashboard() {
         }
 
         mainContent.innerHTML = `
+            <button class="btn btn-secondary mb-3" onclick="loadHome()">&larr; Voltar para Home</button>
             <div class="container">
                 <h2>Dashboard do Gerente</h2>
-                
                 <!-- Cards com estatísticas -->
                 <div class="row mb-4" id="statsCards">
                     <div class="col-md-3">

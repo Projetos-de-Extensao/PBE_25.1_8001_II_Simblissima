@@ -193,16 +193,6 @@ async function initializeApp() {
     console.log('Initializing app...');
     const user = await getCurrentUser();
     console.log('Current user:', user);
-
-    if (user && user.is_staff) {
-        console.log('Staff user detected, loading manager dashboard');
-        loadManagerDashboard();
-        const managerNav = document.getElementById('managerNav');
-        if (managerNav) {
-            managerNav.style.display = 'block';
-            managerNav.classList.remove('d-none');
-        }
-    }
 }
 
 async function checkAuthAndRedirect(redirectIfNotAuth = true) {

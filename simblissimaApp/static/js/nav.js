@@ -10,6 +10,8 @@ async function updateNavigation() {
         const managerNav = document.getElementById('managerNav');
         const pedidosNav = document.getElementById('pedidosNav');
         const userName = document.getElementById('userName');
+        const dashboardNav = document.getElementById('dashboardNav'); // Dashboard do cliente
+        const infoNav = document.getElementById('infoNav'); // Ver informações
 
         // Checagem de existência dos elementos antes de manipular
         if (user && user.id) {
@@ -21,14 +23,14 @@ async function updateNavigation() {
             // Configura a visibilidade baseada no tipo de usuário
             if (user.is_staff) {
                 if (managerNav) managerNav.classList.remove('d-none');
+                if (dashboardNav) dashboardNav.classList.remove('d-none');
+                if (infoNav) infoNav.classList.remove('d-none');
                 if (pedidosNav) {
-                    // Só manipula style se o elemento existir e tem propriedade style
                     if (pedidosNav.style) {
                         pedidosNav.style.display = 'none';
                     }
                     pedidosNav.classList.add('d-none');
                 }
-                loadManagerDashboard();
             } else {
                 if (managerNav) {
                     if (managerNav.style) {
@@ -36,6 +38,8 @@ async function updateNavigation() {
                     }
                     managerNav.classList.add('d-none');
                 }
+                if (dashboardNav) dashboardNav.classList.add('d-none');
+                if (infoNav) infoNav.classList.add('d-none');
                 if (pedidosNav) {
                     if (pedidosNav.style) {
                         pedidosNav.style.display = 'block';
@@ -53,6 +57,8 @@ async function updateNavigation() {
         if (logoutNav) logoutNav.classList.add('d-none');
         if (managerNav) managerNav.classList.add('d-none');
         if (pedidosNav) pedidosNav.classList.add('d-none');
+        if (dashboardNav) dashboardNav.classList.add('d-none');
+        if (infoNav) infoNav.classList.add('d-none');
         return false;
     } catch (error) {
         console.error('Erro ao verificar usuário:', error);

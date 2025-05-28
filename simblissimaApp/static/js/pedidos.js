@@ -9,14 +9,6 @@ async function loadPedidos() {
             return;
         }
         
-        // Bloqueia acesso para gerentes, eles só devem usar o dashboard
-        if (user.is_staff) {
-            console.log('Staff user detected, access denied to regular orders page');
-            showMessage('Área restrita para clientes. Use o Dashboard do Gerente.', 'warning');
-            loadManagerDashboard();
-            return;
-        }
-
         const content = document.getElementById('content');
         content.innerHTML = `
         <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
@@ -94,6 +86,17 @@ function novoPedido() {
                                 <label class="form-label">Observações</label>
                                 <textarea class="form-control" id="observacoes" rows="2"></textarea>
                             </div>
+                            <div class="mb-3">
+                                <label for="formaPagamento" class="form-label">Forma de Pagamento</label>
+                                <select class="form-select" id="formaPagamento" name="formaPagamento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                    <option value="Cartão de Débito">Cartão de Débito</option>
+                                    <option value="Pix">Pix</option>
+                                </select>
+                                <div class="invalid-feedback">Escolha a forma de pagamento</div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -137,10 +140,11 @@ async function handleNovoPedido(event) {
         preco: parseFloat(item.querySelector('.item-preco').value)
     })).filter(item => item.descricao && !isNaN(item.preco));
     const observacoes = document.getElementById('observacoes').value.trim();
+    const formaPagamento = document.getElementById('formaPagamento').value;
     try {
         await fetchAPI('/pedidos/', {
             method: 'POST',
-            body: JSON.stringify({ itens, observacoes })
+            body: JSON.stringify({ itens, observacoes, formaPagamento })
         });
         showMessage('Pedido criado com sucesso!', 'success');
         loadPedidos();
