@@ -198,6 +198,16 @@ async function initializeApp() {
     }
 }
 
+async function checkAuthAndRedirect(redirectIfNotAuth = true) {
+    const user = await getCurrentUser();
+    if (!user && redirectIfNotAuth) {
+        showMessage('Por favor, faça login para acessar esta página.', 'warning');
+        loadLogin();
+        return null;
+    }
+    return user;
+}
+
 // Call initialization when DOM is loaded
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM loaded, initializing app...');

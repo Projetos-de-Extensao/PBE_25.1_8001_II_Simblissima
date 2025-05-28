@@ -313,8 +313,28 @@ def perfil_cliente(request):
         serializer = ClienteSerializer(cliente)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        user_data = {}
+        if 'first_name' in request.data:
+            user_data['first_name'] = request.data.pop('first_name')
+        if 'last_name' in request.data:
+            user_data['last_name'] = request.data.pop('last_name')
+        if 'email' in request.data:
+            user_data['email'] = request.data.pop('email')
+        if 'password' in request.data and request.data['password']:
+            user_data['password'] = request.data.pop('password')
+
+        # Atualiza o usuário primeiro
+        if user_data:
+            user = cliente.user
+            if 'password' in user_data:
+                user.set_password(user_data.pop('password'))
+            for key, value in user_data.items():
+                setattr(user, key, value)
+            user.save()
+
+        # Atualiza os dados do cliente
         serializer = ClienteSerializer(cliente, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(ClienteSerializer(cliente).data)
         return Response(serializer.errors, status=400)

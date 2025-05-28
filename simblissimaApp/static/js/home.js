@@ -33,23 +33,23 @@ function loadHome() {
     `;
 }
 
-function loadPerfil() {
-    if (!authToken) {
-        loadLogin();
-        return;
-    }
+async function loadPerfil() {
+    const user = await checkAuthAndRedirect();
+    if (!user) return;
 
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Meu Perfil</h3>
+                        <h3 class="mb-0">Meu Perfil</h3>
                     </div>
                     <div class="card-body">
-                        <div id="perfilData">
-                            Carregando...
+                        <div id="perfilData" class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,29 +57,101 @@ function loadPerfil() {
         </div>
     `;
 
-    fetchAPI('/clientes/').then(data => {
-        if (data.results && data.results.length > 0) {
-            const cliente = data.results[0];
-            const perfilDiv = document.getElementById('perfilData');
-            perfilDiv.innerHTML = `
-                <div class="mb-3">
-                    <strong>Nome:</strong> ${cliente.user.first_name} ${cliente.user.last_name}
+    try {
+        const response = await fetchAPI('/perfil/', {
+            method: 'GET'
+        });
+
+        const cliente = response;
+        const perfilDiv = document.getElementById('perfilData');
+        perfilDiv.innerHTML = `
+            <form id="perfilForm" onsubmit="handleUpdatePerfil(event)" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="first_name" value="${cliente.user.first_name}" required>
+                        <div class="invalid-feedback">Por favor, insira um nome válido</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Sobrenome</label>
+                        <input type="text" class="form-control" id="last_name" value="${cliente.user.last_name}" required>
+                        <div class="invalid-feedback">Por favor, insira um sobrenome válido</div>
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <strong>Email:</strong> ${cliente.user.email}
+                    <label class="form-label">CPF</label>
+                    <input type="text" class="form-control" value="${cliente.cpf}" disabled>
+                    <small class="text-muted">O CPF não pode ser alterado</small>
                 </div>
                 <div class="mb-3">
-                    <strong>CPF:</strong> ${cliente.cpf}
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" value="${cliente.user.email}" required>
+                    <div class="invalid-feedback">Por favor, insira um email válido</div>
                 </div>
                 <div class="mb-3">
-                    <strong>Endereço:</strong> ${cliente.endereco}
+                    <label class="form-label">Endereço</label>
+                    <input type="text" class="form-control" id="endereco" value="${cliente.endereco}" required>
+                    <div class="invalid-feedback">Por favor, insira um endereço válido</div>
                 </div>
                 <div class="mb-3">
-                    <strong>Telefone:</strong> ${cliente.telefone}
+                    <label class="form-label">Telefone</label>
+                    <input type="text" class="form-control" id="telefone" value="${cliente.telefone}" 
+                           pattern="\\d{10,11}" required oninput="this.value = this.value.replace(/\\D/g, '')">
+                    <div class="invalid-feedback">Por favor, insira um telefone válido (10 ou 11 dígitos)</div>
                 </div>
-            `;
+                <div class="mb-3">
+                    <label class="form-label">Nova Senha (opcional)</label>
+                    <input type="password" class="form-control" id="password" minlength="6">
+                    <small class="text-muted">Deixe em branco para manter a senha atual</small>
+                    <div class="invalid-feedback">A senha deve ter pelo menos 6 caracteres</div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <button type="button" class="btn btn-secondary" onclick="loadHome()">Voltar</button>
+                </div>
+            </form>
+        `;
+    } catch (error) {
+        console.error('Erro ao carregar perfil:', error);
+        showMessage('Erro ao carregar dados do perfil', 'danger');
+    }
+}
+
+async function handleUpdatePerfil(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    if (!form.checkValidity()) {
+        event.stopPropagation();
+        form.classList.add('was-validated');
+        return;
+    }
+
+    try {
+        const formData = {
+            first_name: document.getElementById('first_name').value.trim(),
+            last_name: document.getElementById('last_name').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            endereco: document.getElementById('endereco').value.trim(),
+            telefone: document.getElementById('telefone').value.trim(),
+        };
+
+        // Só inclui a senha se foi preenchida
+        const password = document.getElementById('password').value;
+        if (password) {
+            formData.password = password;
         }
-    }).catch(error => {
-        showMessage('Erro ao carregar perfil', 'danger');
-    });
+
+        const response = await fetchAPI('/perfil/', {
+            method: 'PUT',
+            body: JSON.stringify(formData),
+        });
+
+        showMessage('Perfil atualizado com sucesso!', 'success');
+        await updateNavigation(); // Atualiza o nome do usuário na navbar
+        loadPerfil(); // Recarrega o perfil para mostrar os dados atualizados
+    } catch (error) {
+        console.error('Erro ao atualizar perfil:', error);
+        showMessage('Erro ao atualizar perfil. Por favor, tente novamente.', 'danger');
+    }
 }
