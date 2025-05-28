@@ -47,7 +47,8 @@ async function loadManagerDashboard() {
                             </div>
                         </div>
                     </div>
-                </div>                <!-- Filtros -->
+                </div>
+                <!-- Filtros -->
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <div class="input-group">
@@ -68,7 +69,7 @@ async function loadManagerDashboard() {
                             <label class="input-group-text" for="sortOrder">Ordenar por</label>
                             <select class="form-select" id="sortOrder">
                                 <option value="data_criacao">Data de Criação</option>
-                                <option value="valor_total">Valor Total</option>
+                                <option value="valor_total">Valor dos Produtos</option>
                                 <option value="status">Status</option>
                             </select>
                         </div>
@@ -234,7 +235,7 @@ async function filtrarPedidos() {
                     <div class="col-md-6">
                         <p><strong>Cliente:</strong> ${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
                         <p><strong>Status Atual:</strong> ${pedido.status}</p>
-                        <p><strong>Valor Total:</strong> R$ ${pedido.valor_total}</p>
+                        <p><strong>Valor dos Produtos:</strong> R$ ${pedido.valor_total}</p>
                         <p><strong>Valor Final:</strong> R$ ${pedido.valor_final || 'Não definido'}</p>
                     </div>
                     <div class="col-md-6">

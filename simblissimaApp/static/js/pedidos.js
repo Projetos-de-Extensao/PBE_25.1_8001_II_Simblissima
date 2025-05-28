@@ -203,7 +203,9 @@ async function carregarPedidos() {
                                 <small>${new Date(pedido.data_criacao).toLocaleDateString()}</small>
                             </div>
                             <p class="mb-1">Status: ${pedido.status}</p>
-                            <p class="mb-1">Valor Total: R$ ${pedido.valor_total}</p>
+                            <p class="mb-1">Valor dos Produtos: R$ ${pedido.valor_total}</p>
+                            ${pedido.valor_final ? 
+                                `<p class="mb-1">Valor Final: R$ ${pedido.valor_final}</p>` : ''}
                             ${pedido.metodo_pagamento ? 
                                 `<p class="mb-1">Método de Pagamento: ${pedido.metodo_pagamento}</p>` : ''}
                             ${pedido.observacoes ? 
@@ -239,7 +241,8 @@ async function verDetalhesPedido(pedidoId) {
                         <h5 class="card-title">Informações Gerais</h5>
                         <p>Status: <span id="statusPedido">${pedido.status}</span></p>
                         <p>Data de Criação: ${new Date(pedido.data_criacao).toLocaleString()}</p>
-                        <p>Valor Total: R$ <span id="valorPedido">${pedido.valor_final || pedido.valor_total}</span></p>
+                        <p>Valor dos Produtos: R$ <span id="valorPedido">${pedido.valor_total}</span></p>
+                        ${pedido.valor_final ? `<p>Valor Final: R$ ${pedido.valor_final}</p>` : ''}
                         <p>Método de Pagamento: ${pedido.metodo_pagamento || 'Não definido'}</p>
                         ${pedido.observacoes ? `<p>Observações: ${pedido.observacoes}</p>` : ''}
                     </div>
