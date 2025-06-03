@@ -10,7 +10,7 @@ O brainstorm é uma técnica de elicitação de requisitos que consiste em reuni
  
 ## Metodologia
 <p align = "justify">
-A equipe se reuniu para debater ideias gerais sobre o projeto via encontro presencial durante a aula, começou e terminou uma ideia inicial durante a mesma, onde o Bernardo Lobo foi o moderador, direcionando a equipe com questões pré-elaboradas, e transcrevendo as respostas para o documento.
+A equipe se reuniu para debater ideias gerais sobre o projeto via encontro presencial durante a aula, começando e desenvolvendo uma ideia inicial durante a mesma. Bernardo Lobo atuou como moderador, direcionando a equipe com questões pré-elaboradas e transcrevendo as respostas para o documento.
 </p>
  
 ## Brainstorm
@@ -22,35 +22,39 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via encontro prese
 ### 1. Qual o objetivo principal da aplicação?
  
 <p align = "justify">
-<b>XXXX</b> - Deve ser uma plataforma onde qualquer pessoa possa acessar e fazer um pedido de um produto que será entregue do continente para a ilha primeira.
+**Bernardo Lobo** - Deve ser uma plataforma onde qualquer pessoa possa acessar e fazer um pedido de um produto que será entregue do continente para a Ilha Primeira, facilitando a logística.
 </p>
  
-<b>ZZZ</b> - A plataforma deve fornecer pontos âncora para recebimento da mercadoria no continente e um serviço de logistica para o translocamento da mesma para outros pontos de entrega na Ilha Primeira.
+**Bernardo Moreira** - A plataforma deve fornecer pontos de ancoragem para recebimento da mercadoria no continente e um serviço de logística para o translocamento da mesma para outros pontos de entrega na Ilha Primeira, utilizando a infraestrutura de barcos existente.
  
-<b>YYYY</b> - O objetivo da aplicação é facilitar o acesso a produtos disponibilizados apenas em terra para as pessoas residentes da ilha.
+**Guilherme Dias** - O objetivo da aplicação é facilitar o acesso a produtos disponibilizados apenas em terra para as pessoas residentes da ilha, permitindo que criem e acompanhem seus pedidos.
  
-<b>WWWW</b> - O principal objetivo da aplicação é a democratização do acesso à bens e mercadorias disponiveis de forma equalitaria para a sociedade continental dentro da ilha.
+**Julia Curto** - O principal objetivo da aplicação é a democratização do acesso à bens e mercadorias disponíveis de forma equitária para a sociedade continental dentro da ilha, com um sistema gerenciável.
  
-<b>KKKK</b> - A plataforma deve gerenciar um sistema de logistica para a entrega dos pedidos aos moradores da ilha.
+**Michel de Melo** - A plataforma deve gerenciar um sistema de logística completo para a entrega dos pedidos aos moradores da ilha, incluindo o acompanhamento de status e a gestão de valor final.
 </p>
  
 ---
  
-### 2. Como será o processo para cadastrar um novo clientetorneio?
+### 2. Como será o processo para cadastrar um novo cliente?
  
 <p align = "justify">
-<b>XXXX</b> - O morador deve entrar em contato com a assossiação de moradores da ilha, para que estes assim o disponibilizem uma conta de acesso à plataforma.
+**Bernardo Lobo** - O cliente deve poder se cadastrar diretamente na plataforma fornecendo CPF, email, nome, sobrenome, telefone e endereço, sendo o CPF utilizado como nome de usuário.
  
-<b>YYYY</b> - O cliente enquanto usuario da plataforma deve poder adicionar entrega no ponto ancora localizado no continente, que será entregue no ponto escolhido da ilha.
+**Bernardo Moreira** - Após o cadastro inicial, o sistema deve associar os dados do cliente a um usuário, permitindo o login e a personalização do perfil.
  
-<b>WWWW</b> - Com o usuário logado, ele deverá poder acessar a área de pagamento do serviço, ver um simples historico de pedidos e também realizar um novo pedido de entrega.
+**Guilherme Dias** - O cliente, enquanto usuário da plataforma, deve poder adicionar itens no pedido, indicando a descrição e o preço de cada item.
+ 
+**Julia Curto** - Com o usuário logado, ele deverá poder acessar a área de gerenciamento de pedidos, ver um histórico de pedidos e também realizar um novo pedido de entrega.
+ 
+**Michel de Melo** - A plataforma deve validar os dados de cadastro e garantir que o CPF e email sejam únicos para evitar duplicações e problemas de segurança.
  
 ---
  
 ### 3. Como será a forma de adicionar pedidos?
  
 <p align = "justify">
-<b>XXXX</b> - O cliente ao cadastrar novo pedido, insere todas as informações necessarias para o recebimento do mesmo no local âncora escolhido, também inserindo qual localidade gostaria que o mesmo fosse entregue na ilha.
+**Bernardo Lobo** - O cliente, ao criar um novo pedido, insere a descrição e o preço de cada item, e pode adicionar observações gerais para a entrega. O sistema calculará o valor total dos produtos.
 </p>
  
 ---
@@ -58,7 +62,13 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via encontro prese
 ### 4. Outras perguntas pertinentes ao contexto
 
 <p align = "justify">
-<b>XXXX</b> - Nosso sistema funciona baseado em localidades âncora onde estará presente um ponto de acesso ao trabalho de logistica, que essa fará o transporte dos bens até outro ponto mais acessivel ao morador da ilha.
+**Bernardo Moreira** - Nosso sistema funciona baseado em localidades âncora, onde estará presente um ponto de acesso para o trabalho de logística. Essa logística fará o transporte dos bens até outro ponto mais acessível ao morador da ilha, ou diretamente na residência, dependendo da infraestrutura.
+ 
+**Guilherme Dias** - O gerente deve ter uma visão geral de todos os pedidos, podendo filtrar por status e atualizar o andamento, incluindo a definição de um valor final para o pedido e adição de comentários.
+ 
+**Julia Curto** - O sistema deve permitir o rastreamento do status do pedido em tempo real, informando ao cliente sobre cada etapa da entrega, desde a criação até a finalização.
+ 
+**Michel de Melo** - A comunicação sobre o valor final e a confirmação de pagamento devem ser claras, permitindo ao cliente aceitar ou recusar o valor proposto pelo gerente.
  
 ---
   
@@ -66,28 +76,29 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via encontro prese
  
 |ID|Descrição|
 |----|-------------|
-|BS01| O cliente...|
-|BS02| O cliente...|
-|BS03| O cliente...|
-|BS04| O cliente...|
-|BS05| O cliente...|
-|BS06| O cliente...|
-|BS07| O cliente...|
-|BS08| O cliente...|
-|BS09| O cliente...|
-|BS10| O produto...|
-|BS11| O produto...|
-|BS12| O produto...|
-|BS13| O produto...|
-|BS14| O produto...|
-|BS15| O produto...|
+|BS01| O sistema deve permitir o cadastro de novos clientes com CPF, e-mail, nome, sobrenome, telefone e endereço.|
+|BS02| O sistema deve permitir que clientes loguem com CPF e senha.|
+|BS03| O cliente deve poder criar um novo pedido, adicionando múltiplos itens com descrição e preço.|
+|BS04| O pedido deve ter um campo para observações gerais.|
+|BS05| O sistema deve calcular o valor total dos produtos no pedido automaticamente.|
+|BS06| O cliente deve poder visualizar o histórico de seus pedidos e seus respectivos status.|
+|BS07| O gerente (staff) deve ter acesso a um dashboard para visualizar e gerenciar todos os pedidos.|
+|BS08| O gerente deve poder atualizar o status de um pedido.|
+|BS09| O gerente deve poder definir um valor final para o pedido, que pode ser diferente do valor total.|
+|BS10| O cliente deve ser notificado sobre mudanças no status do pedido e sobre o valor final proposto.|
+|BS11| O cliente deve poder confirmar ou recusar o valor final proposto pelo gerente.|
+|BS12| O histórico de status de cada pedido deve ser registrado com data e comentário.|
+|BS13| O sistema deve permitir o gerenciamento de perfis de clientes (atualização de nome, sobrenome, e-mail, endereço, telefone e senha).|
+|BS14| O sistema deve ser acessível via navegador web, com uma interface Single Page Application (SPA).|
+|BS15| O sistema deve permitir o login e logout de usuários.|
  
 ## Conclusão
 <p align = "justify">
-Através da aplicação da técnica, foi possível elicitar alguns dos primeiros requisitos do projeto.
+Através da aplicação da técnica de Brainstorm, foi possível elicitar um conjunto inicial de requisitos funcionais e não funcionais para o projeto Simblissima, alinhados com a proposta de facilitar a logística de entregas na Ilha Primeira.
 </p>
  
 ## Autor(es)
 | Data | Versão | Descrição | Autor(es) |
 | -- | -- | -- | -- |
 | 24/03/2025 | 1.0 | Criação do documento | Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo |
+| 02/06/2025 | 1.1 | Atualização das perguntas, respostas e requisitos elicitados para refletir o projeto Simblissima | Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo |
