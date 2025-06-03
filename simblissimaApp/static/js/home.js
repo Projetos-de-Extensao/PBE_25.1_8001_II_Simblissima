@@ -8,18 +8,16 @@ async function loadHome() {
     const content = document.getElementById('content');
     let pedidosButton = '';
     if (user && user.is_staff) {
-        pedidosButton = `<button class="btn btn-primary" onclick="loadManagerDashboard()">Dashboard do Cliente</button>`;
+        pedidosButton = `<button class="btn btn-primary" onclick="loadManagerDashboard()">Dashboard</button>`;
     } else {
         pedidosButton = `<button class="btn btn-primary" onclick="loadPedidos()">Ver Pedidos</button>`;
     }
     content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
             <div class="cnmt" style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="jumbotron bg-white p-4 rounded shadow-sm mb-4 text-center">
                     <h1 class="display-4">Bem-vindo à Simblissima!</h1>
-                    <p class="lead">Sistema de gerenciamento de pedidos e produtos.</p>
-                    <hr class="my-4">
-                    <p>Utilize o menu acima para navegar pelo sistema.</p>
+                    <p class="lead">Sistema de gerenciamento de pedidos e produtos.</p>                                    
                 </div>
                 <div class="row justify-content-center mt-4">
                     <div class="col-md-6 col-lg-5 mb-3 d-flex justify-content-center">
@@ -52,7 +50,7 @@ async function loadPerfil() {
 
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
             <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="row justify-content-center">
                     <div class="col-md-8">

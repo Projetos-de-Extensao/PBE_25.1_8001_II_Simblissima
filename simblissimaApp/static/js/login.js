@@ -2,7 +2,7 @@
 function loadLogin() {
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
             <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="card">
                     <div class="card-header text-center"><h4 class="mb-0">Login</h4></div>
@@ -84,7 +84,7 @@ async function handleLogin(event) {
 function loadRegister() {
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
             <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="card">
                     <div class="card-header text-center"><h4 class="mb-0">Cadastro de Novo Cliente</h4></div>

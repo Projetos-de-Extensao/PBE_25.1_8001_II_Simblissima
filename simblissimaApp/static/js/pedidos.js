@@ -11,7 +11,7 @@ async function loadPedidos() {
         
         const content = document.getElementById('content');
         content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
             <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
@@ -65,7 +65,7 @@ function stopAutoRefresh() {
 function novoPedido() {
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
             <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -207,7 +207,7 @@ async function verDetalhesPedido(pedidoId) {
         const pedido = await fetchAPI(`/pedidos/${pedidoId}/`);
         const content = document.getElementById('content');
         content.innerHTML = `
-            <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
+            <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
                 <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
