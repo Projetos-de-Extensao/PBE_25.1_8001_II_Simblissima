@@ -14,7 +14,7 @@ async function loadHome() {
     }
     content.innerHTML = `
         <div class="d-flex justify-content-center align-items-start" style="min-height: 350px; margin-left: 340px;">
-            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+            <div class="cnmt" style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
                 <div class="jumbotron bg-white p-4 rounded shadow-sm mb-4 text-center">
                     <h1 class="display-4">Bem-vindo à Simblissima!</h1>
                     <p class="lead">Sistema de gerenciamento de pedidos e produtos.</p>
