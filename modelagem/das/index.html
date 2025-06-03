@@ -1015,27 +1015,29 @@
 
 
 <h1 id="documento-de-arquitetura-de-software-das">Documento de Arquitetura de Software (DAS)</h1>
-<h1 id="nome-do-projeto">"Nome do Projeto"</h1>
+<h1 id="simblissima">"Simblissima"</h1>
 <h1 id="introducao">Introdução</h1>
 <h2 id="proposta">Proposta</h2>
 <p align = "justify">
-Este documento apresenta uma visão geral da arquitetura do sistema, utilizando diferentes visões arquiteturais para destacar diferentes aspectos do sistema. É utilizado para capturar as decisões arquiteturais significativas que fizeram parte do sistema.
+Este documento apresenta uma visão geral da arquitetura do sistema Simblissima, utilizando diferentes visões arquiteturais para destacar diversos aspectos do sistema. É utilizado para capturar as decisões arquiteturais significativas que fizeram parte do desenvolvimento do sistema, com foco no gerenciamento de pedidos e entregas entre o continente e a Ilha Primeira.
 </p>
 
 <h2 id="escopo">Escopo</h2>
 <p align = "justify">
-A aplicação "XXXX" tem o objetivo fornecer...
+A aplicação "Simblissima" tem o objetivo de fornecer uma API REST para o gerenciamento eficiente de pedidos e entregas, visando facilitar a logística de produtos do continente para a Ilha Primeira. Ela inclui funcionalidades para registro e gestão de usuários (clientes e gerentes), criação e acompanhamento de pedidos, e atualização de status e valores, tudo acessível através de uma interface Single Page Application (SPA).
 </p>
 
 <h2 id="definicoes-acronimos-e-abreviacoes">Definições, Acrônimos e Abreviações</h2>
 <ul>
-<li>MVC - </li>
-<li>MVT - </li>
-<li>SIGLA PARA O APP - Nome do Aplicativo</li>
+<li>MVT - Model-View-Template: Padrão arquitetural utilizado pelo Django, onde Model representa a estrutura de dados, View lida com a lógica de negócio e Template é responsável pela apresentação.</li>
+<li>SPA - Single Page Application: Aplicação web que carrega uma única página HTML e atualiza o conteúdo dinamicamente conforme a interação do usuário.</li>
+<li>API - Application Programming Interface: Conjunto de regras e protocolos que permite a comunicação entre diferentes softwares.</li>
+<li>REST - Representational State Transfer: Estilo de arquitetura de software para sistemas distribuídos, comumente usado para APIs web.</li>
+<li>SIMBLISSIMA - Nome do Aplicativo</li>
 </ul>
 <h2 id="visao-geral">Visão Geral</h2>
 <p align = "justify">
-O Documento de Arquitetura de Software (DAS) trata-se de uma visão geral de toda a arquitetura do sistema, observando diferentes aspectos do mesmo. Neste documento serão abordadas as seguintes visões da aplicação TCM:
+O Documento de Arquitetura de Software (DAS) trata-se de uma visão geral de toda a arquitetura do sistema Simblissima, observando diferentes aspectos do mesmo. Neste documento serão abordadas as seguintes visões da aplicação Simblissima:
 </p>
 
 <ul>
@@ -1048,89 +1050,140 @@ O Documento de Arquitetura de Software (DAS) trata-se de uma visão geral de tod
 <h1 id="representacao-arquitetural">Representação Arquitetural</h1>
 <h2 id="cliente-servidor">Cliente-Servidor</h2>
 <p align = "justify">
-Cliente-Servidor é um modelo de arquitetura...
+Cliente-Servidor é um modelo de arquitetura onde um cliente (geralmente uma interface de usuário) envia requisições a um servidor, que processa essas requisições e envia as respostas de volta ao cliente. No Simblissima, o frontend (SPA) atua como cliente e o backend (API Django REST Framework) como servidor.
 </p>
 
 <p>Cliente (Frontend):</p>
 <ul>
-<li>View: Consiste.....</li>
+<li>View: Consiste nas interfaces HTML, CSS e JavaScript que rodam no navegador do usuário. Estas interfaces são responsáveis por renderizar os dados e capturar as interações do usuário, enviando requisições à API. Os arquivos <code>base.html</code> e os scripts JS em <code>static/js/</code> são parte desta camada.</li>
 </ul>
 <p>Servidor (Backend):</p>
 <ul>
 <li>
-<p>Controller: faz a conexão entre as camadas...</p>
+<p>Controller: Em Django REST Framework, os ViewSets e as funções decoradas com <code>@api_view</code> em <code>simblissimaApp/views.py</code> atuam como controladores. Eles recebem as requisições HTTP do cliente, orquestram a lógica de negócio, interagem com os modelos e serializers, e retornam as respostas HTTP.</p>
 </li>
 <li>
-<p>Service: Responsável pela lógica...</p>
+<p>Service (Lógica de Negócio): A lógica de negócio, como a criação de pedidos com status inicial, atualização de valores totais, e validações específicas, está implementada principalmente dentro dos métodos dos ViewSets (<code>PedidoViewSet</code>, <code>ClienteViewSet</code>, etc.) em <code>simblissimaApp/views.py</code> e nos serializers (<code>PedidoSerializer</code>). As ações <code>@action</code> e <code>transaction.atomic()</code> são exemplos de encapsulamento de lógica de serviço.</p>
 </li>
 <li>
-<p>Model: Responsável pela persistência...</p>
+<p>Model: Responsável pela persistência e recuperação de dados. No Simblissima, os modelos definidos em <code>simblissimaApp/models.py</code> (<code>Cliente</code>, <code>Pedido</code>, <code>ItemPedido</code>, <code>StatusPedido</code>) mapeiam diretamente para as tabelas do banco de dados (SQLite por padrão) e encapsulam a lógica de negócios relacionada aos dados.</p>
 </li>
 </ul>
 <h1 id="objetivos-de-arquitetura-e-restricoes">Objetivos de Arquitetura e Restrições</h1>
 <h2 id="objetivos">Objetivos</h2>
 <p align = "justify">
-Segurança:
-   -
-Persistência:
-   - 
-Privacidade:
-   - Middlewares: Foi usado middlewares...
-Desempenho:
-   Requisições...
-Reusabilidade:
-   Componentes no Frontend...
+**Segurança:**
+   - Proteger dados de usuários e pedidos através de autenticação por sessão e permissões baseadas em roles (cliente/staff) no Django REST Framework.
+   - Utilizar CSRF Token para proteção contra ataques cross-site request forgery.
+**Persistência:**
+   - Garantir a persistência dos dados de clientes, pedidos, itens de pedidos e histórico de status em um banco de dados SQLite.
+**Privacidade:**
+   - Controlar o acesso a dados sensíveis de clientes e pedidos através das permissões de usuário (IsOwnerOrStaff) e autenticação de sessão.
+**Desempenho:**
+   - Otimizar as requisições à API e o carregamento da SPA para uma experiência fluida, com filtros e ordenação para pedidos e dashboards.
+**Reusabilidade:**
+   - Utilizar componentes reutilizáveis no frontend (JavaScript modular) e serializers genéricos no Django REST Framework para facilitar a manutenção e expansão.
 </p>
 
 <h2 id="restricoes">Restrições</h2>
 <p align = "justify">
-Tamanho da tela:...
+**Tamanho da tela:** A interface da Single Page Application (SPA) é responsiva e se adapta a diferentes tamanhos de tela (desktop e mobile), embora a experiência ideal seja em telas maiores para o dashboard do gerente.
 
-Portabilidade:...
+**Portabilidade:** A aplicação é baseada em web e pode ser acessada de qualquer navegador moderno, sem a necessidade de instalação de software específico no lado do cliente.
 
 |IE|Edge|Firefox|Chrome|Safari|Googlebot|
 |--|----|-------|------|------|---------|
 |11 |>= 14|>= 52|>= 49|>= 10|Sim|
 
-Serviços: Os serviços oferecidos....
+**Serviços:** A aplicação é autocontida e não depende inicialmente de serviços externos de terceiros (como APIs de pagamento ou de mapas em tempo real). Todas as funcionalidades de gerenciamento de pedidos são internas.
 
-Acesso a internet: A aplicação está limitada apenas a conexão com internet
+**Acesso a internet:** A aplicação requer conexão com a internet para ser acessada, pois é uma aplicação web.
 </p>
 
 <h2 id="ferramentas-utilizadas">Ferramentas Utilizadas</h2>
 <ul>
-<li>XXX: Ambiente de execução...</li>
-<li>XXXX: Linguagem de programação...
-Typescript: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXX: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXXX: XXXX</li>
-<li>XXXXX: XXXX.</li>
+<li><strong>Python</strong>: Linguagem de programação principal para o backend.</li>
+<li><strong>Django</strong>: Framework web para o desenvolvimento rápido e eficiente do backend.</li>
+<li><strong>Django REST Framework</strong>: Toolkit para a construção da API RESTful.</li>
+<li><strong>SQLite</strong>: Banco de dados padrão leve, utilizado para o desenvolvimento e persistência de dados.</li>
+<li><strong>HTML, CSS, JavaScript</strong>: Linguagens para o desenvolvimento da Single Page Application (SPA) no frontend.</li>
+<li><strong>Bootstrap</strong>: Framework CSS para o design responsivo da interface.</li>
+<li><strong>Git/GitHub</strong>: Sistema de controle de versão e plataforma para colaboração.</li>
+<li><strong>Visual Studio Code</strong>: Ambiente de desenvolvimento integrado (IDE).</li>
+<li><strong>Figma</strong>: Ferramenta para prototipagem de alta fidelidade.</li>
 </ul>
 <h1 id="visao-de-caso-de-uso">Visão de Caso de Uso</h1>
 <p align = "justify">
-O primeiro caso de uso descreve a ação de um usuário que cria um torneio, sendo assim, ele é o manager do torneio. No segundo caso de uso descreve a ação de um usuário que é entra na aplicação com a intenção de entrar em torneios como jogador. Nos dois casos o usuário pode ser o mesmo, porém com funções diferentes.
+A visão de caso de uso descreve as interações dos principais atores com o sistema Simblissima. O diagrama apresenta os casos de uso para o **Cliente** (morador da Ilha Primeira), que pode se registrar, fazer login, criar e acompanhar pedidos, e gerenciar seu perfil; e para o **Gerente** (equipe de logística/administração), que pode fazer login, gerenciar pedidos, atualizar status e visualizar o dashboard.
 </p>
 
-<p><img alt="Caso de uso 1" src="../assets/Casos_de_uso/caso_de_uso_1.png" /></p>
-<p><img alt="Caso de uso 2" src="../assets/Casos_de_uso/caso_de_uso_2.png" /></p>
+<p><img alt="Diagrama de Caso de Uso - Simblissima" src="../assets/Casos_de_Uso/DiagramaCasosDeUso_Simblissima.png" /></p>
 <h1 id="visao-logica">Visão Lógica</h1>
+<p align = "justify">
+A visão lógica do sistema Simblissima é organizada em módulos funcionais que se comunicam através da API REST. Os principais componentes lógicos incluem:
+<ul>
+    <li>**Módulo de Autenticação e Autorização**: Gerencia o registro, login e logout de usuários (clientes e staff), além de controlar o acesso a recursos da API com base nas permissões de usuário.</li>
+    <li>**Módulo de Gerenciamento de Clientes**: Lida com a criação e atualização dos dados de clientes, incluindo o vínculo com o modelo `User` do Django.</li>
+    <li>**Módulo de Gerenciamento de Pedidos**: Centraliza a criação, recuperação, atualização e exclusão de pedidos, incluindo a associação de itens e o cálculo do valor total.</li>
+    <li>**Módulo de Rastreamento de Status**: Gerencia o ciclo de vida do pedido através de diferentes status, registrando o histórico de mudanças e comentários. Permite que gerentes atualizem o status e definam valores finais, e clientes acompanhem essas mudanças.</li>
+    <li>**Módulo de Relatórios/Dashboard**: Fornece funcionalidades para que a equipe de gestão visualize estatísticas e listas de pedidos filtradas, auxiliando na tomada de decisões.</li>
+</ul>
+</p>
+
 <h1 id="visao-de-implantacao">Visão de Implantação</h1>
-<p><img alt="Diagrama de Implantação" src="../assets/Diagrama_implantacao/diagrama_de_implantacao.png" /></p>
+<p><img alt="Diagrama de Implantação - Simblissima" src="../assets/Diagrama_implantacao/diagrama_de_implantacao_simblissima.png" /></p>
+<p align = "justify">
+O diagrama de implantação ilustra o ambiente físico e lógico onde o sistema Simblissima será executado. A aplicação é implantada em um servidor web, que hospeda o backend (Django/Django REST Framework) e serve os arquivos estáticos (frontend SPA). O banco de dados (SQLite, para desenvolvimento) é acessado pelo backend. Os usuários (clientes e gerentes) interagem com o sistema através de seus navegadores web.
+</p>
+
 <h1 id="visao-de-implementacao">Visão de Implementação</h1>
 <h2 id="visao-geral_1">Visão Geral</h2>
-<p><img alt="Diagrama de Componentes" src="../assets/Diagrama_componentes/diagrama_de_componentesV2.0.png" /></p>
+<p align = "justify">
+A visão de implementação do Simblissima detalha a estrutura do código-fonte e os componentes principais. O projeto é organizado em uma aplicação Django (`simblissimaApp`) que contém os modelos de dados, serializadores, views da API e a lógica de negócio. O frontend é uma Single Page Application (SPA) construída com HTML, CSS e JavaScript, que interage com a API REST.
+</p>
+<p><img alt="Diagrama de Componentes - Simblissima" src="../assets/Diagrama_componentes/diagrama_de_componentes_simblissima.png" /></p>
 <h1 id="visao-de-dados">Visão de Dados</h1>
 <h2 id="modelo-entidade-relacionamento-mer">Modelo Entidade Relacionamento (MER)</h2>
-<h4 id="entidades-e-relacionamentos">Entidades e Relacionamentos:</h4>
-<h2 id="diagrama-entidade-relacionamento-der">Diagrama Entidade Relacionamento (DER)</h2>
-<h1 id="tamanho-e-desempenho">Tamanho e Desempenho</h1>
-<h1 id="qualidade">Qualidade</h1>
+<p align = "justify">
+O Modelo Entidade Relacionamento (MER) do Simblissima descreve as entidades do sistema e como elas se relacionam para armazenar as informações de clientes, pedidos e seus status.
 </p>
+<h4 id="entidades-e-relacionamentos">Entidades e Relacionamentos:</h4>
+<ul>
+<li><strong>User</strong>: Representa o usuário do sistema (do Django Auth), contendo informações básicas de autenticação como username (CPF), email, first_name e last_name.</li>
+<li><strong>Cliente</strong>: Estende o <code>User</code> com informações específicas do cliente, como CPF (único), endereço e telefone. Possui um relacionamento <code>OneToOneField</code> com <code>User</code>.</li>
+<li><strong>Pedido</strong>: Representa um pedido feito por um cliente. Contém informações como cliente (<code>ForeignKey</code> para Cliente), data de criação, status (Pendente, Confirmado, etc.), valor total (dos itens), valor final (definido pelo gerente), método de pagamento e observações.</li>
+<li><strong>ItemPedido</strong>: Representa um item individual dentro de um pedido. Possui uma <code>ForeignKey</code> para <code>Pedido</code> e contém a descrição do item e seu preço.</li>
+<li><strong>StatusPedido</strong>: Registra o histórico de status de um pedido. Possui uma <code>ForeignKey</code> para <code>Pedido</code> e registra o status, a data da mudança e um comentário.</li>
+</ul>
+<h2 id="diagrama-entidade-relacionamento-der">Diagrama Entidade Relacionamento (DER)</h2>
+<p align = "justify">
+O Diagrama Entidade Relacionamento (DER) a seguir ilustra visualmente as entidades e os relacionamentos descritos no MER, mostrando a estrutura do banco de dados do Simblissima.
+</p>
+<p><img alt="Diagrama Entidade Relacionamento - Simblissima" src="../assets/Diagrama_dados/DER_Simblissima.png" /></p>
+<h1 id="tamanho-e-desempenho">Tamanho e Desempenho</h1>
+<p align = "justify">
+O sistema Simblissima foi projetado para ser leve e eficiente, utilizando o Django REST Framework para otimização de requisições e respostas da API. A paginação (page_size: 10) está configurada para limitar o número de itens retornados por requisição, melhorando o desempenho para grandes volumes de dados. A atualização automática das listas de pedidos (a cada 30 segundos para a lista geral e 15 segundos para detalhes) visa manter as informações atualizadas para clientes e gerentes, sem sobrecarregar o servidor. O uso de SQLite em desenvolvimento oferece flexibilidade e facilidade de setup, podendo ser escalado para bancos de dados mais robustos em produção.
+</p>
+
+<h1 id="qualidade">Qualidade</h1>
+<p align = "justify">
+A qualidade do sistema Simblissima é assegurada através de:
+<ul>
+    <li>**Validação de Dados**: Implementada nos serializers e modelos para garantir a integridade e consistência dos dados de entrada (ex: CPF de 11 dígitos, preços positivos).</li>
+    <li>**Tratamento de Erros**: Respostas de erro padronizadas da API com códigos HTTP apropriados e mensagens informativas para o cliente.</li>
+    <li>**Segurança**: Autenticação de sessão e permissões (`IsOwnerOrStaff`) para garantir que apenas usuários autorizados acessem ou modifiquem recursos específicos.</li>
+    <li>**Usabilidade**: Design responsivo da SPA com Bootstrap e feedback visual para as ações do usuário (mensagens de sucesso/erro).</li>
+    <li>**Consistência de Dados**: Uso de transações atômicas para garantir que operações complexas (ex: criação de pedido com status inicial) sejam concluídas integralmente ou desfeitas.</li>
+</ul>
+</p>
+
 <h1 id="referencias-bibliograficas">Referências Bibliográficas</h1>
-<blockquote></blockquote>
+<blockquote>
+<p>Documento de Arquitetura de Software: Disponível em: https://www.devmedia.com.br/documento-de-arquitetura-de-software-das/37279. Acesso em: 02 de junho de 2025. https://www.reddit.com/r/NoStupidQuestions/comments/hgkc5g/whats_a_gender_neutral_alternative_to_dear/?tl=pt-br
+Padrão Cliente-Servidor: Disponível em: https://www.alura.com.br/artigos/o-que-e-cliente-servidor. Acesso em: 02 de junho de 2025. https://www.reddit.com/r/NoStupidQuestions/comments/hgkc5g/whats_a_gender_neutral_alternative_to_dear/?tl=pt-br
+Django REST Framework: Disponível em: https://www.django-rest-framework.org/. Acesso em: 02 de junho de 2025.
+SQLite: Disponível em: https://www.sqlite.org/index.html. Acesso em: 02 de junho de 2025.</p>
+</blockquote>
 <h1 id="historico-de-versao">Histórico de Versão</h1>
 <table>
 <thead>
@@ -1149,34 +1202,10 @@ O primeiro caso de uso descreve a ação de um usuário que cria um torneio, sen
 <td>xxx xxx, xxx xx, xxx xx, xxx xxx e xxx xxxx</td>
 </tr>
 <tr>
-<td>15/11/2020</td>
+<td>02/06/2025</td>
 <td>1.1</td>
-<td>Representação arquitetural e objetivos e restrições arquiteturais.</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>19/11/2020</td>
-<td>1.2</td>
-<td>Adição dos diagramas, visões, tamanho e desempenho e qualidade</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>20/11/2020</td>
-<td>1.3</td>
-<td>Adição da descrição de MER e DER</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>20/11/2020</td>
-<td>1.4</td>
-<td>Adição do tópico de qualidade</td>
-<td>Autores</td>
-</tr>
-<tr>
-<td>20/11/2020</td>
-<td>1.5</td>
-<td>Revisão</td>
-<td>Autores</td>
+<td>Atualização completa do documento para refletir o projeto Simblissima, incluindo todas as seções e imagens.</td>
+<td>Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo</td>
 </tr>
 </tbody>
 </table>
