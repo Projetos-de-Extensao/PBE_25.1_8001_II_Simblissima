@@ -31,31 +31,32 @@ async function loadPedidos() {
         const content = document.getElementById('content');
         // Só monta o layout se ainda não estiver presente
         if (!document.getElementById('listaPedidos')) {
-            content.innerHTML = `        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-            <div style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h3 class="mb-0">Meus Pedidos</h3>
-                                <div>
-                                    <button class="btn btn-primary me-2" onclick="novoPedido()">Novo Pedido</button>
-                                    <button class="btn btn-secondary" onclick="loadHome()">Voltar</button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="listaPedidos" class="text-center">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Carregando...</span>
+            content.innerHTML = `
+                <div class="pedidos-container">
+                    <div class="pedidos-content">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h3 class="mb-0">Meus Pedidos</h3>
+                                        <div class="pedidos-button-container">
+                                            <button class="btn btn-primary me-2" onclick="novoPedido()">Novo Pedido</button>
+                                            <button class="btn btn-secondary" onclick="loadHome()">Voltar</button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="listaPedidos" class="text-center">
+                                            <div class="spinner-border" role="status">
+                                                <span class="visually-hidden">Carregando...</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        `;
+            `;
         }
         atualizarListaPedidos();
         // Start auto-refresh when loading the pedidos view
@@ -66,8 +67,7 @@ async function loadPedidos() {
     }
 }
 
-function startAutoRefresh() {
-    // Clear any existing interval
+function startAutoRefresh() {    // Clear any existing interval
     if (refreshInterval) {
         clearInterval(refreshInterval);
     }
@@ -75,12 +75,18 @@ function startAutoRefresh() {
     refreshInterval = setInterval(atualizarListaPedidos, 30000);
 }
 
+function stopAutoRefresh() {
+    if (refreshInterval) {
+        clearInterval(refreshInterval);
+    }
+}
+
 // Nova função: só atualiza a lista, sem checar usuário nem mexer no layout
 async function atualizarListaPedidos() {
     try {
         // Salva os pedidos expandidos
         const expanded = Array.from(document.querySelectorAll('[id^="pedido-content-usuario-"]'))
-            .filter(div => div.style.display === 'block')
+            .filter(div => div.classList.contains('pedido-content-visible'))
             .map(div => div.id.replace('pedido-content-usuario-', ''));
         // Busca o usuário só para pegar o id, mas não faz redirecionamento
         const user = await getCurrentUser();
@@ -91,7 +97,7 @@ async function atualizarListaPedidos() {
         if (data.results && data.results.length > 0) {
             listaPedidos.innerHTML = data.results.map(pedido => `
                 <div class="card shadow-sm mb-4 w-100" style="max-width:100%;">
-                    <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 pedido-header-clickable" onclick="togglePedidoMinimizadoUsuario(${pedido.id})" style="cursor:pointer;">
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge ${getBadgeClassUsuario(pedido.status)} px-3 py-2">
@@ -101,16 +107,15 @@ async function atualizarListaPedidos() {
                             </div>
                             <span class="text-muted small text-center text-md-start">${new Date(pedido.data_criacao).toLocaleDateString()}</span>
                         </div>
-                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 justify-content-md-end">
-                            <span class="fw-bold text-primary text-center text-md-end">R$ ${pedido.valor_final || pedido.valor_total}</span>
-                            <span class="text-muted small text-center text-md-end">${formatStatus(pedido.status)}</span>
-                            <button class="btn btn-outline-primary btn-sm mx-auto mx-md-0" onclick="togglePedidoMinimizadoUsuario(${pedido.id})">
-                                <span class="d-none d-md-inline">Detalhes</span>
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 justify-content-md-end flex-grow-1" style="min-width:320px;">
+                            <span class="fw-bold text-primary text-center text-md-start me-md-auto" style="white-space:nowrap;">R$&nbsp;${parseFloat(pedido.valor_final || pedido.valor_total).toFixed(2)}</span>
+                            <span class="text-muted small w-100 text-center d-block" style="vertical-align:middle;">${formatStatus(pedido.status)}</span>
+                            <span class="mx-auto mx-md-0 pedido-toggle-arrow" style="font-size:1.2rem;">
                                 <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-down"></i>
-                            </button>
+                            </span>
                         </div>
                     </div>
-                    <div id="pedido-content-usuario-${pedido.id}" style="display: none;">
+                    <div id="pedido-content-usuario-${pedido.id}" class="pedido-content-hidden">
                         <div class="p-3">
                             <div class="mb-2">
                                 <strong class="text-center text-md-start d-block">Itens:</strong>
@@ -118,7 +123,7 @@ async function atualizarListaPedidos() {
                                     ${pedido.itens && pedido.itens.length > 0 ? pedido.itens.map(item => `
                                         <li class="d-flex justify-content-between border-bottom py-1">
                                             <span class="text-center text-md-start">${item.descricao}</span>
-                                            <span class="text-end">R$ ${parseFloat(item.preco).toFixed(2)}</span>
+                                            <span class="text-end w-25">R$ ${parseFloat(item.preco).toFixed(2)}</span>
                                         </li>
                                     `).join('') : '<li class="text-muted text-center">Nenhum item</li>'}
                                 </ul>
@@ -148,13 +153,13 @@ async function atualizarListaPedidos() {
                         </div>
                     </div>
                 </div>
-            `).join('');
-            // Restaura os pedidos expandidos
+            `).join('');            // Restaura os pedidos expandidos
             expanded.forEach(id => {
                 const content = document.getElementById('pedido-content-usuario-' + id);
                 const icon = document.getElementById('pedido-toggle-icon-usuario-' + id);
                 if (content && icon) {
-                    content.style.display = 'block';
+                    content.classList.remove('pedido-content-hidden');
+                    content.classList.add('pedido-content-visible');
                     icon.classList.remove('bi-chevron-down');
                     icon.classList.add('bi-chevron-up');
                 }
@@ -170,9 +175,8 @@ async function atualizarListaPedidos() {
 
 // Função para criar um novo pedido
 function novoPedido() {
-    const content = document.getElementById('content');
-    content.innerHTML = `        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-            <div style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
+    const content = document.getElementById('content');    content.innerHTML = `        <div class="order-detail-container">
+            <div class="order-list">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Novo Pedido</h3>
@@ -259,26 +263,25 @@ async function handleNovoPedido(event) {
     }
 }
 
-async function carregarPedidos() {
-    try {
-        // Obter o usuário atual
-        const user = await getCurrentUser();
-        if (!user) {
-            return;
-        }
+// Remove função carregarPedidos() pois está duplicada com atualizarListaPedidos()
 
-        // Se for staff, não deve carregar pedidos aqui
-        if (user.is_staff) {
-            return;
-        }
-        // Buscar apenas os pedidos do usuário atual usando um parâmetro de filtro
+// Atualiza só a lista de pedidos
+async function atualizarListaPedidos() {
+    try {
+        // Salva os pedidos expandidos
+        const expanded = Array.from(document.querySelectorAll('[id^="pedido-content-usuario-"]'))
+            .filter(div => div.classList.contains('pedido-content-visible'))
+            .map(div => div.id.replace('pedido-content-usuario-', ''));
+        // Busca o usuário só para pegar o id, mas não faz redirecionamento
+        const user = await getCurrentUser();
+        if (!user || user.is_staff) return;
         const data = await fetchAPI(`/pedidos/?cliente=${user.id}`);
         const listaPedidos = document.getElementById('listaPedidos');
 
         if (data.results && data.results.length > 0) {
             listaPedidos.innerHTML = data.results.map(pedido => `
                 <div class="card shadow-sm mb-4 w-100" style="max-width:100%;">
-                    <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 pedido-header-clickable" onclick="togglePedidoMinimizadoUsuario(${pedido.id})" style="cursor:pointer;">
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge ${getBadgeClassUsuario(pedido.status)} px-3 py-2">
@@ -288,16 +291,15 @@ async function carregarPedidos() {
                             </div>
                             <span class="text-muted small text-center text-md-start">${new Date(pedido.data_criacao).toLocaleDateString()}</span>
                         </div>
-                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 justify-content-md-end">
-                            <span class="fw-bold text-primary text-center text-md-end">R$ ${pedido.valor_final || pedido.valor_total}</span>
-                            <span class="text-muted small text-center text-md-end">${formatStatus(pedido.status)}</span>
-                            <button class="btn btn-outline-primary btn-sm mx-auto mx-md-0" onclick="togglePedidoMinimizadoUsuario(${pedido.id})">
-                                <span class="d-none d-md-inline">Detalhes</span>
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 justify-content-md-end flex-grow-1" style="min-width:320px;">
+                            <span class="fw-bold text-primary text-center text-md-start me-md-auto" style="white-space:nowrap;">R$&nbsp;${parseFloat(pedido.valor_final || pedido.valor_total).toFixed(2)}</span>
+                            <span class="text-muted small w-100 text-center d-block" style="vertical-align:middle;">${formatStatus(pedido.status)}</span>
+                            <span class="mx-auto mx-md-0 pedido-toggle-arrow" style="font-size:1.2rem;">
                                 <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-down"></i>
-                            </button>
+                            </span>
                         </div>
                     </div>
-                    <div id="pedido-content-usuario-${pedido.id}" style="display: none;">
+                    <div id="pedido-content-usuario-${pedido.id}" class="pedido-content-hidden">
                         <div class="p-3">
                             <div class="mb-2">
                                 <strong class="text-center text-md-start d-block">Itens:</strong>
@@ -305,7 +307,7 @@ async function carregarPedidos() {
                                     ${pedido.itens && pedido.itens.length > 0 ? pedido.itens.map(item => `
                                         <li class="d-flex justify-content-between border-bottom py-1">
                                             <span class="text-center text-md-start">${item.descricao}</span>
-                                            <span class="text-end">R$ ${parseFloat(item.preco).toFixed(2)}</span>
+                                            <span class="text-end w-25">R$ ${parseFloat(item.preco).toFixed(2)}</span>
                                         </li>
                                     `).join('') : '<li class="text-muted text-center">Nenhum item</li>'}
                                 </ul>
@@ -350,14 +352,16 @@ window.togglePedidoMinimizadoUsuario = function(pedidoId) {
     const content = document.getElementById('pedido-content-usuario-' + pedidoId);
     const icon = document.getElementById('pedido-toggle-icon-usuario-' + pedidoId);
     if (content && icon) {
-        if (content.style.display === 'none') {
-            content.style.display = 'block';
-            icon.classList.remove('bi-chevron-down');
-            icon.classList.add('bi-chevron-up');
-        } else {
-            content.style.display = 'none';
+        if (content.classList.contains('pedido-content-visible')) {
+            content.classList.remove('pedido-content-visible');
+            content.classList.add('pedido-content-hidden');
             icon.classList.remove('bi-chevron-up');
             icon.classList.add('bi-chevron-down');
+        } else {
+            content.classList.remove('pedido-content-hidden');
+            content.classList.add('pedido-content-visible');
+            icon.classList.remove('bi-chevron-down');
+            icon.classList.add('bi-chevron-up');
         }
     }
 };
