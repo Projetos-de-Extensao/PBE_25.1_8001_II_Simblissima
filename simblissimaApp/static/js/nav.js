@@ -8,7 +8,6 @@ async function updateNavigation() {
         const userInfo = document.getElementById('userInfo');
         const logoutNav = document.getElementById('logoutNav');
         const managerNav = document.getElementById('managerNav');
-        const pedidosNav = document.getElementById('pedidosNav');
         const userName = document.getElementById('userName');
         const dashboardNav = document.getElementById('dashboardNav'); // Dashboard do cliente
         const infoNav = document.getElementById('infoNav'); // Ver informações
@@ -25,12 +24,6 @@ async function updateNavigation() {
                 if (managerNav) managerNav.classList.remove('d-none');
                 if (dashboardNav) dashboardNav.classList.remove('d-none');
                 if (infoNav) infoNav.classList.remove('d-none');
-                if (pedidosNav) {
-                    if (pedidosNav.style) {
-                        pedidosNav.style.display = 'none';
-                    }
-                    pedidosNav.classList.add('d-none');
-                }
             } else {
                 if (managerNav) {
                     if (managerNav.style) {
@@ -40,12 +33,6 @@ async function updateNavigation() {
                 }
                 if (dashboardNav) dashboardNav.classList.add('d-none');
                 if (infoNav) infoNav.classList.add('d-none');
-                if (pedidosNav) {
-                    if (pedidosNav.style) {
-                        pedidosNav.style.display = 'block';
-                    }
-                    pedidosNav.classList.remove('d-none');
-                }
             }
             return true;
         }
@@ -56,7 +43,6 @@ async function updateNavigation() {
         if (userInfo) userInfo.classList.add('d-none');
         if (logoutNav) logoutNav.classList.add('d-none');
         if (managerNav) managerNav.classList.add('d-none');
-        if (pedidosNav) pedidosNav.classList.add('d-none');
         if (dashboardNav) dashboardNav.classList.add('d-none');
         if (infoNav) infoNav.classList.add('d-none');
         return false;

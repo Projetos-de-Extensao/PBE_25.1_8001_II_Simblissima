@@ -1,6 +1,19 @@
 // pedidos.js
 let refreshInterval;
 
+// Função para formatar o status do pedido
+function formatStatus(status) {
+    const statusMap = {
+        'PENDENTE': 'Pendente',
+        'AGUARDANDO_PAGAMENTO': 'Aguardando Pagamento',
+        'CONFIRMADO': 'Confirmado',
+        'EM_TRANSITO': 'Em Trânsito',
+        'ENTREGUE': 'Entregue',
+        'CANCELADO': 'Cancelado'
+    };
+    return statusMap[status] || status;
+}
+
 async function loadPedidos() {
     try {
         const user = await getCurrentUser();
@@ -20,7 +33,7 @@ async function loadPedidos() {
                                 <h3 class="mb-0">Meus Pedidos</h3>
                                 <div>
                                     <button class="btn btn-primary me-2" onclick="novoPedido()">Novo Pedido</button>
-                                    <button class="btn btn-secondary" onclick="loadHome()">Voltar</button>
+                                    <button class="btn btn-secondary" onclick="loadHome()">Voltar</button>                                    
                                 </div>
                             </div>
                             <div class="card-body">
@@ -176,7 +189,7 @@ async function carregarPedidos() {
                                 <h5 class="mb-1">Pedido #${pedido.id}</h5>
                                 <small>${new Date(pedido.data_criacao).toLocaleDateString()}</small>
                             </div>
-                            <p class="mb-1">Status: ${pedido.status}</p>
+                            <p class="mb-1">Status: ${formatStatus(pedido.status)}</p>
                             <p class="mb-1">Valor dos Produtos: R$ ${pedido.valor_total}</p>
                             ${pedido.valor_final ? 
                                 `<p class="mb-1">Valor Final: R$ ${pedido.valor_final}</p>` : ''}
@@ -216,7 +229,7 @@ async function verDetalhesPedido(pedidoId) {
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Informações Gerais</h5>
-                            <p>Status: <span id="statusPedido">${pedido.status}</span></p>
+                            <p>Status: <span id="statusPedido">${formatStatus(pedido.status)}</span></p>
                             <p>Data de Criação: ${new Date(pedido.data_criacao).toLocaleString()}</p>
                             <p>Valor dos Produtos: R$ <span id="valorPedido">${pedido.valor_total}</span></p>
                             ${pedido.valor_final ? `<p>Valor Final: R$ ${pedido.valor_final}</p>` : ''}
@@ -263,7 +276,7 @@ async function verDetalhesPedido(pedidoId) {
                                 ${pedido.historico_status.map(status => `
                                     <div class="list-group-item">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">${status.status}</h6>
+                                            <h6 class="mb-1">${formatStatus(status.status)}</h6>
                                             <small>${new Date(status.data).toLocaleString()}</small>
                                         </div>
                                         ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
@@ -287,7 +300,7 @@ async function refreshOrderDetails(pedidoId) {
         const pedido = await fetchAPI(`/pedidos/${pedidoId}/`);
         
         // Update status and price
-        document.getElementById('statusPedido').textContent = pedido.status;
+        document.getElementById('statusPedido').textContent = formatStatus(pedido.status);
         document.getElementById('valorPedido').textContent = pedido.valor_final || pedido.valor_total;
 
         // Update history
@@ -295,7 +308,7 @@ async function refreshOrderDetails(pedidoId) {
         historicoStatus.innerHTML = pedido.historico_status.map(status => `
             <div class="list-group-item">
                 <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1">${status.status}</h6>
+                    <h6 class="mb-1">${formatStatus(status.status)}</h6>
                     <small>${new Date(status.data).toLocaleString()}</small>
                 </div>
                 ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
@@ -304,7 +317,7 @@ async function refreshOrderDetails(pedidoId) {
 
         // Notify user of changes
         const latestStatus = pedido.historico_status[pedido.historico_status.length - 1];
-        showMessage(`Pedido atualizado! Novo status: ${latestStatus.status}`, 'info');
+        showMessage(`Pedido atualizado! Novo status: ${formatStatus(latestStatus.status)}`, 'info');
     } catch (error) {
         console.error('Erro ao atualizar detalhes do pedido:', error);
     }

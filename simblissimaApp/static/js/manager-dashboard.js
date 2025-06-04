@@ -1,4 +1,17 @@
 // Manager Dashboard
+// Função para formatar o status do pedido
+function formatStatus(status) {
+    const statusMap = {
+        'PENDENTE': 'Pendente',
+        'AGUARDANDO_PAGAMENTO': 'Aguardando Pagamento',
+        'CONFIRMADO': 'Confirmado',
+        'EM_TRANSITO': 'Em Trânsito',
+        'ENTREGUE': 'Entregue',
+        'CANCELADO': 'Cancelado'
+    };
+    return statusMap[status] || status;
+}
+
 async function loadManagerDashboard() {
     try {
         const user = await getCurrentUser();
@@ -21,6 +34,7 @@ async function loadManagerDashboard() {
             <button class="btn btn-secondary mb-3" onclick="loadHome()">&larr; Voltar para Home</button>
             <div class="container">
                 <h2>Dashboard do Gerente</h2>
+
                 <!-- Cards com estatísticas -->
                 <div class="row mb-4" id="statsCards">
                     <div class="col-md-3">
@@ -60,8 +74,7 @@ async function loadManagerDashboard() {
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <div class="input-group">
-                            <label class="input-group-text" for="statusFilter">Status</label>
-                            <select class="form-select" id="statusFilter">
+                            <label class="input-group-text" for="statusFilter">Status</label>                            <select class="form-select" id="statusFilter">
                                 <option value="">Todos</option>
                                 <option value="PENDENTE">Pendente</option>
                                 <option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
@@ -105,7 +118,7 @@ async function loadManagerDashboard() {
         await filtrarPedidos();
     } catch (error) {
         console.error('Erro ao carregar dashboard:', error);
-        showMessage('Erro ao carregar o dashboard', 'danger');
+        showMessage('Erro ao carregar dashboard', 'danger');
     }
 }
 
@@ -247,11 +260,12 @@ async function filtrarPedidos() {
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">                        <p><strong>Cliente:</strong> ${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
-                        <p><strong>Status Atual:</strong> ${pedido.status}</p>
+                    <div class="col-md-6">
+                        <p><strong>Cliente:</strong> ${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
+                        <p><strong>Status Atual:</strong> ${formatStatus(pedido.status)}</p>
                         <p><strong>Valor dos Produtos:</strong> R$ ${pedido.valor_total}</p>
                         <p><strong>Valor Final:</strong> R$ ${pedido.valor_final || 'Não definido'}</p>
-                          <!-- Itens do Pedido -->
+                        <!-- Itens do Pedido -->
                         <div class="mt-2">
                             <h6>Itens do Pedido</h6>
                             <div class="table-responsive">
@@ -281,8 +295,7 @@ async function filtrarPedidos() {
                         <form onsubmit="atualizarPedido(event, ${pedido.id})" class="border p-3 rounded">
                             <div class="mb-3">
                                 <label class="form-label">Novo Status:</label>
-                                <select class="form-select" name="status" required>
-                                    <option value="">Selecione...</option>
+                                <select class="form-select" name="status" required>                                    <option value="">Selecione...</option>
                                     <option value="PENDENTE">Pendente</option>
                                     <option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
                                     <option value="CONFIRMADO">Confirmado</option>
@@ -310,7 +323,7 @@ async function filtrarPedidos() {
                         ${pedido.historico_status.map(status => `
                             <div class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">${status.status}</h6>
+                                    <h6 class="mb-1">${formatStatus(status.status)}</h6>
                                     <small>${new Date(status.data).toLocaleString()}</small>
                                 </div>
                                 ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
