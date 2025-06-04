@@ -29,7 +29,9 @@ async function loadPedidos() {
         }
         
         const content = document.getElementById('content');
-        content.innerHTML = `        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
+        // Só monta o layout se ainda não estiver presente
+        if (!document.getElementById('listaPedidos')) {
+            content.innerHTML = `        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
             <div style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
@@ -54,7 +56,8 @@ async function loadPedidos() {
             </div>
         </div>
         `;
-    carregarPedidos();
+        }
+        atualizarListaPedidos();
         // Start auto-refresh when loading the pedidos view
         startAutoRefresh();
     } catch (error) {
@@ -69,13 +72,99 @@ function startAutoRefresh() {
         clearInterval(refreshInterval);
     }
     // Refresh every 30 seconds
-    refreshInterval = setInterval(carregarPedidos, 30000);
+    refreshInterval = setInterval(atualizarListaPedidos, 30000);
 }
 
-function stopAutoRefresh() {
-    if (refreshInterval) {
-        clearInterval(refreshInterval);
-        refreshInterval = null;
+// Nova função: só atualiza a lista, sem checar usuário nem mexer no layout
+async function atualizarListaPedidos() {
+    try {
+        // Salva os pedidos expandidos
+        const expanded = Array.from(document.querySelectorAll('[id^="pedido-content-usuario-"]'))
+            .filter(div => div.style.display === 'block')
+            .map(div => div.id.replace('pedido-content-usuario-', ''));
+        // Busca o usuário só para pegar o id, mas não faz redirecionamento
+        const user = await getCurrentUser();
+        if (!user || user.is_staff) return;
+        const data = await fetchAPI(`/pedidos/?cliente=${user.id}`);
+        const listaPedidos = document.getElementById('listaPedidos');
+        if (!listaPedidos) return;
+        if (data.results && data.results.length > 0) {
+            listaPedidos.innerHTML = data.results.map(pedido => `
+                <div class="card shadow-sm mb-4 w-100" style="max-width:100%;">
+                    <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge ${getBadgeClassUsuario(pedido.status)} px-3 py-2">
+                                    ${getStatusIconUsuario(pedido.status)}
+                                </span>
+                                <span class="fw-bold text-center text-md-start">Pedido #${pedido.id}</span>
+                            </div>
+                            <span class="text-muted small text-center text-md-start">${new Date(pedido.data_criacao).toLocaleDateString()}</span>
+                        </div>
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 justify-content-md-end">
+                            <span class="fw-bold text-primary text-center text-md-end">R$ ${pedido.valor_final || pedido.valor_total}</span>
+                            <span class="text-muted small text-center text-md-end">${formatStatus(pedido.status)}</span>
+                            <button class="btn btn-outline-primary btn-sm mx-auto mx-md-0" onclick="togglePedidoMinimizadoUsuario(${pedido.id})">
+                                <span class="d-none d-md-inline">Detalhes</span>
+                                <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="pedido-content-usuario-${pedido.id}" style="display: none;">
+                        <div class="p-3">
+                            <div class="mb-2">
+                                <strong class="text-center text-md-start d-block">Itens:</strong>
+                                <ul class="list-unstyled mb-2">
+                                    ${pedido.itens && pedido.itens.length > 0 ? pedido.itens.map(item => `
+                                        <li class="d-flex justify-content-between border-bottom py-1">
+                                            <span class="text-center text-md-start">${item.descricao}</span>
+                                            <span class="text-end">R$ ${parseFloat(item.preco).toFixed(2)}</span>
+                                        </li>
+                                    `).join('') : '<li class="text-muted text-center">Nenhum item</li>'}
+                                </ul>
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Status:</strong> ${formatStatus(pedido.status)}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Última atualização:</strong> ${new Date(pedido.historico_status && pedido.historico_status.length > 0 ? pedido.historico_status[pedido.historico_status.length - 1].data : pedido.data_criacao).toLocaleString()}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Observação:</strong> ${pedido.observacoes ? pedido.observacoes : '<span class=\'text-muted\'>Nenhuma</span>'}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Pagamento:</strong> ${pedido.metodo_pagamento || 'Não definido'}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Histórico:</strong>
+                                <ul class="list-unstyled mb-0">
+                                    ${pedido.historico_status && pedido.historico_status.length > 0 ? pedido.historico_status.filter(status => !(status.comentario && (status.comentario.trim() === 'Valor final confirmado pelo cliente' || status.comentario.trim() === 'Pedido criado'))).map(status => `
+                                        <li class="small text-muted">
+                                            ${getStatusIconUsuario(status.status)} ${formatStatus(status.status)} - ${new Date(status.data).toLocaleString()}
+                                        </li>
+                                    `).join('') : '<li class="text-muted text-center">Sem histórico</li>'}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            // Restaura os pedidos expandidos
+            expanded.forEach(id => {
+                const content = document.getElementById('pedido-content-usuario-' + id);
+                const icon = document.getElementById('pedido-toggle-icon-usuario-' + id);
+                if (content && icon) {
+                    content.style.display = 'block';
+                    icon.classList.remove('bi-chevron-down');
+                    icon.classList.add('bi-chevron-up');
+                }
+            });
+        } else {
+            listaPedidos.innerHTML = '<p class="text-center">Nenhum pedido encontrado.</p>';
+        }
+    } catch (error) {
+        // Não mostra erro para o usuário no auto-refresh
+        console.error('Erro ao atualizar lista de pedidos:', error);
     }
 }
 
@@ -182,45 +271,120 @@ async function carregarPedidos() {
         if (user.is_staff) {
             return;
         }
-        
         // Buscar apenas os pedidos do usuário atual usando um parâmetro de filtro
         const data = await fetchAPI(`/pedidos/?cliente=${user.id}`);
         const listaPedidos = document.getElementById('listaPedidos');
-        
-        // Adiciona espaçamento entre os pedidos na listagem
+
         if (data.results && data.results.length > 0) {
-            listaPedidos.innerHTML = `
-                <div class="list-group">
-                    ${data.results.map(pedido => `
-                        <div class="list-group-item mb-3">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Pedido #${pedido.id}</h5>
-                                <small>${new Date(pedido.data_criacao).toLocaleDateString()}</small>
+            listaPedidos.innerHTML = data.results.map(pedido => `
+                <div class="card shadow-sm mb-4 w-100" style="max-width:100%;">
+                    <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge ${getBadgeClassUsuario(pedido.status)} px-3 py-2">
+                                    ${getStatusIconUsuario(pedido.status)}
+                                </span>
+                                <span class="fw-bold text-center text-md-start">Pedido #${pedido.id}</span>
                             </div>
-                            <p class="mb-1">Status: ${formatStatus(pedido.status)}</p>
-                            <p class="mb-1">Valor dos Produtos: R$ ${pedido.valor_total}</p>
-                            ${pedido.valor_final ? 
-                                `<p class="mb-1">Valor Final: R$ ${pedido.valor_final}</p>` : ''}
-                            ${pedido.metodo_pagamento ? 
-                                `<p class="mb-1">Método de Pagamento: ${pedido.metodo_pagamento}</p>` : ''}
-                            ${pedido.observacoes ? 
-                                `<p class="mb-1">Observações: ${pedido.observacoes}</p>` : ''}
-                            <div class="mt-2">
-                                <button class="btn btn-sm btn-info" onclick="verDetalhesPedido(${pedido.id})">
-                                    Ver Detalhes
-                                </button>
+                            <span class="text-muted small text-center text-md-start">${new Date(pedido.data_criacao).toLocaleDateString()}</span>
+                        </div>
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 justify-content-md-end">
+                            <span class="fw-bold text-primary text-center text-md-end">R$ ${pedido.valor_final || pedido.valor_total}</span>
+                            <span class="text-muted small text-center text-md-end">${formatStatus(pedido.status)}</span>
+                            <button class="btn btn-outline-primary btn-sm mx-auto mx-md-0" onclick="togglePedidoMinimizadoUsuario(${pedido.id})">
+                                <span class="d-none d-md-inline">Detalhes</span>
+                                <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="pedido-content-usuario-${pedido.id}" style="display: none;">
+                        <div class="p-3">
+                            <div class="mb-2">
+                                <strong class="text-center text-md-start d-block">Itens:</strong>
+                                <ul class="list-unstyled mb-2">
+                                    ${pedido.itens && pedido.itens.length > 0 ? pedido.itens.map(item => `
+                                        <li class="d-flex justify-content-between border-bottom py-1">
+                                            <span class="text-center text-md-start">${item.descricao}</span>
+                                            <span class="text-end">R$ ${parseFloat(item.preco).toFixed(2)}</span>
+                                        </li>
+                                    `).join('') : '<li class="text-muted text-center">Nenhum item</li>'}
+                                </ul>
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Status:</strong> ${formatStatus(pedido.status)}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Última atualização:</strong> ${new Date(pedido.historico_status && pedido.historico_status.length > 0 ? pedido.historico_status[pedido.historico_status.length - 1].data : pedido.data_criacao).toLocaleString()}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Observação:</strong> ${pedido.observacoes ? pedido.observacoes : '<span class=\'text-muted\'>Nenhuma</span>'}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Pagamento:</strong> ${pedido.metodo_pagamento || 'Não definido'}
+                            </div>
+                            <div class="mb-2 text-center text-md-start">
+                                <strong>Histórico:</strong>
+                                <ul class="list-unstyled mb-0">
+                                    ${pedido.historico_status && pedido.historico_status.length > 0 ? pedido.historico_status.filter(status => !(status.comentario && (status.comentario.trim() === 'Valor final confirmado pelo cliente' || status.comentario.trim() === 'Pedido criado'))).map(status => `
+                                        <li class="small text-muted">
+                                            ${getStatusIconUsuario(status.status)} ${formatStatus(status.status)} - ${new Date(status.data).toLocaleString()}
+                                        </li>
+                                    `).join('') : '<li class="text-muted text-center">Sem histórico</li>'}
+                                </ul>
                             </div>
                         </div>
-                    `).join('')}
+                    </div>
                 </div>
-            `;
+            `).join('');
         } else {
-            listaPedidos.innerHTML = '<p>Nenhum pedido encontrado.</p>';
+            listaPedidos.innerHTML = '<p class="text-center">Nenhum pedido encontrado.</p>';
         }
     } catch (error) {
+        // Apenas loga no console, não mostra mensagem para o usuário
         console.error('Erro ao carregar pedidos:', error);
-        showMessage('Erro ao carregar pedidos', 'danger');
     }
+}
+
+// Função global para minimizar/maximizar pedidos do usuário
+window.togglePedidoMinimizadoUsuario = function(pedidoId) {
+    const content = document.getElementById('pedido-content-usuario-' + pedidoId);
+    const icon = document.getElementById('pedido-toggle-icon-usuario-' + pedidoId);
+    if (content && icon) {
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            icon.classList.remove('bi-chevron-down');
+            icon.classList.add('bi-chevron-up');
+        } else {
+            content.style.display = 'none';
+            icon.classList.remove('bi-chevron-up');
+            icon.classList.add('bi-chevron-down');
+        }
+    }
+};
+
+// Funções auxiliares para estilização do usuário
+function getBadgeClassUsuario(status) {
+    const statusClasses = {
+        'PENDENTE': 'bg-warning',
+        'AGUARDANDO_PAGAMENTO': 'bg-info',
+        'CONFIRMADO': 'bg-primary',
+        'EM_TRANSITO': 'bg-info',
+        'ENTREGUE': 'bg-success',
+        'CANCELADO': 'bg-danger'
+    };
+    return statusClasses[status] || 'bg-secondary';
+}
+
+function getStatusIconUsuario(status) {
+    const statusIcons = {
+        'PENDENTE': '🕒',
+        'AGUARDANDO_PAGAMENTO': '💰',
+        'CONFIRMADO': '✅',
+        'EM_TRANSITO': '🚚',
+        'ENTREGUE': '📦',
+        'CANCELADO': '❌'
+    };
+    return statusIcons[status] || '⚪';
 }
 
 async function verDetalhesPedido(pedidoId) {
@@ -286,7 +450,6 @@ async function verDetalhesPedido(pedidoId) {
                                             <h6 class="mb-1">${formatStatus(status.status)}</h6>
                                             <small>${new Date(status.data).toLocaleString()}</small>
                                         </div>
-                                        ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
                                     </div>
                                 `).join('')}
                             </div>
@@ -318,7 +481,6 @@ async function refreshOrderDetails(pedidoId) {
                     <h6 class="mb-1">${formatStatus(status.status)}</h6>
                     <small>${new Date(status.data).toLocaleString()}</small>
                 </div>
-                ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
             </div>
         `).join('');
 

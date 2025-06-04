@@ -241,8 +241,12 @@ async function aplicarFiltros() {
 
 async function filtrarPedidos() {
     if (!await checkStaffAccess()) return;
-    
     try {
+        // Salva os pedidos expandidos
+        const expanded = Array.from(document.querySelectorAll('[id^="pedido-content-"]'))
+            .filter(div => div.style.display === 'block')
+            .map(div => div.id.replace('pedido-content-', ''));
+
         // Obter os elementos de filtro
         const statusFilterElement = document.getElementById('statusFilter');
         const sortOrderElement = document.getElementById('sortOrder');
@@ -259,16 +263,12 @@ async function filtrarPedidos() {
         if (statusFilterElement.value) {
             params.append('status', statusFilterElement.value);
         }
-        
         const url = `/pedidos/${params.toString() ? '?' + params.toString() : ''}`;
         const response = await fetchAPI(url);
-        
         if (!response || !response.results) {
             throw new Error('Resposta inválida da API');
         }
-        
         const pedidos = response.results;
-        
         if (!pedidos || pedidos.length === 0) {
             document.getElementById('listaPedidos').innerHTML = '<p>Nenhum pedido encontrado.</p>';
             return;
@@ -505,6 +505,16 @@ async function filtrarPedidos() {
                 </div>
             </div>
         `).join('');
+        // Restaura os pedidos expandidos
+        expanded.forEach(id => {
+            const content = document.getElementById('pedido-content-' + id);
+            const icon = document.getElementById('pedido-toggle-icon-' + id);
+            if (content && icon) {
+                content.style.display = 'block';
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-up');
+            }
+        });
     } catch (error) {
         console.error('Erro ao filtrar pedidos:', error);
         showMessage('Erro ao carregar pedidos', 'danger');

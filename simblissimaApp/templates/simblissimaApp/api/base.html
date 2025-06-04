@@ -30,8 +30,8 @@
         body {
             margin: 0;
             padding: 0;
-            /* Removido background da imagem, agora controlado por .home-bg */
             min-height: 100vh;
+            background: #f4f6fb;
         }
         .container, .navbar, #content {
             position: relative;
@@ -55,8 +55,55 @@
             padding-top: 0.25rem !important;
             padding-bottom: 0.25rem !important;
             font-size: 1rem !important;
-        }        
-        
+        }
+        .card, .card-body, .jumbotron {
+            border-radius: 16px !important;
+            box-shadow: 0 2px 12px 0 #1565c01a !important;
+            border: none !important;
+        }
+        .jumbotron {
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 16px !important;
+        }
+        .jumbotron * {
+            border-radius: 16px !important;
+        }
+        .form-control, .form-select {
+            border-radius: 10px !important;
+            box-shadow: 0 1px 4px 0 #1565c01a !important;
+            border: 1px solid #e3e6ef !important;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #1976d2;
+            border-color: #1976d2;
+        }
+        .btn-primary:hover {
+            background-color: #1565c0;
+            border-color: #1565c0;
+        }
+        .btn-secondary {
+            background-color: #e3e6ef;
+            color: #222;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #cfd8e3;
+            color: #222;
+        }
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .alert {
+            border-radius: 10px;
+        }
         /* Estilos personalizados para os botões de navegação */
         #loginNav .nav-link,
         #registroNav .nav-link,
@@ -112,14 +159,6 @@
             transform: translateY(-2px);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
-        .btn-primary {
-            background-color: #1976d2;
-            border-color: #1976d2;
-        }
-        .btn-primary:hover {
-            background-color: #1565c0;
-            border-color: #1565c0;
-        }
         /* Caso haja outros botões customizados, garantir que não fiquem vermelhos */
         .btn-danger {
             background-color: #d32f2f;
@@ -161,6 +200,14 @@
         }
         .pedido-info-valores .text-primary {
             color: #fff !important;
+        }        .cnmt {
+            border: 1px solid #e3e6ef; /* tom mais suave, quase branco */
+            border-top: none; /* remove a borda superior */
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 2px 12px 0 #1565c01a;
+            padding: 0 0 16px 0;
+            overflow: hidden;
         }
     </style>
 </head>
