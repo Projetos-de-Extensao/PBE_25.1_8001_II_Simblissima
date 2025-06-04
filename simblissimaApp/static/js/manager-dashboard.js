@@ -303,7 +303,6 @@ async function filtrarPedidos() {
                         </form>
                     </div>
                 </div>
-
                 <!-- Histórico de Status -->
                 <div class="mt-3">
                     <h6>Histórico de Status</h6>
