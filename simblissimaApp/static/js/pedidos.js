@@ -71,8 +71,8 @@ function startAutoRefresh() {    // Clear any existing interval
     if (refreshInterval) {
         clearInterval(refreshInterval);
     }
-    // Refresh every 30 seconds
-    refreshInterval = setInterval(atualizarListaPedidos, 30000);
+    // Refresh every 60 seconds para reduzir atualizações frequentes
+    refreshInterval = setInterval(atualizarListaPedidos, 60000);
 }
 
 function stopAutoRefresh() {
@@ -84,10 +84,9 @@ function stopAutoRefresh() {
 // Nova função: só atualiza a lista, sem checar usuário nem mexer no layout
 async function atualizarListaPedidos() {
     try {
-        // Salva os pedidos expandidos
-        const expanded = Array.from(document.querySelectorAll('[id^="pedido-content-usuario-"]'))
-            .filter(div => div.classList.contains('pedido-content-visible'))
-            .map(div => div.id.replace('pedido-content-usuario-', ''));
+        // Get expanded orders from localStorage logo no início
+        const expandedOrders = JSON.parse(localStorage.getItem('expandedOrders') || '[]');
+        
         // Busca o usuário só para pegar o id, mas não faz redirecionamento
         const user = await getCurrentUser();
         if (!user || user.is_staff) return;
@@ -95,7 +94,9 @@ async function atualizarListaPedidos() {
         const listaPedidos = document.getElementById('listaPedidos');
         if (!listaPedidos) return;
         if (data.results && data.results.length > 0) {
-            listaPedidos.innerHTML = data.results.map(pedido => `
+            listaPedidos.innerHTML = data.results.map(pedido => {
+                const isExpanded = expandedOrders.includes(pedido.id.toString());
+                return `
                 <div class="card shadow-sm mb-4 w-100" style="max-width:100%;">
                     <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 pedido-header-clickable" onclick="togglePedidoMinimizadoUsuario(${pedido.id})" style="cursor:pointer;">
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100">
@@ -111,11 +112,11 @@ async function atualizarListaPedidos() {
                             <span class="fw-bold text-primary text-center text-md-start me-md-auto" style="white-space:nowrap;">R$&nbsp;${parseFloat(pedido.valor_final || pedido.valor_total).toFixed(2)}</span>
                             <span class="text-muted small w-100 text-center d-block" style="vertical-align:middle;">${formatStatus(pedido.status)}</span>
                             <span class="mx-auto mx-md-0 pedido-toggle-arrow" style="font-size:1.2rem;">
-                                <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-down"></i>
+                                <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-${isExpanded ? 'up' : 'down'}"></i>
                             </span>
                         </div>
                     </div>
-                    <div id="pedido-content-usuario-${pedido.id}" class="pedido-content-hidden">
+                    <div id="pedido-content-usuario-${pedido.id}" class="${isExpanded ? 'pedido-content-visible' : 'pedido-content-hidden'}">
                         <div class="p-3">
                             <div class="mb-2">
                                 <strong class="text-center text-md-start d-block">Itens:</strong>
@@ -152,23 +153,12 @@ async function atualizarListaPedidos() {
                             </div>
                         </div>
                     </div>
-                </div>
-            `).join('');            // Restaura os pedidos expandidos
-            expanded.forEach(id => {
-                const content = document.getElementById('pedido-content-usuario-' + id);
-                const icon = document.getElementById('pedido-toggle-icon-usuario-' + id);
-                if (content && icon) {
-                    content.classList.remove('pedido-content-hidden');
-                    content.classList.add('pedido-content-visible');
-                    icon.classList.remove('bi-chevron-down');
-                    icon.classList.add('bi-chevron-up');
-                }
-            });
+                </div>`;
+            }).join('');
         } else {
             listaPedidos.innerHTML = '<p class="text-center">Nenhum pedido encontrado.</p>';
         }
     } catch (error) {
-        // Não mostra erro para o usuário no auto-refresh
         console.error('Erro ao atualizar lista de pedidos:', error);
     }
 }
@@ -268,10 +258,9 @@ async function handleNovoPedido(event) {
 // Atualiza só a lista de pedidos
 async function atualizarListaPedidos() {
     try {
-        // Salva os pedidos expandidos
-        const expanded = Array.from(document.querySelectorAll('[id^="pedido-content-usuario-"]'))
-            .filter(div => div.classList.contains('pedido-content-visible'))
-            .map(div => div.id.replace('pedido-content-usuario-', ''));
+        // Get expanded orders from localStorage logo no início
+        const expandedOrders = JSON.parse(localStorage.getItem('expandedOrders') || '[]');
+        
         // Busca o usuário só para pegar o id, mas não faz redirecionamento
         const user = await getCurrentUser();
         if (!user || user.is_staff) return;
@@ -279,7 +268,9 @@ async function atualizarListaPedidos() {
         const listaPedidos = document.getElementById('listaPedidos');
 
         if (data.results && data.results.length > 0) {
-            listaPedidos.innerHTML = data.results.map(pedido => `
+            listaPedidos.innerHTML = data.results.map(pedido => {
+                const isExpanded = expandedOrders.includes(pedido.id.toString());
+                return `
                 <div class="card shadow-sm mb-4 w-100" style="max-width:100%;">
                     <div class="card-body p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 pedido-header-clickable" onclick="togglePedidoMinimizadoUsuario(${pedido.id})" style="cursor:pointer;">
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100">
@@ -295,11 +286,11 @@ async function atualizarListaPedidos() {
                             <span class="fw-bold text-primary text-center text-md-start me-md-auto" style="white-space:nowrap;">R$&nbsp;${parseFloat(pedido.valor_final || pedido.valor_total).toFixed(2)}</span>
                             <span class="text-muted small w-100 text-center d-block" style="vertical-align:middle;">${formatStatus(pedido.status)}</span>
                             <span class="mx-auto mx-md-0 pedido-toggle-arrow" style="font-size:1.2rem;">
-                                <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-down"></i>
+                                <i id="pedido-toggle-icon-usuario-${pedido.id}" class="bi bi-chevron-${isExpanded ? 'up' : 'down'}"></i>
                             </span>
                         </div>
                     </div>
-                    <div id="pedido-content-usuario-${pedido.id}" class="pedido-content-hidden">
+                    <div id="pedido-content-usuario-${pedido.id}" class="${isExpanded ? 'pedido-content-visible' : 'pedido-content-hidden'}">
                         <div class="p-3">
                             <div class="mb-2">
                                 <strong class="text-center text-md-start d-block">Itens:</strong>
@@ -336,8 +327,8 @@ async function atualizarListaPedidos() {
                             </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         } else {
             listaPedidos.innerHTML = '<p class="text-center">Nenhum pedido encontrado.</p>';
         }
@@ -357,11 +348,24 @@ window.togglePedidoMinimizadoUsuario = function(pedidoId) {
             content.classList.add('pedido-content-hidden');
             icon.classList.remove('bi-chevron-up');
             icon.classList.add('bi-chevron-down');
+            // Remove from localStorage
+            const expandedOrders = JSON.parse(localStorage.getItem('expandedOrders') || '[]');
+            const index = expandedOrders.indexOf(pedidoId.toString());
+            if (index > -1) {
+                expandedOrders.splice(index, 1);
+                localStorage.setItem('expandedOrders', JSON.stringify(expandedOrders));
+            }
         } else {
             content.classList.remove('pedido-content-hidden');
             content.classList.add('pedido-content-visible');
             icon.classList.remove('bi-chevron-down');
             icon.classList.add('bi-chevron-up');
+            // Add to localStorage
+            const expandedOrders = JSON.parse(localStorage.getItem('expandedOrders') || '[]');
+            if (!expandedOrders.includes(pedidoId.toString())) {
+                expandedOrders.push(pedidoId.toString());
+                localStorage.setItem('expandedOrders', JSON.stringify(expandedOrders));
+            }
         }
     }
 };

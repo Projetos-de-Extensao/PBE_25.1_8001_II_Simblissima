@@ -17,6 +17,32 @@
     max-width: 100%;
 }
 
+.home-content .card {
+    background: #fff;
+}
+
+.home-content .card-body {
+    padding: 28px !important;
+}
+
+.home-content .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1565c0;
+    margin-bottom: 12px;
+}
+
+.home-content .card-text {
+    color: #666;
+    margin-bottom: 24px;
+    font-size: 1.1rem;
+}
+
+.home-content .btn-primary {
+    padding: 10px 24px;
+    font-size: 1rem;
+}
+
 @media (max-width: 1200px) {
     .pedidos-content {
         max-width: 98vw;
