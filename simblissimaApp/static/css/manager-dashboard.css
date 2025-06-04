@@ -1,7 +1,22 @@
 /* Dashboard styles */
+#statsCards {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    gap: 32px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
 #statsCards .card {
-    min-height: 140px;
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
     height: 100%;
+    min-height: 140px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,6 +27,53 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 24px 12px 20px 12px;
+}
+
+#statsCards .card-title,
+#statsCards .card-subtitle {
+    text-align: left;
+    width: 100%;
+}
+
+#statsCards .d-flex.justify-content-between.align-items-center {
+    flex-direction: row !important;
+    gap: 0;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100%;
+}
+
+#statsCards .card-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+#statsCards .card-subtitle {
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    opacity: 0.95;
+}
+
+#statsCards i.fs-1 {
+    font-size: 2.2rem !important;
+    opacity: 0.7 !important;
+    margin-top: 6px;
+}
+
+#statsCards .col-md-3 {
+    flex: 0 1 260px;
+    max-width: 260px;
+    min-width: 220px;
+    padding: 0;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Order status cards */
@@ -83,4 +145,25 @@
 /* Price column */
 .price-column {
     width: 150px;
+}
+
+@media (max-width: 1200px) {
+    #statsCards {
+        gap: 20px;
+    }
+    #statsCards .col-md-3 {
+        max-width: 48%;
+        flex: 1 1 48%;
+    }
+}
+@media (max-width: 700px) {
+    #statsCards {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+    #statsCards .col-md-3 {
+        max-width: 100%;
+        flex: 1 1 100%;
+    }
 }

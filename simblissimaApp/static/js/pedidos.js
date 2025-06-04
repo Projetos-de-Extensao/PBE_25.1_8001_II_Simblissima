@@ -144,7 +144,7 @@ async function atualizarListaPedidos() {
                                 <strong>Histórico:</strong>
                                 <ul class="list-unstyled mb-0">
                                     ${pedido.historico_status && pedido.historico_status.length > 0 ? pedido.historico_status.filter(status => !(status.comentario && (status.comentario.trim() === 'Valor final confirmado pelo cliente' || status.comentario.trim() === 'Pedido criado'))).map(status => `
-                                        <li class="small text-muted">
+                                        <li class="small text-muted historico-status-item">
                                             ${getStatusIconUsuario(status.status)} ${formatStatus(status.status)} - ${new Date(status.data).toLocaleString()}
                                         </li>
                                     `).join('') : '<li class="text-muted text-center">Sem histórico</li>'}
@@ -328,7 +328,7 @@ async function atualizarListaPedidos() {
                                 <strong>Histórico:</strong>
                                 <ul class="list-unstyled mb-0">
                                     ${pedido.historico_status && pedido.historico_status.length > 0 ? pedido.historico_status.filter(status => !(status.comentario && (status.comentario.trim() === 'Valor final confirmado pelo cliente' || status.comentario.trim() === 'Pedido criado'))).map(status => `
-                                        <li class="small text-muted">
+                                        <li class="small text-muted historico-status-item">
                                             ${getStatusIconUsuario(status.status)} ${formatStatus(status.status)} - ${new Date(status.data).toLocaleString()}
                                         </li>
                                     `).join('') : '<li class="text-muted text-center">Sem histórico</li>'}
