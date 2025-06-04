@@ -120,73 +120,7 @@ function showMessage(message, type = 'success') {
     }, 3000);
 }
 
-// Atualiza os estilos
-const style = document.createElement('style');
-style.textContent = `
-    .nav-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 2rem;
-    }
-
-    .auth-container {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-    }
-
-    .user-nav {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .user-name {
-        color: white;
-        font-weight: 500;
-    }
-
-    .btn {
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-login {
-        background-color: white;
-        color: #1976d2;
-    }
-
-    .btn-register {
-        background-color: transparent;
-        color: #1976d2;
-        border: 2px solid #1976d2;
-    }
-
-    .btn-register:hover {
-        background-color: #1976d2;
-        color: white;
-    }
-
-    .btn-danger {
-        background-color: #d32f2f;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background-color: #b71c1c;
-    }
-`;
-document.head.appendChild(style);
+// CSS styles moved to styles.css
 
 // Initialization code
 async function initializeApp() {

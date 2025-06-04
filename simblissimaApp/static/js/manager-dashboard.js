@@ -289,20 +289,25 @@ async function filtrarPedidos() {
             <!-- Container do Pedido -->
             <div class="mb-5">
                 <!-- Cabeçalho do Pedido -->
-                <div class="bg-light p-3 rounded-top border shadow-sm mb-3 d-flex justify-content-between align-items-center pedido-header-clickable" onclick="togglePedidoMinimizado(${pedido.id})" style="cursor:pointer;">
-                    <div class="d-flex align-items-center gap-3">
-                        <strong class="h4 mb-0">Pedido #${pedido.id}</strong>
-                        <span class="badge ${getBadgeClass(pedido.status)} px-3 py-2">
-                            ${getStatusIcon(pedido.status)} ${formatStatus(pedido.status)}
-                        </span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <small class="text-muted me-3">
-                            Última atualização: ${new Date(pedido.historico_status[pedido.historico_status.length - 1].data).toLocaleString()}
-                        </small>
-                        <button class="btn btn-sm btn-outline-secondary" title="Minimizar/Maximizar" tabindex="-1" style="pointer-events:none;">
-                            <i id="pedido-toggle-icon-${pedido.id}" class="bi bi-chevron-down"></i>
-                        </button>
+                <div class="bg-light p-3 rounded-top border shadow-sm mb-3 pedido-header-clickable" onclick="togglePedidoMinimizado(${pedido.id})" style="cursor:pointer;">
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <span class="badge ${getBadgeClass(pedido.status)} px-3 py-2" style="white-space:nowrap;">${getStatusIcon(pedido.status)}</span>
+                        </div>
+                        <div class="col-md-2">
+                            <strong class="h5 mb-0">Pedido #${pedido.id}</strong>
+                        </div>                        <div class="col-md-4 text-center">
+                            <span class="text-muted small w-100 text-center d-block" style="vertical-align:middle;">${formatStatus(pedido.status)}</span>
+                        </div><div class="col-md-2 d-flex align-items-center justify-content-center" style="white-space:nowrap;">
+                            <span class="text-primary fw-bold" style="font-size:1.1rem; white-space:nowrap;">
+                                R$&nbsp;${parseFloat(pedido.valor_final || pedido.valor_total).toFixed(2)}
+                            </span>
+                        </div>
+                        <div class="col-md-auto ms-md-auto d-flex align-items-center">
+                            <span class="pedido-toggle-arrow" style="font-size:1.2rem;">
+                                <i id="pedido-toggle-icon-${pedido.id}" class="bi bi-chevron-down"></i>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -340,9 +345,8 @@ async function filtrarPedidos() {
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center">
-                                                
-                                                <div style="width:100%">
-                                                    <small class="text-muted d-block text-center mb-3" style="background:#e3e6ef; color:#222; border-radius:6px; padding:4px 0; margin-bottom:16px;">Valores</small>
+                                                  <div class="pedido-values-container">
+                                                    <small class="text-muted pedido-values-label">Valores</small>
                                                     <div class="row g-2 align-items-center justify-content-center">
                                                         <div class="col-6">
                                                             <div class="bg-light rounded p-2 text-center border">
@@ -439,8 +443,7 @@ async function filtrarPedidos() {
                                         <table class="table table-hover">
                                             <thead class="table-light">
                                                 <tr>
-                                                    <th>Descrição</th>
-                                                    <th class="text-end" style="width: 150px;">Preço</th>
+                                                    <th>Descrição</th>                                                    <th class="text-end price-column">Preço</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

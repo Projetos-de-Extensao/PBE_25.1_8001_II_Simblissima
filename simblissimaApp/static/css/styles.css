@@ -1,0 +1,232 @@
+/* Base styles */
+body, .jumbotron, .card, .card-body, .display-4, .lead, .btn, .form-label, .form-control, h1, h3, h5, p {
+    font-family: 'Poppins', Arial, sans-serif !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #f4f6fb;
+}
+
+.container, .navbar, #content {
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Navigation styles */
+.navbar {
+    background-color: #1565c0 !important;
+    min-height: 48px !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    box-shadow: 0 2px 8px #1565c096;
+}
+
+.navbar .nav-link, .navbar .navbar-brand {
+    color: white !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    font-size: 1rem !important;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.auth-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.user-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-name {
+    color: white;
+    font-weight: 500;
+}
+
+/* Button styles */
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background-color: #1976d2;
+    border-color: #1976d2;
+}
+
+.btn-primary:hover {
+    background-color: #1565c0;
+    border-color: #1565c0;
+}
+
+.btn-secondary {
+    background-color: #e3e6ef;
+    color: #222;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #cfd8e3;
+    color: #222;
+}
+
+.btn-danger {
+    background-color: #d32f2f;
+    border-color: #d32f2f;
+}
+
+.btn-danger:hover {
+    background-color: #b71c1c;
+    border-color: #b71c1c;
+}
+
+/* Navigation button styles */
+#loginNav .nav-link,
+#registroNav .nav-link,
+#logoutNav .nav-link {
+    padding: 0.3rem 1rem !important;
+    margin: 0 0.2rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+#loginNav .nav-link,
+#registroNav .nav-link,
+#logoutNav .nav-link {
+    border: 2px solid #1976d2;
+}
+
+#loginNav .nav-link:hover,
+#registroNav .nav-link:hover {
+    background-color: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+}
+
+#logoutNav .nav-link:hover {
+    background-color: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
+}
+
+/* Card and form styles */
+.card, .card-body, .jumbotron {
+    border-radius: 16px !important;
+}
+
+.card {
+    box-shadow: 0 2px 12px 0 #1565c01a !important;
+    border: none !important;
+}
+
+.jumbotron {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.jumbotron * {
+    border-radius: 16px !important;
+}
+
+.form-control, .form-select {
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px 0 #1565c01a !important;
+    border: 1px solid #e3e6ef !important;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+/* Table styles */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+/* Alert styles */
+.alert {
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* Status styles */
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* Dashboard styles */
+#statsCards .card {
+    min-height: 140px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#statsCards .card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pedido-info-valores .bg-primary.bg-opacity-10 {
+    background-color: #1976d2 !important;
+    color: #fff !important;
+}
+
+.pedido-info-valores .bg-light {
+    background-color: #e3e6ef !important;
+}
+
+.pedido-info-valores .text-primary {
+    color: #fff !important;
+}
+
+.cnmt {
+    border: 1px solid #e3e6ef;
+    border-top: none;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 #1565c01a;
+    padding: 0 0 16px 0;
+    overflow: hidden;
+}
+

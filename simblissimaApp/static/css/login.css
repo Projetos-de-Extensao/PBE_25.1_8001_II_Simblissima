@@ -1,0 +1,47 @@
+/* Login/Register container styles */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    min-height: 350px;
+}
+
+.auth-content {
+    max-width: 800px;
+    width: 100%;
+    margin: 30px 0 0 0;
+}
+
+/* Login form styles */
+.form-control {
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px 0 #1565c01a !important;
+    border: 1px solid #e3e6ef !important;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+#loginForm, #registerForm {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Login/Register nav button styles */
+#loginNav .nav-link,
+#registroNav .nav-link {
+    padding: 0.3rem 1rem !important;
+    margin: 0 0.2rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background-color: transparent;
+    border: 2px solid #1976d2;
+}
+
+#loginNav .nav-link:hover,
+#registroNav .nav-link:hover {
+    background-color: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+}

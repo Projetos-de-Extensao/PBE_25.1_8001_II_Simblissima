@@ -1,0 +1,50 @@
+/* Home page styles */
+.home-bg {
+    background: #f4f6fb;
+}
+
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    min-height: 350px;
+}
+
+.home-content {
+    max-width: 800px;
+    width: 100%;
+    margin: 30px 0 0 0;
+}
+
+/* Profile container styles */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    min-height: 350px;
+}
+
+.profile-content {
+    max-width: 800px;
+    width: 100%;
+    margin: 30px 0 0 0;
+}
+
+/* Other existing styles */
+.jumbotron {
+    border-radius: 16px !important;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: white;
+}
+
+.jumbotron * {
+    border-radius: 16px !important;
+}
+
+/* Form styles */
+.form-control, .form-select {
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px 0 #1565c01a !important;
+    border: 1px solid #e3e6ef !important;
+}

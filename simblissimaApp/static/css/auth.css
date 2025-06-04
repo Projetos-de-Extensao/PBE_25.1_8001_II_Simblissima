@@ -1,0 +1,42 @@
+/* Navigation styles */
+.navbar {
+    background-color: #1565c0 !important;
+    min-height: 48px !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    box-shadow: 0 2px 8px #1565c096;
+}
+
+.navbar .nav-link, .navbar .navbar-brand {
+    color: white !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    font-size: 1rem !important;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.auth-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.user-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-name {
+    color: white;
+    font-weight: 500;
+}

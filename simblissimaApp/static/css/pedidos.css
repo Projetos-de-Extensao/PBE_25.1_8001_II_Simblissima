@@ -1,0 +1,177 @@
+/* Order styles */
+.pedidos-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    min-height: 350px;
+}
+
+.pedidos-content {
+    max-width: 1100px;
+    width: 100%;
+    margin: 30px 0 0 0;
+}
+
+.card {
+    min-width: 350px;
+    max-width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .pedidos-content {
+        max-width: 98vw;
+    }
+    .card {
+        min-width: 0;
+    }
+}
+
+.order-card {
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px 0 #1565c01a !important;
+    border: none !important;
+    max-width: 100%;
+}
+
+.pedido-content {
+    display: none;
+}
+
+.pedido-content.d-block {
+    display: block;
+}
+
+.pedido-content.d-none {
+    display: none;
+}
+
+.pedido-content-hidden {
+    display: none;
+}
+
+.pedido-content-visible {
+    display: block;
+}
+
+.pedidos-button-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* List groups */
+.list-group-item {
+    border-color: #e3e6ef;
+}
+
+/* Status badges */
+.badge {
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.bg-warning {
+    background-color: #ff9800 !important;
+    color: white !important;
+}
+
+.bg-info {
+    background-color: #03a9f4 !important;
+    color: white !important;
+}
+
+.bg-success {
+    background-color: #4caf50 !important;
+}
+
+.bg-danger {
+    background-color: #f44336 !important;
+}
+
+/* Order details */
+.order-details-table {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.order-details-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+}
+
+.order-timeline {
+    padding-left: 2rem;
+    border-left: 2px solid #e3e6ef;
+}
+
+.order-timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.order-timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: #1976d2;
+    border: 2px solid white;
+}
+
+/* Form styles */
+.novo-pedido-form .form-control {
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px 0 #1565c01a !important;
+    border: 1px solid #e3e6ef !important;
+}
+
+.order-details {
+    min-height: 350px;
+    margin: 30px 0 0 0;
+    max-width: 800px;
+    width: 100%;
+}
+
+.order-header {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.order-content {
+    display: none;
+}
+
+.order-content.show {
+    display: block;
+}
+
+.order-detail-container {
+    min-height: 350px;
+    margin: 30px 0 0 0;
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.order-list {
+    width: 100%;
+    max-width: 800px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e3e6ef;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}

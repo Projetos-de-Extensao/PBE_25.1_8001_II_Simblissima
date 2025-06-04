@@ -18,13 +18,12 @@ async function loadHome() {
     } else {
         pedidosButton = `<button class="btn btn-primary" onclick="loadPedidos()">Ver Pedidos</button>`;
     }
-    
-    content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-            <div class="cnmt" style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
-                <div class="jumbotron bg-white p-4 rounded mb-4 text-center" style="box-shadow:none; border:none; border-radius:16px;">
-                    <h1 class="display-4" style="border-radius:16px;">Simblissima Delivery!</h1>
-                    <p class="lead" style="border-radius:16px;">Sistema de gerenciamento de pedidos para a ilha primeira</p>
+      content.innerHTML = `
+        <div class="home-container">
+            <div class="home-content cnmt">
+                <div class="jumbotron bg-white p-4 rounded mb-4 text-center">
+                    <h1 class="display-4">Simblissima Delivery!</h1>
+                    <p class="lead">Sistema de gerenciamento de pedidos para a ilha primeira</p>
                 </div>
                 <div class="row justify-content-center mt-4">
                     <div class="col-md-6 col-lg-5 mb-3 d-flex justify-content-center">

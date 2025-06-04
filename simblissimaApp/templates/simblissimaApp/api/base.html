@@ -3,213 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simblissima - API</title>    {% load static %}
+    <title>Simblissima - API</title>
+    {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>    <!-- Load auth.js first as it's required by other scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Load external scripts -->
     <script src="{% static 'js/auth.js' %}"></script>
-    <!-- Load nav.js next as it handles navigation -->
     <script src="{% static 'js/nav.js' %}"></script>
-    <!-- Load other scripts -->
     <script src="{% static 'js/login.js' %}" defer></script>
     <script src="{% static 'js/home.js' %}" defer></script>
     <script src="{% static 'js/pedidos.js' %}" defer></script>
     <script src="{% static 'js/manager-dashboard.js' %}" defer></script>
-    <!-- Initialize navigation when page loads -->
+    
+    <!-- Initialize navigation -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             console.log('Page loaded, updating navigation...');
             updateNavigation();
         });
     </script>
+      <!-- Load styles -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body, .jumbotron, .card, .card-body, .display-4, .lead, .btn, .form-label, .form-control, h1, h3, h5, p {
-            font-family: 'Poppins', Arial, sans-serif !important;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: #f4f6fb;
-        }
-        .container, .navbar, #content {
-            position: relative;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .navbar {
-            background-color: #1565c0 !important;
-            min-height: 48px !important;
-            padding-top: 0.25rem !important;
-            padding-bottom: 0.25rem !important;
-            position: sticky;
-            top: 0;
-            z-index: 1050;
-            box-shadow: 0 2px 8px #1565c096;
-        }
-        .navbar .nav-link, .navbar .navbar-brand {
-            color: white !important;
-            padding-top: 0.25rem !important;
-            padding-bottom: 0.25rem !important;
-            font-size: 1rem !important;
-        }
-        .card, .card-body, .jumbotron {
-            border-radius: 16px !important;
-            box-shadow: 0 2px 12px 0 #1565c01a !important;
-            border: none !important;
-        }
-        .jumbotron {
-            border: none !important;
-            box-shadow: none !important;
-            border-radius: 16px !important;
-        }
-        .jumbotron * {
-            border-radius: 16px !important;
-        }
-        .form-control, .form-select {
-            border-radius: 10px !important;
-            box-shadow: 0 1px 4px 0 #1565c01a !important;
-            border: 1px solid #e3e6ef !important;
-        }
-        .form-label {
-            font-weight: 500;
-        }
-        .btn-primary {
-            background-color: #1976d2;
-            border-color: #1976d2;
-        }
-        .btn-primary:hover {
-            background-color: #1565c0;
-            border-color: #1565c0;
-        }
-        .btn-secondary {
-            background-color: #e3e6ef;
-            color: #222;
-            border: none;
-        }
-        .btn-secondary:hover {
-            background-color: #cfd8e3;
-            color: #222;
-        }
-        .table {
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .table th, .table td {
-            vertical-align: middle;
-        }
-        .alert {
-            border-radius: 10px;
-        }
-        /* Estilos personalizados para os botões de navegação */
-        #loginNav .nav-link,
-        #registroNav .nav-link,
-        #logoutNav .nav-link {
-            padding: 0.3rem 1rem !important;
-            margin: 0 0.2rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            background-color: transparent;
-        }
-
-        #loginNav .nav-link {
-            border: 2px solid #1976d2;
-            
-        }
-
-        #registroNav .nav-link {
-            border: 2px solid #1976d2;            
-        }
-
-        #logoutNav .nav-link {
-            border: 2px solid #1976d2;
-            
-        }        #loginNav .nav-link:hover {
-            background-color: #1976d2;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-        }
-
-        #registroNav .nav-link:hover {
-            background-color: #1976d2;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-        }
-
-        #logoutNav .nav-link:hover {
-            background-color: #1976d2;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
-        }
-
-        /* Estilos para o nome do usuário */
-        #userInfo .nav-link {
-            font-weight: 500;
-            padding: 0.4rem 1rem !important;      
-            margin-right: 0.5rem;
-        }
-
-        .btn {
-            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        /* Caso haja outros botões customizados, garantir que não fiquem vermelhos */
-        .btn-danger {
-            background-color: #d32f2f;
-            border-color: #d32f2f;
-        }
-        .btn-danger:hover {
-            background-color: #b71c1c;
-            border-color: #b71c1c;
-        }
-        .status {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        .alert {
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }        /* Cards de estatísticas do dashboard do gerente - mesma altura */
-        #statsCards .card {
-            min-height: 140px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        #statsCards .card-body {
-            flex: 1 1 auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }        /* Tonalidade mais forte para cards de valores do pedido */
-        .pedido-info-valores .bg-primary.bg-opacity-10 {
-            background-color: #1976d2 !important;
-            color: #fff !important;
-        }
-        .pedido-info-valores .bg-light {
-            background-color: #e3e6ef !important;
-        }
-        .pedido-info-valores .text-primary {
-            color: #fff !important;
-        }        .cnmt {
-            border: 1px solid #e3e6ef; /* tom mais suave, quase branco */
-            border-top: none; /* remove a borda superior */
-            border-radius: 18px;
-            background: #fff;
-            box-shadow: 0 2px 12px 0 #1565c01a;
-            padding: 0 0 16px 0;
-            overflow: hidden;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/manager-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pedidos.css' %}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
