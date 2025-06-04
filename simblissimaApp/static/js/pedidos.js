@@ -21,11 +21,16 @@ async function loadPedidos() {
             loadLogin();
             return;
         }
+
+        // Se for staff, redireciona para o dashboard
+        if (user.is_staff) {
+            loadManagerDashboard();
+            return;
+        }
         
         const content = document.getElementById('content');
-        content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+        content.innerHTML = `        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
+            <div style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
@@ -33,7 +38,7 @@ async function loadPedidos() {
                                 <h3 class="mb-0">Meus Pedidos</h3>
                                 <div>
                                     <button class="btn btn-primary me-2" onclick="novoPedido()">Novo Pedido</button>
-                                    <button class="btn btn-secondary" onclick="loadHome()">Voltar</button>                                    
+                                    <button class="btn btn-secondary" onclick="loadHome()">Voltar</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -77,9 +82,8 @@ function stopAutoRefresh() {
 // Função para criar um novo pedido
 function novoPedido() {
     const content = document.getElementById('content');
-    content.innerHTML = `
-        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+    content.innerHTML = `        <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
+            <div style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Novo Pedido</h3>
@@ -171,7 +175,11 @@ async function carregarPedidos() {
         // Obter o usuário atual
         const user = await getCurrentUser();
         if (!user) {
-            showMessage('Usuário não autenticado', 'danger');
+            return;
+        }
+
+        // Se for staff, não deve carregar pedidos aqui
+        if (user.is_staff) {
             return;
         }
         
@@ -219,9 +227,8 @@ async function verDetalhesPedido(pedidoId) {
     try {
         const pedido = await fetchAPI(`/pedidos/${pedidoId}/`);
         const content = document.getElementById('content');
-        content.innerHTML = `
-            <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-                <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+        content.innerHTML = `            <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
+                <div style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="mb-0">Detalhes do Pedido #${pedido.id}</h3>

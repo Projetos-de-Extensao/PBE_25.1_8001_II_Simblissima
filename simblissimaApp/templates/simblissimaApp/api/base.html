@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simblissima - API</title>    {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>    <!-- Load auth.js first as it's required by other scripts -->
     <script src="{% static 'js/auth.js' %}"></script>
     <!-- Load nav.js next as it handles navigation -->
@@ -47,14 +48,64 @@
             position: sticky;
             top: 0;
             z-index: 1050;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px #1565c096;
         }
         .navbar .nav-link, .navbar .navbar-brand {
             color: white !important;
             padding-top: 0.25rem !important;
             padding-bottom: 0.25rem !important;
             font-size: 1rem !important;
-        }        .btn {
+        }        
+        
+        /* Estilos personalizados para os botões de navegação */
+        #loginNav .nav-link,
+        #registroNav .nav-link,
+        #logoutNav .nav-link {
+            padding: 0.3rem 1rem !important;
+            margin: 0 0.2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background-color: transparent;
+        }
+
+        #loginNav .nav-link {
+            border: 2px solid #1976d2;
+            
+        }
+
+        #registroNav .nav-link {
+            border: 2px solid #1976d2;            
+        }
+
+        #logoutNav .nav-link {
+            border: 2px solid #1976d2;
+            
+        }        #loginNav .nav-link:hover {
+            background-color: #1976d2;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+        }
+
+        #registroNav .nav-link:hover {
+            background-color: #1976d2;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+        }
+
+        #logoutNav .nav-link:hover {
+            background-color: #1976d2;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
+        }
+
+        /* Estilos para o nome do usuário */
+        #userInfo .nav-link {
+            font-weight: 500;
+            padding: 0.4rem 1rem !important;      
+            margin-right: 0.5rem;
+        }
+
+        .btn {
             transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s;
         }
         .btn:hover {
@@ -87,20 +138,45 @@
         .alert {
             margin-bottom: 20px;
             border-radius: 8px;
+        }        /* Cards de estatísticas do dashboard do gerente - mesma altura */
+        #statsCards .card {
+            min-height: 140px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #statsCards .card-body {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }        /* Tonalidade mais forte para cards de valores do pedido */
+        .pedido-info-valores .bg-primary.bg-opacity-10 {
+            background-color: #1976d2 !important;
+            color: #fff !important;
+        }
+        .pedido-info-valores .bg-light {
+            background-color: #e3e6ef !important;
+        }
+        .pedido-info-valores .text-primary {
+            color: #fff !important;
         }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#" onclick="loadHome()">Simblissima</a>
+            <a class="navbar-brand" href="#" onclick="loadHome()">Simblissima Delivery</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto"></ul>
-                <ul class="navbar-nav ms-auto">                    <li class="nav-item d-none" id="userInfo">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item d-none" id="userInfo">
                         <span class="nav-link">
+                            Olá,
                             <span id="userName"></span>
                         </span>
                     </li>

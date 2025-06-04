@@ -51,4 +51,4 @@ async function updateNavigation() {
         return false;
     }
 }
-// ...restante do código...
+

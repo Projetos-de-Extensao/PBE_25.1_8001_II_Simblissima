@@ -2,8 +2,8 @@
 // Função para formatar o status do pedido
 function formatStatus(status) {
     const statusMap = {
-        'PENDENTE': 'Pendente',
-        'AGUARDANDO_PAGAMENTO': 'Aguardando Pagamento',
+        'PENDENTE': 'Pedido Criado - Pendente',
+        'AGUARDANDO_PAGAMENTO': 'Aguardando Confirmação do Valor Final',
         'CONFIRMADO': 'Confirmado',
         'EM_TRANSITO': 'Em Trânsito',
         'ENTREGUE': 'Entregue',
@@ -12,14 +12,27 @@ function formatStatus(status) {
     return statusMap[status] || status;
 }
 
+async function checkStaffAccess() {
+    const user = await getCurrentUser();
+    if (!user) {
+        showMessage('Por favor, faça login para continuar.', 'warning');
+        loadLogin();
+        return false;
+    }
+    
+    if (!user.is_staff) {
+        console.log('Acesso negado: usuário não é staff');
+        showMessage('Acesso negado. Área restrita para gerentes.', 'danger');
+        loadHome();
+        return false;
+    }
+    console.log('Acesso staff confirmado');
+    return true;
+}
+
 async function loadManagerDashboard() {
     try {
-        const user = await getCurrentUser();
-        if (!user || !user.is_staff) {
-            showMessage('Acesso negado. Área restrita para gerentes.', 'danger');
-            loadLogin();
-            return;
-        }        const mainContent = document.getElementById('content');
+        if (!await checkStaffAccess()) return;
         
         // Para evitar recargas desnecessárias, verifica se já estamos no dashboard
         let dashboardLayout = document.querySelector('.container h2');
@@ -28,89 +41,117 @@ async function loadManagerDashboard() {
             await carregarDadosDashboard();
             await filtrarPedidos();
             return;
-        }
-
+        }        const mainContent = document.getElementById('content');
         mainContent.innerHTML = `
-            <button class="btn btn-secondary mb-3" onclick="loadHome()">&larr; Voltar para Home</button>
-            <div class="container">
-                <h2>Dashboard do Gerente</h2>
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="bi bi-speedometer2"></i> Dashboard do Gerente
+                </h2>
+                <button class="btn btn-outline-secondary" onclick="loadHome()">
+                    <i class="bi bi-house-door"></i> Voltar para Home
+                </button>
+            </div>
 
-                <!-- Cards com estatísticas -->
-                <div class="row mb-4" id="statsCards">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total de Pedidos</h5>
-                                <p class="card-text" id="totalPedidos">Carregando...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Valor Total Arrecadado</h5>
-                                <p class="card-text" id="valorTotal">Carregando...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Tempo Médio de Entrega</h5>
-                                <p class="card-text" id="tempoMedio">Carregando...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Pedidos Pendentes</h5>
-                                <p class="card-text" id="pedidosPendentes">Carregando...</p>
+            <!-- Cards com estatísticas -->
+            <div class="row mb-4" id="statsCards">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2 text-white-50">Total de Pedidos</h6>
+                                    <h2 class="card-title mb-0" id="totalPedidos">-</h2>
+                                </div>
+                                <i class="bi bi-box-seam fs-1 opacity-50"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Filtros -->
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <label class="input-group-text" for="statusFilter">Status</label>                            <select class="form-select" id="statusFilter">
-                                <option value="">Todos</option>
-                                <option value="PENDENTE">Pendente</option>
-                                <option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
-                                <option value="CONFIRMADO">Confirmado</option>
-                                <option value="EM_TRANSITO">Em Trânsito</option>
-                                <option value="ENTREGUE">Entregue</option>
-                                <option value="CANCELADO">Cancelado</option>
-                            </select>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2 text-white-50">Valor Arrecadado</h6>
+                                    <h2 class="card-title mb-0" id="valorTotal">-</h2>
+                                </div>
+                                <i class="bi bi-cash-coin fs-1 opacity-50"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <label class="input-group-text" for="sortOrder">Ordenar por</label>
-                            <select class="form-select" id="sortOrder">
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2 text-white-50">Tempo Médio de Entrega</h6>
+                                    <h2 class="card-title mb-0" id="tempoMedio">-</h2>
+                                </div>
+                                <i class="bi bi-clock-history fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2 text-white-50">Pedidos Pendentes</h6>
+                                    <h2 class="card-title mb-0" id="pedidosPendentes">-</h2>
+                                </div>
+                                <i class="bi bi-hourglass-split fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            <!-- Filtros -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-funnel"></i> Filtros e Ordenação
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="statusFilter">Status do Pedido</label>
+                            <select class="form-select shadow-sm" id="statusFilter">
+                                <option value="">Todos os Status</option>
+                                <option value="PENDENTE">🕒 Pendente</option>
+                                <option value="AGUARDANDO_PAGAMENTO">💰 Aguardando Pagamento</option>
+                                <option value="CONFIRMADO">✅ Confirmado</option>
+                                <option value="EM_TRANSITO">🚚 Em Trânsito</option>
+                                <option value="ENTREGUE">📦 Entregue</option>
+                                <option value="CANCELADO">❌ Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="sortOrder">Ordenar por</label>
+                            <select class="form-select shadow-sm" id="sortOrder">
                                 <option value="data_criacao">Data de Criação</option>
                                 <option value="valor_total">Valor dos Produtos</option>
                                 <option value="status">Status</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary w-100" onclick="aplicarFiltros()">
-                            Aplicar Filtros
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Lista de Pedidos -->
-                <div class="row">
-                    <div class="col">
-                        <div id="listaPedidos" class="list-group">
-                            Carregando pedidos...
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button class="btn btn-primary w-100 shadow-sm" onclick="aplicarFiltros()">
+                                <i class="bi bi-search"></i> Buscar Pedidos
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Lista de Pedidos -->
+            <div class="row">
+                <div class="col">
+                    <div id="listaPedidos" class="list-group">
+                        Carregando pedidos...
+                    </div>
+                </div>
+            </div>
+        </div>
         `;
 
         // Carregar dados iniciais
@@ -123,6 +164,8 @@ async function loadManagerDashboard() {
 }
 
 async function carregarDadosDashboard() {
+    if (!await checkStaffAccess()) return;
+    
     try {
         console.log('Carregando dados do dashboard...');
         const response = await fetchAPI('/pedidos/');
@@ -142,15 +185,15 @@ async function carregarDadosDashboard() {
         const valorTotal = pedidos
             .filter(p => p.status === 'ENTREGUE')
             .reduce((acc, p) => acc + (parseFloat(p.valor_final) || parseFloat(p.valor_total)), 0);
-        console.log('Valor total arrecadado:', valorTotal); // Debug log
+        
         document.getElementById('valorTotal').textContent = `R$ ${valorTotal.toFixed(2)}`;
 
         // Pedidos pendentes
         const pendentes = pedidos.filter(p => p.status === 'PENDENTE').length;
-        console.log('Pedidos pendentes:', pendentes); // Debug log
-        document.getElementById('pedidosPendentes').textContent = pendentes;        // Tempo médio de entrega (para pedidos entregues)
+        document.getElementById('pedidosPendentes').textContent = pendentes;
+
+        // Tempo médio de entrega (para pedidos entregues)
         const pedidosEntregues = pedidos.filter(p => p.status === 'ENTREGUE');
-        console.log('Pedidos entregues:', pedidosEntregues); // Debug log
 
         if (pedidosEntregues.length > 0) {
             const tempoTotal = pedidosEntregues.reduce((acc, p) => {
@@ -159,13 +202,10 @@ async function carregarDadosDashboard() {
                     const statusEntrega = p.historico_status
                         .find(s => s.status === 'ENTREGUE');
                         
-                    if (!statusEntrega) {
-                        console.log('Status de entrega não encontrado para pedido:', p.id);
-                        return acc;
-                    }                    const entrega = new Date(statusEntrega.data);
+                    if (!statusEntrega) return acc;
+
+                    const entrega = new Date(statusEntrega.data);
                     const tempoEntrega = entrega - criacao;
-                    const horasEntrega = tempoEntrega / (1000 * 60 * 60);
-                    console.log(`Tempo de entrega do pedido ${p.id}:`, horasEntrega, 'horas');
                     return acc + tempoEntrega;
                 } catch (error) {
                     console.error('Erro ao calcular tempo de entrega do pedido:', p.id, error);
@@ -177,12 +217,11 @@ async function carregarDadosDashboard() {
             const horasMedio = Math.floor(tempoMedio / (1000 * 60 * 60));
             const minutosMedio = Math.floor((tempoMedio % (1000 * 60 * 60)) / (1000 * 60));
             
-            console.log('Tempo médio de entrega:', horasMedio, 'horas e', minutosMedio, 'minutos'); // Debug log
             document.getElementById('tempoMedio').textContent = `${horasMedio}h ${minutosMedio}min`;
         } else {
-            console.log('Nenhum pedido entregue encontrado');
             document.getElementById('tempoMedio').textContent = 'N/A';
-        }    } catch (error) {
+        }
+    } catch (error) {
         console.error('Erro ao carregar dados do dashboard:', error);
         
         // Limpa os campos em caso de erro
@@ -196,22 +235,13 @@ async function carregarDadosDashboard() {
 }
 
 async function aplicarFiltros() {
-    const filterBtn = document.querySelector('button.btn-primary');
-    filterBtn.disabled = true;
-    filterBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Filtrando...';
-    
-    try {
-        await filtrarPedidos();
-        showMessage('Filtros aplicados com sucesso!', 'success');
-    } catch (error) {
-        showMessage('Erro ao aplicar filtros', 'danger');
-    } finally {
-        filterBtn.disabled = false;
-        filterBtn.textContent = 'Aplicar Filtros';
-    }
+    if (!await checkStaffAccess()) return;
+    await filtrarPedidos();
 }
 
 async function filtrarPedidos() {
+    if (!await checkStaffAccess()) return;
+    
     try {
         // Obter os elementos de filtro
         const statusFilterElement = document.getElementById('statusFilter');
@@ -230,16 +260,21 @@ async function filtrarPedidos() {
             params.append('status', statusFilterElement.value);
         }
         
-        const url = `/pedidos/${params.toString() ? '?' + params.toString() : ''}`;        const response = await fetchAPI(url);
+        const url = `/pedidos/${params.toString() ? '?' + params.toString() : ''}`;
+        const response = await fetchAPI(url);
+        
         if (!response || !response.results) {
             throw new Error('Resposta inválida da API');
-        }                        const pedidos = response.results;
-        console.log('Dados dos pedidos:', JSON.stringify(pedidos, null, 2)); // Log mais detalhado dos dados
-
+        }
+        
+        const pedidos = response.results;
+        
         if (!pedidos || pedidos.length === 0) {
             document.getElementById('listaPedidos').innerHTML = '<p>Nenhum pedido encontrado.</p>';
             return;
-        }        // Ordenar pedidos
+        }
+
+        // Ordenar pedidos
         pedidos.sort((a, b) => {
             if (sortOrderElement.value === 'data_criacao') {
                 return new Date(b.data_criacao) - new Date(a.data_criacao);
@@ -249,91 +284,227 @@ async function filtrarPedidos() {
                 return a.status.localeCompare(b.status);
             }
             return 0;
-        });
-
-        const listaPedidos = document.getElementById('listaPedidos');
+        });        const listaPedidos = document.getElementById('listaPedidos');
         listaPedidos.innerHTML = pedidos.map(pedido => `
-            <div class="list-group-item">
-                <div class="d-flex w-100 justify-content-between mb-2">
-                    <h5 class="mb-1">Pedido #${pedido.id}</h5>
-                    <small>${new Date(pedido.data_criacao).toLocaleString()}</small>
+            <!-- Container do Pedido -->
+            <div class="mb-5">
+                <!-- Cabeçalho do Pedido -->
+                <div class="bg-light p-3 rounded-top border shadow-sm mb-3 d-flex justify-content-between align-items-center pedido-header-clickable" onclick="togglePedidoMinimizado(${pedido.id})" style="cursor:pointer;">
+                    <div class="d-flex align-items-center gap-3">
+                        <strong class="h4 mb-0">Pedido #${pedido.id}</strong>
+                        <span class="badge ${getBadgeClass(pedido.status)} px-3 py-2">
+                            ${getStatusIcon(pedido.status)} ${formatStatus(pedido.status)}
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <small class="text-muted me-3">
+                            Última atualização: ${new Date(pedido.historico_status[pedido.historico_status.length - 1].data).toLocaleString()}
+                        </small>
+                        <button class="btn btn-sm btn-outline-secondary" title="Minimizar/Maximizar" tabindex="-1" style="pointer-events:none;">
+                            <i id="pedido-toggle-icon-${pedido.id}" class="bi bi-chevron-down"></i>
+                        </button>
+                    </div>
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Cliente:</strong> ${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</p>
-                        <p><strong>Status Atual:</strong> ${formatStatus(pedido.status)}</p>
-                        <p><strong>Valor dos Produtos:</strong> R$ ${pedido.valor_total}</p>
-                        <p><strong>Valor Final:</strong> R$ ${pedido.valor_final || 'Não definido'}</p>
-                        <!-- Itens do Pedido -->
-                        <div class="mt-2">
-                            <h6>Itens do Pedido</h6>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Descrição</th>
-                                            <th>Preço</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${pedido.itens && pedido.itens.length > 0 ? 
-                                            pedido.itens.map(item => `
+
+                <!-- Conteúdo do Pedido -->
+                <div id="pedido-content-${pedido.id}" style="display: none;">
+                    <div class="card shadow-lg mb-3">
+                        <div class="card-body">
+                            <!-- Informações e Formulário -->
+                            <div class="row g-4 mb-4">
+                                <!-- Coluna de Informações -->
+                                <div class="col-md-6">
+                                    <div class="card h-100 border shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-4">Informações do Pedido</h5>
+                                            
+                                            <div class="d-flex align-items-center mb-3">
+                                                <i class="bi bi-person-circle me-2"></i>
+                                                <div>
+                                                    <small class="text-muted d-block">Cliente</small>
+                                                    <strong>${pedido.cliente.user.first_name} ${pedido.cliente.user.last_name}</strong>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <i class="bi bi-calendar-event me-2"></i>
+                                                <div>
+                                                    <small class="text-muted d-block">Data do Pedido</small>
+                                                    <strong>${new Date(pedido.data_criacao).toLocaleString()}</strong>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <i class="bi bi-chat-left-text me-2"></i>
+                                                <div>
+                                                    <small class="text-muted d-block">Observação</small>
+                                                    <strong>${pedido.observacoes ? pedido.observacoes : '<span class=\'text-muted\'>Nenhuma</span>'}</strong>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                
+                                                <div style="width:100%">
+                                                    <small class="text-muted d-block text-center mb-3" style="background:#e3e6ef; color:#222; border-radius:6px; padding:4px 0; margin-bottom:16px;">Valores</small>
+                                                    <div class="row g-2 align-items-center justify-content-center">
+                                                        <div class="col-6">
+                                                            <div class="bg-light rounded p-2 text-center border">
+                                                                <span class="text-muted small">Produtos</span><br>
+                                                                <span class="fw-bold fs-5">R$ ${pedido.valor_total}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="bg-primary bg-opacity-10 rounded p-2 text-center border">
+                                                                <span class="text-muted small">Final</span><br>
+                                                                <span class="fw-bold fs-5 text-primary">R$ ${pedido.valor_final || 'Não definido'}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Coluna de Atualização -->
+                                <div class="col-md-6">
+                                    <div class="card h-100 border shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-4">Atualizar Pedido</h5>
+                                            <form onsubmit="atualizarPedido(event, ${pedido.id})" class="h-100">                                <div class="mb-4">
+                                                <label class="form-label">
+                                                    <i class="bi bi-arrow-repeat me-2"></i>Novo Status
+                                                </label>
+                                                <select class="form-select form-select-lg mb-2" name="status" required>
+                                                    <option value="">Selecione o status...</option>
+                                                    <option value="PENDENTE">
+                                                        <i class="bi bi-hourglass me-2"></i>Pendente
+                                                    </option>
+                                                    <option value="AGUARDANDO_PAGAMENTO">
+                                                        <i class="bi bi-cash me-2"></i>Aguardando Pagamento
+                                                    </option>
+                                                    <option value="CONFIRMADO">
+                                                        <i class="bi bi-check-circle me-2"></i>Confirmado
+                                                    </option>
+                                                    <option value="EM_TRANSITO">
+                                                        <i class="bi bi-truck me-2"></i>Em Trânsito
+                                                    </option>
+                                                    <option value="ENTREGUE">
+                                                        <i class="bi bi-box-seam me-2"></i>Entregue
+                                                    </option>
+                                                    <option value="CANCELADO">
+                                                        <i class="bi bi-x-circle me-2"></i>Cancelado
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label class="form-label">
+                                                    <i class="bi bi-currency-dollar me-2"></i>Valor Final
+                                                </label>
+                                                <div class="input-group input-group-lg">
+                                                    <span class="input-group-text">R$</span>
+                                                    <input type="number" 
+                                                           class="form-control" 
+                                                           name="valor_final" 
+                                                           step="0.01" 
+                                                           min="0" 
+                                                           value="${pedido.valor_final || pedido.valor_total}"
+                                                           required>
+                                                </div>
+                                                <small class="form-text text-muted">Defina o valor final incluindo frete e taxas</small>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label class="form-label">
+                                                    <i class="bi bi-chat-left-text me-2"></i>Comentário
+                                                </label>
+                                                <textarea class="form-control" 
+                                                          name="comentario" 
+                                                          rows="3"
+                                                          placeholder="Adicione um comentário sobre a atualização..."></textarea>
+                                            </div>
+
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    <i class="bi bi-arrow-clockwise me-2"></i>Atualizar Pedido
+                                                </button>
+                                            </div>
+                                        </form></div>
+                                </div>            </div>
+
+                            <!-- Itens do Pedido -->
+                            <div class="card border mt-4">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">
+                                        <i class="bi bi-box-seam me-2"></i>Itens do Pedido
+                                    </h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="table-light">
                                                 <tr>
-                                                    <td>${item.descricao}</td>
-                                                    <td>R$ ${parseFloat(item.preco).toFixed(2)}</td>
+                                                    <th>Descrição</th>
+                                                    <th class="text-end" style="width: 150px;">Preço</th>
                                                 </tr>
-                                            `).join('') 
-                                            : '<tr><td colspan="2" class="text-center">Nenhum item encontrado</td></tr>'}
-                                    </tbody>
-                                </table>
+                                            </thead>
+                                            <tbody>
+                                                ${pedido.itens && pedido.itens.length > 0 ? 
+                                                    pedido.itens.map(item => `
+                                                        <tr>
+                                                            <td>
+                                                                <i class="bi bi-cart me-2 text-muted"></i>
+                                                                ${item.descricao}
+                                                            </td>
+                                                            <td class="text-end">R$ ${parseFloat(item.preco).toFixed(2)}</td>
+                                                        </tr>
+                                                    `).join('') 
+                                                    : '<tr><td colspan="2" class="text-center text-muted py-4"><i class="bi bi-inbox me-2"></i>Nenhum item encontrado</td></tr>'}
+                                                ${pedido.itens && pedido.itens.length > 0 ? `
+                                                    <tr class="table-light fw-bold">
+                                                        <td class="text-end">Total dos Produtos:</td>
+                                                        <td class="text-end">R$ ${pedido.valor_total}</td>
+                                                    </tr>` : ''}
+                                            </tbody>
+                                        </table>
+                                    </div>                </div>
+                            </div>
+
+                            <!-- Histórico -->
+                            <div class="card border mt-4">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">
+                                        <i class="bi bi-clock-history me-2"></i>Histórico de Status
+                                    </h5>
+                                    <div class="list-group">
+                                        ${pedido.historico_status.map(status => `
+                                            <div class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                                                    <h6 class="mb-0">
+                                                        <span class="badge ${getBadgeClass(status.status)} me-2">
+                                                            ${getStatusIcon(status.status)}
+                                                        </span>
+                                                        ${formatStatus(status.status)}
+                                                    </h6>
+                                                    <small class="text-muted">
+                                                        <i class="bi bi-clock me-1"></i>${new Date(status.data).toLocaleString()}
+                                                    </small>
+                                                </div>
+                                                ${status.comentario ? `
+                                                    <p class="mb-0 mt-2 ps-4 text-muted">
+                                                        <i class="bi bi-chat-left-text me-2"></i>${status.comentario}
+                                                    </p>` : ''}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <!-- Form de atualização -->
-                        <form onsubmit="atualizarPedido(event, ${pedido.id})" class="border p-3 rounded">
-                            <div class="mb-3">
-                                <label class="form-label">Novo Status:</label>
-                                <select class="form-select" name="status" required>                                    <option value="">Selecione...</option>
-                                    <option value="PENDENTE">Pendente</option>
-                                    <option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
-                                    <option value="CONFIRMADO">Confirmado</option>
-                                    <option value="EM_TRANSITO">Em Trânsito</option>
-                                    <option value="ENTREGUE">Entregue</option>
-                                    <option value="CANCELADO">Cancelado</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Valor Final:</label>
-                                <input type="number" class="form-control" name="valor_final" step="0.01" min="0" value="${pedido.valor_final || pedido.valor_total}">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Comentário:</label>
-                                <textarea class="form-control" name="comentario" rows="2"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Atualizar Pedido</button>
-                        </form>
-                    </div>
                 </div>
-                <!-- Histórico de Status -->
-                <div class="mt-3">
-                    <h6>Histórico de Status</h6>
-                    <div class="list-group">
-                        ${pedido.historico_status.map(status => `
-                            <div class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">${formatStatus(status.status)}</h6>
-                                    <small>${new Date(status.data).toLocaleString()}</small>
-                                </div>
-                                ${status.comentario ? `<p class="mb-1">${status.comentario}</p>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
+
+                <!-- Divisor entre pedidos -->
+                <div class="d-flex align-items-center my-5">                   
+                    <div class="mx-4"></div>
+                    <div class="border-bottom flex-grow-1"></div>
                 </div>
             </div>
         `).join('');
-
     } catch (error) {
         console.error('Erro ao filtrar pedidos:', error);
         showMessage('Erro ao carregar pedidos', 'danger');
@@ -342,6 +513,8 @@ async function filtrarPedidos() {
 
 async function atualizarPedido(event, pedidoId) {
     event.preventDefault();
+    if (!await checkStaffAccess()) return;
+    
     const form = event.target;
     
     try {
@@ -389,4 +562,46 @@ async function atualizarPedido(event, pedidoId) {
         updateButton.textContent = 'Atualizar Pedido';
         updateButton.disabled = false;
     }
+}
+
+// Função global para minimizar/maximizar pedidos (corrigida)
+window.togglePedidoMinimizado = function(pedidoId) {
+    const content = document.getElementById('pedido-content-' + pedidoId);
+    const icon = document.getElementById('pedido-toggle-icon-' + pedidoId);
+    if (content && icon) {
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            icon.classList.remove('bi-chevron-down');
+            icon.classList.add('bi-chevron-up');
+        } else {
+            content.style.display = 'none';
+            icon.classList.remove('bi-chevron-up');
+            icon.classList.add('bi-chevron-down');
+        }
+    }
+};
+
+// Funções auxiliares para estilização
+function getBadgeClass(status) {
+    const statusClasses = {
+        'PENDENTE': 'bg-warning',
+        'AGUARDANDO_PAGAMENTO': 'bg-info',
+        'CONFIRMADO': 'bg-primary',
+        'EM_TRANSITO': 'bg-info',
+        'ENTREGUE': 'bg-success',
+        'CANCELADO': 'bg-danger'
+    };
+    return statusClasses[status] || 'bg-secondary';
+}
+
+function getStatusIcon(status) {
+    const statusIcons = {
+        'PENDENTE': '🕒',
+        'AGUARDANDO_PAGAMENTO': '💰',
+        'CONFIRMADO': '✅',
+        'EM_TRANSITO': '🚚',
+        'ENTREGUE': '📦',
+        'CANCELADO': '❌'
+    };
+    return statusIcons[status] || '⚪';
 }

@@ -1,30 +1,37 @@
 // home.js
 async function loadHome() {
     const user = await getCurrentUser();
-    
+    if (!user) {
+        loadLogin();
+        return;
+    }
+
     // Adiciona imagem de fundo apenas na home
     document.body.classList.add('home-bg');
 
     const content = document.getElementById('content');
     let pedidosButton = '';
-    if (user && user.is_staff) {
+    
+    // Define o botão baseado no tipo de usuário
+    if (user.is_staff) {
         pedidosButton = `<button class="btn btn-primary" onclick="loadManagerDashboard()">Dashboard</button>`;
     } else {
         pedidosButton = `<button class="btn btn-primary" onclick="loadPedidos()">Ver Pedidos</button>`;
     }
+    
     content.innerHTML = `
         <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-            <div class="cnmt" style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
-                <div class="jumbotron bg-white p-4 rounded shadow-sm mb-4 text-center">
-                    <h1 class="display-4">Bem-vindo à Simblissima!</h1>
-                    <p class="lead">Sistema de gerenciamento de pedidos e produtos.</p>                                    
+            <div class="cnmt" style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
+                <div class="jumbotron bg-white p-4 rounded mb-4 text-center">
+                    <h1 class="display-4">Simblissima Delivery!</h1>
+                    <p class="lead">Sistema de gerenciamento de pedidos para a ilha primeira</p>
                 </div>
                 <div class="row justify-content-center mt-4">
                     <div class="col-md-6 col-lg-5 mb-3 d-flex justify-content-center">
                         <div class="card h-100 w-100 border-0 shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title">Pedidos</h5>
-                                <p class="card-text">Acompanhe e gerencie os pedidos.</p>
+                                <p class="card-text">Acompanhe e gerencie os pedidos</p>
                                 ${pedidosButton}
                             </div>
                         </div>
@@ -33,7 +40,7 @@ async function loadHome() {
                         <div class="card h-100 w-100 border-0 shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title">Minha Conta</h5>
-                                <p class="card-text">Gerencie suas informações.</p>
+                                <p class="card-text">Gerencie suas informações</p>
                                 <button class="btn btn-primary" onclick="loadPerfil()">Ver Perfil</button>
                             </div>
                         </div>
@@ -51,7 +58,7 @@ async function loadPerfil() {
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
-            <div style="max-width: 800px; width: 100%; margin: 40px 0 0 0;">
+            <div style="max-width: 800px; width: 100%; margin: 30px 0 0 0;">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
@@ -84,44 +91,41 @@ async function loadPerfil() {
         const cliente = response;
         const perfilDiv = document.getElementById('perfilData');
         perfilDiv.innerHTML = `
-            <form id="perfilForm" onsubmit="handleUpdatePerfil(event)" class="needs-validation" novalidate>
-                <div class="row">
+            <form id="perfilForm" onsubmit="handleUpdatePerfil(event)" class="needs-validation" novalidate>                <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Nome</label>
+                        <label class="form-label text-start w-100">Nome</label>
                         <input type="text" class="form-control" id="first_name" value="${cliente.user.first_name}" required>
                         <div class="invalid-feedback">Por favor, insira um nome válido</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Sobrenome</label>
+                        <label class="form-label text-start w-100">Sobrenome</label>
                         <input type="text" class="form-control" id="last_name" value="${cliente.user.last_name}" required>
                         <div class="invalid-feedback">Por favor, insira um sobrenome válido</div>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">CPF</label>
+                    <label class="form-label text-start w-100">CPF</label>
                     <input type="text" class="form-control" value="${cliente.cpf}" disabled>
-                    <small class="text-muted">O CPF não pode ser alterado</small>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Email</label>
+                    <label class="form-label text-start w-100">Email</label>
                     <input type="email" class="form-control" id="email" value="${cliente.user.email}" required>
                     <div class="invalid-feedback">Por favor, insira um email válido</div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Endereço</label>
+                    <label class="form-label text-start w-100">Endereço</label>
                     <input type="text" class="form-control" id="endereco" value="${cliente.endereco}" required>
                     <div class="invalid-feedback">Por favor, insira um endereço válido</div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Telefone</label>
+                    <label class="form-label text-start w-100">Telefone</label>
                     <input type="text" class="form-control" id="telefone" value="${cliente.telefone}" 
                            pattern="\\d{10,11}" required oninput="this.value = this.value.replace(/\\D/g, '')">
                     <div class="invalid-feedback">Por favor, insira um telefone válido (10 ou 11 dígitos)</div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Nova Senha (opcional)</label>
-                    <input type="password" class="form-control" id="password" minlength="6">
-                    <small class="text-muted">Deixe em branco para manter a senha atual</small>
+                <label class="form-label text-start w-100">Mudar Senha (opcional)</label>
+                    <input type="password" class="form-control" id="password" minlength="6" placeholder="Deixe em branco para manter a senha atual">
                     <div class="invalid-feedback">A senha deve ter pelo menos 6 caracteres</div>
                 </div>
             </form>
