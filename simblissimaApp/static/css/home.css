@@ -11,9 +11,10 @@
 }
 
 .home-content {
-    max-width: 800px;
+    max-width: 1000px;
     width: 100%;
-    margin: 30px 0 0 0;
+    margin: 30px auto;
+    padding: 0 20px;
 }
 
 /* Profile container styles */
@@ -29,6 +30,60 @@
     width: 100%;
     margin: 30px 0 0 0;
 }
+
+/* Cards row styles */
+.home-cards-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    margin-top: 32px;
+    gap: 32px;
+    width: 100%;
+}
+
+.home-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+    padding: 32px 28px 24px 28px;
+    width: calc(50% - 16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 170px;
+}
+
+.home-card h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.home-card p {
+    font-size: 1rem;
+    margin-bottom: 18px;
+}
+
+.home-card .btn {
+    width: 120px;
+}
+
+.home-card .card-body {
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.row .card {
+    margin-bottom: 0;
+}
+
+.row .card-body {
+    padding: 24px 20px 20px 20px;
+    margin-bottom: 0;
+}
+
+/* Removed margin styles as we're using gap */
 
 /* Other existing styles */
 .jumbotron {
@@ -47,4 +102,17 @@
     border-radius: 10px !important;
     box-shadow: 0 1px 4px 0 #1565c01a !important;
     border: 1px solid #e3e6ef !important;
+}
+
+@media (max-width: 900px) {
+    .home-cards-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+    }
+    .home-card {
+        width: 100%;
+        max-width: none;
+        padding: 24px 20px;
+    }
 }

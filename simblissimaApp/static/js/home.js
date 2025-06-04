@@ -25,8 +25,8 @@ async function loadHome() {
                     <h1 class="display-4">Simblissima Delivery!</h1>
                     <p class="lead">Sistema de gerenciamento de pedidos para a ilha primeira</p>
                 </div>
-                <div class="row justify-content-center mt-4">
-                    <div class="col-md-6 col-lg-5 mb-3 d-flex justify-content-center">
+                <div class="row justify-content-center mt-4 g-4">
+                    <div class="col-md-6 col-lg-5 d-flex">
                         <div class="card h-100 w-100 border-0 shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title">Pedidos</h5>
@@ -35,7 +35,7 @@ async function loadHome() {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-5 mb-3 d-flex justify-content-center">
+                    <div class="col-md-6 col-lg-5 d-flex">
                         <div class="card h-100 w-100 border-0 shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title">Minha Conta</h5>
