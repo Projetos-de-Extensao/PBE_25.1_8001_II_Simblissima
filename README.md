@@ -93,7 +93,16 @@ Para iniciar o servidor de desenvolvimento e acessar a aplicação:
 
 
 ## Vídeo
-Adicione 1 ou mais vídeos com a execução do projeto final.
+# Parte 1
+[![video pt1](/simblissimaApp/static/video/part1(split-video.com).mp4)](/simblissimaApp/static/video/part1(split-video.com).mp4)
+# Parte 2
+[![video pt2](/simblissimaApp/static/video/part2(split-video.com).mp4)](/simblissimaApp/static/video/part2(split-video.com).mp4)
+# Parte 3
+[![video pt3](/simblissimaApp/static/video/part3(split-video.com).mp4)](/simblissimaApp/static/video/part3(split-video.com).mp4)
+# Parte 4
+[![video pt4](/simblissimaApp/static/video/part4(split-video.com).mp4)](/simblissimaApp/static/video/part4(split-video.com).mp4)
+
+
 
 ## Outros 
 https://www.canva.com/design/DAGjtltoot8/rh_b9t3NbySyI2s5XLXq-Q/edit?utm_content=DAGjtltoot8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton  
