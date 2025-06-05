@@ -13,6 +13,8 @@ from .serializers import (
 from decimal import Decimal
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 def spa_view(request):
     return render(request, 'simblissimaApp/api/base.html')
@@ -35,19 +37,34 @@ class IsOwnerOrStaff(permissions.BasePermission):
 
 
 class ClienteViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciar clientes.
+    
+    Permite operações CRUD para clientes. Usuários comuns podem ver apenas
+    seus próprios dados, enquanto staff podem ver todos os clientes.
+    """
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
     permission_classes = [IsOwnerOrStaff]
 
     def get_queryset(self):
+        """Filtra clientes baseado nas permissões do usuário."""
         if self.request.user.is_staff:
             return Cliente.objects.all()
         return Cliente.objects.filter(user=self.request.user)
 
 class PedidoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciar pedidos.
+    
+    Permite operações CRUD para pedidos. Usuários comuns podem ver apenas
+    seus próprios pedidos, enquanto staff podem ver todos os pedidos.
+    
+    Suporta filtro por status via parâmetro 'status' na query string.
+    """
     queryset = Pedido.objects.all()
     serializer_class = PedidoSerializer
-    permission_classes = [IsOwnerOrStaff]    
+    permission_classes = [IsOwnerOrStaff]
     def get_queryset(self):
         queryset = Pedido.objects.all() if self.request.user.is_staff else Pedido.objects.filter(cliente__user=self.request.user)
         
@@ -98,9 +115,19 @@ class PedidoViewSet(viewsets.ModelViewSet):
             print(f"DEBUG - Status pedido criado com ID: {status_pedido.id}")
             # Se chegarmos aqui, tudo foi criado com sucesso
             print(f"DEBUG - Pedido e status criados com sucesso")
-            
+    
+    @swagger_auto_schema(
+        method='post',
+        operation_description="Adiciona um item ao pedido",
+        request_body=ItemPedidoSerializer,
+        responses={
+            201: PedidoSerializer,
+            400: "Dados inválidos"
+        }
+    )
     @action(detail=True, methods=['post'])
     def add_item(self, request, pk=None):
+        """Adiciona um item ao pedido e recalcula o valor total."""
         pedido = self.get_object()
         serializer = ItemPedidoSerializer(data=request.data)
         
@@ -109,13 +136,29 @@ class PedidoViewSet(viewsets.ModelViewSet):
             # Recalcula o valor total do pedido
             total = sum(item.preco for item in pedido.itens.all())
             pedido.valor_total = total
-            pedido.save()
-            # Retorna o pedido atualizado, incluindo o novo total
+            pedido.save()            # Retorna o pedido atualizado, incluindo o novo total
             return Response(PedidoSerializer(pedido).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
+    @swagger_auto_schema(
+        method='post',
+        operation_description="Atualiza o status do pedido",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'status': openapi.Schema(type=openapi.TYPE_STRING, description='Novo status do pedido'),
+                'comentario': openapi.Schema(type=openapi.TYPE_STRING, description='Comentário sobre a mudança de status')
+            },
+            required=['status']
+        ),
+        responses={
+            200: PedidoSerializer,
+            400: "Status inválido"
+        }
+    )
     @action(detail=True, methods=['post'])
     def update_status(self, request, pk=None):
+        """Atualiza o status do pedido e registra o histórico."""
         pedido = self.get_object()
         novo_status = request.data.get('status')
         
@@ -136,9 +179,25 @@ class PedidoViewSet(viewsets.ModelViewSet):
             )
             
         return Response(PedidoSerializer(pedido).data)
-
+    
+    @swagger_auto_schema(
+        method='post',
+        operation_description="Confirma o método de pagamento do pedido",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'metodo_pagamento': openapi.Schema(type=openapi.TYPE_STRING, description='Método de pagamento (PIX, CARTAO_CREDITO, CARTAO_DEBITO, DINHEIRO)')
+            },
+            required=['metodo_pagamento']
+        ),
+        responses={
+            200: PedidoSerializer,
+            400: "Método de pagamento inválido"
+        }
+    )
     @action(detail=True, methods=['post'])
     def confirmar_pagamento(self, request, pk=None):
+        """Confirma o método de pagamento e atualiza o status do pedido."""
         pedido = self.get_object()
         metodo_pagamento = request.data.get('metodo_pagamento')
         
@@ -163,28 +222,75 @@ class PedidoViewSet(viewsets.ModelViewSet):
         return Response(PedidoSerializer(pedido).data)
 
 class ItemPedidoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciar itens de pedidos.
+    
+    Permite operações CRUD para itens de pedidos. Usuários comuns podem ver apenas
+    os itens de seus próprios pedidos, enquanto staff podem ver todos os itens.
+    """
     queryset = ItemPedido.objects.all()
     serializer_class = ItemPedidoSerializer
     permission_classes = [IsOwnerOrStaff]
 
     def get_queryset(self):
+        """Filtra itens baseado nas permissões do usuário."""
         if self.request.user.is_staff:
             return ItemPedido.objects.all()
         return ItemPedido.objects.filter(pedido__cliente__user=self.request.user)
 
 class StatusPedidoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciar histórico de status dos pedidos.
+    
+    Permite operações CRUD para status de pedidos. Usuários comuns podem ver apenas
+    o histórico de seus próprios pedidos, enquanto staff podem ver todos os status.
+    """
     queryset = StatusPedido.objects.all()
     serializer_class = StatusPedidoSerializer
     permission_classes = [IsOwnerOrStaff]
 
     def get_queryset(self):
+        """Filtra status baseado nas permissões do usuário."""
         if self.request.user.is_staff:
             return StatusPedido.objects.all()
         return StatusPedido.objects.filter(pedido__cliente__user=self.request.user)
 
+@swagger_auto_schema(
+    method='post',
+    operation_description="Registra um novo usuário e cliente",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'cpf': openapi.Schema(type=openapi.TYPE_STRING, description='CPF do cliente (11 dígitos)'),
+            'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email do usuário'),
+            'password': openapi.Schema(type=openapi.TYPE_STRING, description='Senha do usuário'),
+            'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='Nome do usuário'),
+            'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='Sobrenome do usuário'),
+            'telefone': openapi.Schema(type=openapi.TYPE_STRING, description='Telefone do cliente'),
+            'endereco': openapi.Schema(type=openapi.TYPE_STRING, description='Endereço do cliente'),
+        },
+        required=['cpf', 'email', 'password', 'first_name', 'last_name', 'telefone', 'endereco']
+    ),
+    responses={
+        201: openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'message': openapi.Schema(type=openapi.TYPE_STRING),
+                'user': openapi.Schema(type=openapi.TYPE_OBJECT)
+            }
+        ),
+        400: "Dados inválidos"
+    }
+)
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def register_user(request):
+    """
+    Registra um novo usuário e cria o cliente associado.
+    
+    Cria simultaneamente um usuário Django e um cliente com as informações fornecidas.
+    Valida se CPF e email são únicos no sistema.
+    """
     print("Iniciando registro de usuário...")
     print(f"Dados recebidos: {request.data}")
     try:
@@ -273,19 +379,51 @@ def register_user(request):
             'message': f'Erro ao registrar usuário: {str(e)}'
         }, status=status.HTTP_400_BAD_REQUEST)
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Retorna informações do usuário autenticado",
+    responses={
+        200: UserSerializer,
+        401: "Usuário não autenticado"
+    }
+)
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def current_user(request):
+    """Retorna informações do usuário atualmente autenticado."""
     if request.user.is_authenticated:
         print(f"Current user: {request.user.username}, is_staff: {request.user.is_staff}")  # Debug log
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
     return Response({'detail': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
 
+@swagger_auto_schema(
+    method='post',
+    operation_description="Autentica um usuário no sistema",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'username': openapi.Schema(type=openapi.TYPE_STRING, description='Nome de usuário (CPF)'),
+            'password': openapi.Schema(type=openapi.TYPE_STRING, description='Senha do usuário'),
+        },
+        required=['username', 'password']
+    ),
+    responses={
+        200: openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'message': openapi.Schema(type=openapi.TYPE_STRING),
+                'user': openapi.Schema(type=openapi.TYPE_OBJECT)
+            }
+        ),
+        401: "Credenciais inválidas"
+    }
+)
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def api_login(request):
+    """Autentica um usuário e inicia uma sessão."""
     username = request.data.get('username')
     password = request.data.get('password')
     user = authenticate(request, username=username, password=password)
@@ -301,9 +439,43 @@ def api_login(request):
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Visualizar perfil do cliente",
+    responses={
+        200: ClienteSerializer,
+        404: "Cliente não encontrado"
+    }
+)
+@swagger_auto_schema(
+    method='put',
+    operation_description="Editar perfil do cliente",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='Nome do usuário'),
+            'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='Sobrenome do usuário'),
+            'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email do usuário'),
+            'password': openapi.Schema(type=openapi.TYPE_STRING, description='Nova senha (opcional)'),
+            'telefone': openapi.Schema(type=openapi.TYPE_STRING, description='Telefone do cliente'),
+            'endereco': openapi.Schema(type=openapi.TYPE_STRING, description='Endereço do cliente'),
+        }
+    ),
+    responses={
+        200: ClienteSerializer,
+        404: "Cliente não encontrado",
+        400: "Dados inválidos"
+    }
+)
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def perfil_cliente(request):
+    """
+    Visualizar ou editar o perfil do cliente autenticado.
+    
+    GET: Retorna os dados completos do cliente
+    PUT: Atualiza os dados do cliente e usuário associado
+    """
     try:
         cliente = Cliente.objects.get(user=request.user)
     except Cliente.DoesNotExist:
