@@ -97,3 +97,4 @@ Adicione 1 ou mais vídeos com a execução do projeto final.
 
 ## Outros 
 https://www.canva.com/design/DAGjtltoot8/rh_b9t3NbySyI2s5XLXq-Q/edit?utm_content=DAGjtltoot8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+https://gamma.app/docs/Simblissima-Gerenciamento-de-Pedidos-e-Entregas-5ifz2l76ul02oec?mode=doc
