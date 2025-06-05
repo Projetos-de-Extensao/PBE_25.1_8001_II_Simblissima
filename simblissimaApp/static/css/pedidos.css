@@ -185,6 +185,25 @@
     justify-content: center;
 }
 
+/* Specific styling for new order creation form */
+.novo-pedido-container {
+    min-height: 350px;
+    margin: 30px auto 0 auto;
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Center the main content when creating a new order - alternative approach */
+.novo-pedido-page #content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 60vh;
+}
+
 .order-list {
     width: 100%;
     max-width: 800px;

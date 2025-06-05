@@ -32,6 +32,9 @@ async function checkStaffAccess() {
 
 async function loadManagerDashboard() {
     try {
+        // Remove new order page class if it exists
+        document.body.classList.remove('novo-pedido-page');
+        
         if (!await checkStaffAccess()) return;
         
         // Para evitar recargas desnecessárias, verifica se já estamos no dashboard

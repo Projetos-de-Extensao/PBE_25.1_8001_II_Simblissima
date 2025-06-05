@@ -1,5 +1,8 @@
 // login.js
 function loadLogin() {
+    // Remove new order page class if it exists
+    document.body.classList.remove('novo-pedido-page');
+    
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="auth-container">
@@ -82,6 +85,9 @@ async function handleLogin(event) {
 }
 
 function loadRegister() {
+    // Remove new order page class if it exists
+    document.body.classList.remove('novo-pedido-page');
+    
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="auth-container">

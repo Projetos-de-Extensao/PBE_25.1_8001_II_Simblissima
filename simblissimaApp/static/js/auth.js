@@ -42,6 +42,9 @@ async function getCurrentUser() {
 
 async function logout() {
     try {
+        // Remove new order page class if it exists
+        document.body.classList.remove('novo-pedido-page');
+        
         const response = await fetch('/api-auth/logout/', {
             method: 'POST',
             headers: {

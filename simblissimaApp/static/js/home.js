@@ -1,5 +1,8 @@
 // home.js
 async function loadHome() {
+    // Remove new order page class if it exists
+    document.body.classList.remove('novo-pedido-page');
+    
     const user = await getCurrentUser();
     if (!user) {
         loadLogin();
@@ -51,6 +54,9 @@ async function loadHome() {
 }
 
 async function loadPerfil() {
+    // Remove new order page class if it exists
+    document.body.classList.remove('novo-pedido-page');
+    
     const user = await checkAuthAndRedirect();
     if (!user) return;
 

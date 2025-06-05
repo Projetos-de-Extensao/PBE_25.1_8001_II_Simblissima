@@ -16,6 +16,9 @@ function formatStatus(status) {
 
 async function loadPedidos() {
     try {
+        // Remove new order page class if it exists
+        document.body.classList.remove('novo-pedido-page');
+        
         const user = await getCurrentUser();
         if (!user) {
             loadLogin();
@@ -165,7 +168,12 @@ async function atualizarListaPedidos() {
 
 // Função para criar um novo pedido
 function novoPedido() {
-    const content = document.getElementById('content');    content.innerHTML = `        <div class="order-detail-container">
+    const content = document.getElementById('content');
+    
+    // Add class to body to identify new order page
+    document.body.classList.add('novo-pedido-page');
+    
+    content.innerHTML = `        <div class="order-detail-container novo-pedido-container">
             <div class="order-list">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -240,13 +248,14 @@ async function handleNovoPedido(event) {
         preco: parseFloat(item.querySelector('.item-preco').value)
     })).filter(item => item.descricao && !isNaN(item.preco));
     const observacoes = document.getElementById('observacoes').value.trim();
-    const formaPagamento = document.getElementById('formaPagamento').value;
-    try {
+    const formaPagamento = document.getElementById('formaPagamento').value;    try {
         await fetchAPI('/pedidos/', {
             method: 'POST',
             body: JSON.stringify({ itens, observacoes, formaPagamento })
         });
         showMessage('Pedido criado com sucesso!', 'success');
+        // Remove the new order page class before returning to list
+        document.body.classList.remove('novo-pedido-page');
         loadPedidos();
     } catch (error) {
         showMessage('Erro ao criar pedido. Tente novamente.', 'danger');
@@ -397,6 +406,9 @@ function getStatusIconUsuario(status) {
 
 async function verDetalhesPedido(pedidoId) {
     try {
+        // Remove new order page class if it exists
+        document.body.classList.remove('novo-pedido-page');
+        
         const pedido = await fetchAPI(`/pedidos/${pedidoId}/`);
         const content = document.getElementById('content');
         content.innerHTML = `            <div class="d-flex justify-content-center align-items-start" style="min-height: 350px">
