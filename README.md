@@ -17,7 +17,13 @@
 Nosso projeto consiste em desenvolver uma API REST para gerenciamento de pedidos e entregas, focando na logística de produtos do continente para a Ilha Primeira, utilizando um sistema de integração com barcos já existentes.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em termos de interface e funcionamento.
+[![(homeuser)](/simblissimaApp/static/img/homeuser.png)](/simblissimaApp/static/img/homeuser.png)
+
+[![(dashboard)](/simblissimaApp/static/img/dashboard.png)](/simblissimaApp/static/img/homeuser.png)
+
+[![(login)](/simblissimaApp/static/img/login.png)](/simblissimaApp/static/img/homeuser.png)
+
+
 
 ## Instalação 
 **Linguagens**: Python<br>
