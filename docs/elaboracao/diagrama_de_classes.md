@@ -13,7 +13,7 @@ O diagrama de classes UML é um diagrama que mostra a estrutura do sistema Simbl
 ## Metodologia
 
 <p align = "justify">
-Para a criação da primeira versão do diagrama de classes, a equipe utilizou o programa **[Nome da Ferramenta utilizada, ex: draw.io, Lucidchart]**. Além disso, foi utilizado Discord e WhatsApp para videoconferência e Visual Studio Code / Live Share para elaboração da documentação.
+Para a criação da primeira versão do diagrama de classes, a equipe utilizou o PlantUML. Além disso, foi utilizado Discord e WhatsApp para videoconferência e Visual Studio Code / Live Share para elaboração da documentação.
 </p>
 
 
@@ -21,7 +21,7 @@ Para a criação da primeira versão do diagrama de classes, a equipe utilizou o
 
 ### Versão 1.0
 
-![![Diagrama de Classes - Simblissima](../assets/PlantUML/UMLDiagramaDeClasses_Simblissima.png)](../assets/PlantUML/UMLDiagramaDeClasses_Simblissima.png)
+![![Diagrama de Classes - Simblissima](../assets/PlantUML/UMLDiagramaDeClasses.png)](../assets/PlantUML/UMLDiagramaDeClasses.png)
 
 #### Rastreabilidade de Requisitos
 

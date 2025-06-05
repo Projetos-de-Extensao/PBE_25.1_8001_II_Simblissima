@@ -1,74 +1,63 @@
-@startuml FastDelivery_DiagramaClasses
+@startuml Simblissima_DiagramaClasses
 
-interface Entrega{
-    @startuml SimblissimaDelivery
-
-class Morador {
-    + nome: String
-    + cpf: String
+class User {
+    + id: Integer
+    + username: String
+    + first_name: String
+    + last_name: String
     + email: String
-    + senha: String
-    + telefone: String
-    + endereco: String
-    + dataDeNascimento: Date
-    + efetuarLogin()
-    + sairDaConta()
-    + cadastrarEntrega()
-    + checarStatusDaEntrega()
-    + verHistoricoDeEntregas()
-    + alterarInformacoes()
-    + pagar()
+    + password: String
+    + is_staff: Boolean
+    + is_active: Boolean
+    + date_joined: DateTime
 }
 
-class Admin {
-    + nome: String
-    + email: String
-    + senha: String
-    + criarContaParaMorador()
-    + checarPagamentosDosClientes()
+class Cliente {
+    + id: Integer
+    + user: OneToOneField
+    + cpf: String [11, unique]
+    + endereco: TextField
+    + telefone: String [15]
+    + __str__(): String
 }
 
-class PontoAncora {
-    + identificador: String
-    + endereco: String
-    + horarioDeFuncionamento: String
-    + funcionarios: List<String>
-    + receberEntrega()
-    + efetuarEntrega()
-    + alterarStatusDeEntrega()
+class Pedido {
+    + id: Integer
+    + cliente: ForeignKey
+    + data_criacao: DateTimeField
+    + data_atualizacao: DateTimeField
+    + status: String [20]
+    + valor_total: DecimalField
+    + valor_final: DecimalField
+    + metodo_pagamento: String [10]
+    + observacoes: TextField
+    + __str__(): String
 }
 
-class Pagamento {
-    + valor: Double
-    + data: Date
-    + metodo: String
-    + status: String
-    + verificarPagamento()
+class ItemPedido {
+    + id: Integer
+    + pedido: ForeignKey
+    + descricao: TextField
+    + preco: DecimalField
+    + __str__(): String
 }
 
-class Informacoes {
-    + tipo: String
-    + conteudo: String
-    + validarInformacoes()
+class StatusPedido {
+    + id: Integer
+    + pedido: ForeignKey
+    + status: String [20]
+    + data: DateTimeField
+    + comentario: TextField
+    + __str__(): String
 }
 
-class Entrega {
-    + numeroDoPedido: String
-    + enderecoDeEntrega: String
-    + codigoDeConfirmacao: String
-    + status: String
-    + dataDeEntrega: Date
-    + registrarEntrega()
-    + atualizarStatus()
-    + confirmarRecebimento()
-}
+note right of Pedido : STATUS_CHOICES:\nPENDENTE, AGUARDANDO_PAGAMENTO,\nCONFIRMADO, EM_TRANSITO,\nENTREGUE, CANCELADO
 
-Morador --> Pagamento : "usa"
-Morador --> Informacoes : "usa"
-PontoAncora -- Morador : "interage"
-Admin --> Morador : "gerencia"
-Morador --> Entrega : "cadastra/verifica"
-PontoAncora --> Entrega : "processa"
+note right of Pedido : METODO_PAGAMENTO_CHOICES:\nPIX, CARTAO, BOLETO
+
+User ||--|| Cliente : user
+Cliente ||--o{ Pedido : cliente
+Pedido ||--o{ ItemPedido : pedido (itens)
+Pedido ||--o{ StatusPedido : pedido (historico_status)
 
 @enduml
-}

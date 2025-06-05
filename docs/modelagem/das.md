@@ -105,7 +105,7 @@ Servidor (Backend):
 A visão de caso de uso descreve as interações dos principais atores com o sistema Simblissima. O diagrama apresenta os casos de uso para o **Cliente** (morador da Ilha Primeira), que pode se registrar, fazer login, criar e acompanhar pedidos, e gerenciar seu perfil; e para o **Gerente** (equipe de logística/administração), que pode fazer login, gerenciar pedidos, atualizar status e visualizar o dashboard.
 </p>
  
-![Diagrama de Caso de Uso - Simblissima](../assets/Casos_de_Uso/DiagramaCasosDeUso_Simblissima.png)
+![Diagrama de Caso de Uso - Simblissima](../assets/Casos_de_Uso/DiagramaCasosDeUso.png)
  
 # Visão Lógica
 <p align = "justify">
@@ -120,9 +120,15 @@ A visão lógica do sistema Simblissima é organizada em módulos funcionais que
 </p>
  
 # Visão de Implantação
-![Diagrama de Implantação - Simblissima](../assets/Diagrama_implantacao/diagrama_de_implantacao_simblissima.png)
+<!-- ![Diagrama de Implantação - Simblissima](../assets/Diagrama_implantacao/diagrama_de_implantacao_simblissima.png) -->
 <p align = "justify">
-O diagrama de implantação ilustra o ambiente físico e lógico onde o sistema Simblissima será executado. A aplicação é implantada em um servidor web, que hospeda o backend (Django/Django REST Framework) e serve os arquivos estáticos (frontend SPA). O banco de dados (SQLite, para desenvolvimento) é acessado pelo backend. Os usuários (clientes e gerentes) interagem com o sistema através de seus navegadores web.
+O sistema Simblissima será implantado como uma aplicação web Django com as seguintes características de implantação:
+<ul>
+    <li>**Servidor Web**: Aplicação Django servindo tanto a API REST quanto os arquivos estáticos da SPA</li>
+    <li>**Banco de Dados**: SQLite para desenvolvimento, podendo ser migrado para PostgreSQL ou MySQL em produção</li>
+    <li>**Frontend**: Single Page Application (SPA) servida como arquivos estáticos</li>
+    <li>**Acesso do Cliente**: Navegadores web acessando o sistema através de HTTP/HTTPS</li>
+</ul>
 </p>
 
  
@@ -131,7 +137,15 @@ O diagrama de implantação ilustra o ambiente físico e lógico onde o sistema 
 <p align = "justify">
 A visão de implementação do Simblissima detalha a estrutura do código-fonte e os componentes principais. O projeto é organizado em uma aplicação Django (`simblissimaApp`) que contém os modelos de dados, serializadores, views da API e a lógica de negócio. O frontend é uma Single Page Application (SPA) construída com HTML, CSS e JavaScript, que interage com a API REST.
 </p>
-![Diagrama de Componentes - Simblissima](../assets/Diagrama_componentes/diagrama_de_componentes_simblissima.png)
+<!-- ![Diagrama de Componentes - Simblissima](../assets/Diagrama_componentes/diagrama_de_componentes_simblissima.png) -->
+
+### Principais Componentes:
+- **models.py**: Define as entidades do sistema (Cliente, Pedido, ItemPedido, StatusPedido)
+- **serializers.py**: Serialização dos dados para a API REST
+- **views.py**: ViewSets e endpoints da API
+- **static/js/**: Scripts JavaScript da SPA
+- **templates/**: Templates HTML base
+- **static/css/**: Estilos CSS e Bootstrap
  
 # Visão de Dados
  
@@ -150,7 +164,13 @@ O Modelo Entidade Relacionamento (MER) do Simblissima descreve as entidades do s
 <p align = "justify">
 O Diagrama Entidade Relacionamento (DER) a seguir ilustra visualmente as entidades e os relacionamentos descritos no MER, mostrando a estrutura do banco de dados do Simblissima.
 </p>
-![Diagrama Entidade Relacionamento - Simblissima](../assets/Diagrama_dados/DER_Simblissima.png)
+<!-- ![Diagrama Entidade Relacionamento - Simblissima](../assets/Diagrama_dados/DER_Simblissima.png) -->
+
+### Relacionamentos principais:
+- **User** (1:1) **Cliente**: Cada cliente está associado a um usuário Django
+- **Cliente** (1:N) **Pedido**: Um cliente pode ter múltiplos pedidos
+- **Pedido** (1:N) **ItemPedido**: Um pedido pode conter múltiplos itens
+- **Pedido** (1:N) **StatusPedido**: Um pedido mantém histórico de status
  
 # Tamanho e Desempenho
 <p align = "justify">

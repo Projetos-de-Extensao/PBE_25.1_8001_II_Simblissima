@@ -51,12 +51,13 @@ Utilizaríamos um sistema paralelo com as barcas já existentes para facilitar a
 
 ### Ideia Escolhida: [Integração com barcos]
 **Motivação:**  
-Por já existir um sistema criado anteriormente, será mais fácil integrar nosso sistema. A criação de vários pontos de entrega seria o meio-termo entre a rapidez e a individualização da entrega, possibilitando uma atuação completa na ilha.
+Por já existir um sistema de transporte marítimo anteriormente estabelecido, será mais fácil integrar nosso sistema de gerenciamento de pedidos. A criação de múltiplos pontos de entrega seria o meio-termo entre a rapidez e a individualização da entrega, possibilitando uma atuação completa na ilha.
 
 **Plano de Implementação:**  
-- Criação do sistema de integração com a API do iFood.
-- Usar barcos de transporte como meio de entrega.
-- Mais pontos explicados no brainstorming.
+- Criação do sistema Simblissima com API REST para gerenciamento de pedidos.
+- Usar barcos de transporte marítimo como meio de entrega física.
+- Interface web para clientes criarem pedidos e acompanharem o status.
+- Dashboard para gerentes gerenciarem a logística e atualização de status.
 
 ---
 

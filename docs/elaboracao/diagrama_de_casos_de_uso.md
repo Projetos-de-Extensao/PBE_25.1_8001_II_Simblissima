@@ -19,7 +19,7 @@ Para a criação da primeira versão do diagrama de caso de uso, a equipe utiliz
 
 ### Versão 1.0
 
-![![Diagrama de Caso de Uso - Simblissima](../assets/Casos_de_Uso/DiagramaCasosDeUso_Simblissima.png)](../assets/Casos_de_Uso/DiagramaCasosDeUso_Simblissima.png)
+![![Diagrama de Caso de Uso - Simblissima](../assets/Casos_de_Uso/DiagramaCasosDeUso.png)](../assets/Casos_de_Uso/DiagramaCasosDeUso.png)
 
 #### Rastreabilidade de Requisitos
 

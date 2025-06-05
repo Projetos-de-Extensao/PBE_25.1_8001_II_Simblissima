@@ -19,9 +19,9 @@ Nosso projeto consiste em desenvolver uma API REST para gerenciamento de pedidos
 ## Screenshots
 [![(homeuser)](/simblissimaApp/static/img/homeuser.png)](/simblissimaApp/static/img/homeuser.png)
 
-[![(dashboard)](/simblissimaApp/static/img/dashboard.png)](/simblissimaApp/static/img/homeuser.png)
+[![(dashboard)](/simblissimaApp/static/img/dashboard.png)](/simblissimaApp/static/img/dashboard.png)
 
-[![(login)](/simblissimaApp/static/img/login.png)](/simblissimaApp/static/img/homeuser.png)
+[![(login)](/simblissimaApp/static/img/login.png)](/simblissimaApp/static/img/login.png)
 
 
 
