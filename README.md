@@ -60,7 +60,7 @@ Para rodar o projeto localmente, siga os passos abaixo:
     python manage.py collectstatic
     ```
 
-## Uso 
+## Tutorial de uso 
 Para iniciar o servidor de desenvolvimento e acessar a aplicação:
 
 1.  **Certifique-se de que o ambiente virtual está ativado** (se você o criou).
