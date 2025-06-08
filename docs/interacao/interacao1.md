@@ -14,9 +14,9 @@ title: Interação 1
 |Tarefa|Responsabilidade|
 |---|----|
 | Decidir o nome do projeto.|Todos|
-| Criar o repositório nos padrões (Organizar wiki).| Matheus|
-| Criar issues no GitHub / ZenHub| Renan|
-| Configuração do grupo do Telegram(configurar bot).|Moacir|
+| Criar o repositório nos padrões (Organizar wiki).| XXXXX|
+| Criar issues no GitHub / ZenHub| XXXXX|
+| Configuração do grupo do Telegram(configurar bot).|XXXXX|
 | Estudar e escolher as metodologias.| Todos|
 | [Documento de visão](docs/iniciacao/documento_de_visao.md) |Guilherme Dias Batista|
 | Elaborar [5w2H](docs/iniciacao/5w2h.md) |Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo|

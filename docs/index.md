@@ -22,13 +22,13 @@ O projeto Simblissima é uma API REST com interface Single Page Application (SPA
 - **Sistema**: API REST, autenticação por sessão, histórico de status, validações de dados
 
 ## Screenshots
-[![Login](../simblissimaApp/static/img/login.png)](../simblissimaApp/static/img/login.png)
+[![Login](assets/images/login.png)](assets/images/login.png)
 *Tela de Login do Sistema*
 
-[![Dashboard](../simblissimaApp/static/img/dashboard.png)](../simblissimaApp/static/img/dashboard.png)
+[![Dashboard](assets/images/dashboard.png)](assets/images/dashboard.png)
 *Dashboard do Gerente*
 
-[![Home User](../simblissimaApp/static/img/homeuser.png)](../simblissimaApp/static/img/homeuser.png)
+[![Home User](assets/images/homeuser.png)](assets/images/homeuser.png)
 *Página inicial do Cliente*
 
 ## Instalação 

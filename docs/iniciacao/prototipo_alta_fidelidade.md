@@ -20,34 +20,34 @@ Iniciamos o projeto através dos levantamentos iniciais da equipe, após discuss
 ### Versão 1.0
  
 ### Tela Login
-[![Prototipo login](/simblissimaApp/static/img/login.png)](/simblissimaApp/static/img/login.png)
+[![Prototipo login](../assets/images/login.png)](../assets/images/login.png)
  
 ### Tela Cadastro
  
-[![Prototipo registro](/simblissimaApp/static/img/registro.png)](/simblissimaApp/static/img/registro.png)
+[![Prototipo registro](../assets/images/registro.png)](../assets/images/registro.png)
 
  
 ### Tela da Home usuário
-[![Prototipo Homeuser](/simblissimaApp/static/img/homeuser.png)](/simblissimaApp/static/img/homeuser.png)
+[![Prototipo Homeuser](../assets/images/homeuser.png)](../assets/images/homeuser.png)
  
 ### Tela da Home adm
-[![Prototipo Homeadm](/simblissimaApp/static/img/homeadm.png)](/simblissimaApp/static/img/homeadm.png)
+[![Prototipo Homeadm](../assets/images/homeadm.png)](../assets/images/homeadm.png)
  
 ### Tela Perfil
-[![Prototipo Meu perfil](/simblissimaApp/static/img/meuperfil.png)](/simblissimaApp/static/img/meuperfil.png)
+[![Prototipo Meu perfil](../assets/images/meuperfil.png)](../assets/images/meuperfil.png)
  
 ### Tela Dashboard
-[![Prototipo Dashboard](/simblissimaApp/static/img/dashboard.png)](/simblissimaApp/static/img/dashboard.png)
+[![Prototipo Dashboard](../assets/images/dashboard.png)](../assets/images/dashboard.png)
 
 ### Tela do produto no Dashboard 
-[![Prototipo 12](/simblissimaApp/static/img/dashboardproduto.png)](/simblissimaApp/static/img/dashboardproduto.png)
+[![Prototipo 12](../assets/images/dashboardproduto.png)](../assets/images/dashboardproduto.png)
  
 ### Tela novo pedido
  
-[![Prototipo novo pedido](/simblissimaApp/static/img/novopedido.png)](/simblissimaApp/static/img/novopedido.png)
+[![Prototipo novo pedido](../assets/images/novopedido.png)](../assets/images/novopedido.png)
  
 ### Tela meus pedidos
-[![Prototipo meus pedidos](/simblissimaApp/static/img/meuspedidos.png)](/simblissimaApp/static/img/meuspedidos.png)
+[![Prototipo meus pedidos](../assets/images/meuspedidos.png)](../assets/images/meuspedidos.png)
  
 ### Tela Django admin
 [![Prototipo django admin](/simblissimaApp/static/img/djangoadmin.png)](/simblissimaApp/static/img/djangoadmin.png)
