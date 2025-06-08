@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma Visual - Projeto Simblissima</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .timeline {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .phase {
+            border-left: 5px solid;
+            margin: 20px 0;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .phase-iniciacao { border-left-color: #4CAF50; }
+        .phase-elaboracao { border-left-color: #2196F3; }
+        .phase-construcao { border-left-color: #FF9800; }
+        .phase-transicao { border-left-color: #9C27B0; }
+        
+        .phase-header {
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+        }
+        .iniciacao { background-color: #4CAF50; }
+        .elaboracao { background-color: #2196F3; }
+        .construcao { background-color: #FF9800; }
+        .transicao { background-color: #9C27B0; }
+        
+        .phase-content {
+            padding: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .concluido { background-color: #d4edda; color: #155724; }
+        .em-andamento { background-color: #fff3cd; color: #856404; }
+        .planejado { background-color: #cce7ff; color: #004085; }
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .legend-item {
+            display: inline-block;
+            margin: 5px 15px 5px 0;
+        }
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            transition: width 0.3s ease;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📅 Cronograma do Projeto Simblissima</h1>
+        <p>Sistema de Gerenciamento de Pedidos - Ilha Primeira</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 75%"></div>
+        </div>
+        <p><strong>Progresso Geral: 75% Concluído</strong></p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number">25</div>
+            <div class="stat-label">Semanas Totais</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">19</div>
+            <div class="stat-label">Atividades Concluídas</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Em Andamento</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">4</div>
+            <div class="stat-label">Entregas Principais</div>
+        </div>
+    </div>
+
+    <div class="timeline">
+        <!-- FASE 1: INICIAÇÃO -->
+        <div class="phase phase-iniciacao">
+            <div class="phase-header iniciacao">
+                🚀 FASE 1: INICIAÇÃO (05/02/2025 - 12/04/2025)
+            </div>
+            <div class="phase-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Semana</th>
+                            <th>Data</th>
+                            <th>Atividade</th>
+                            <th>Responsável</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>05/02 - 09/02</td>
+                            <td>Definição do tema e escopo</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>12/02 - 16/02</td>
+                            <td>Brainstorming e ideias</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>19/02 - 23/02</td>
+                            <td>Documento de Visão</td>
+                            <td>Guilherme Dias</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>26/02 - 02/03</td>
+                            <td>Elaboração do 5W2H</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>05/03 - 09/03</td>
+                            <td>Mapa Mental</td>
+                            <td>Bernardo Lobo</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>12/03 - 16/03</td>
+                            <td>Entrevistas fictícias</td>
+                            <td>Michel de Melo</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>19/03 - 23/03</td>
+                            <td>Prototipação Alta Fidelidade</td>
+                            <td>Julia Curto</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>26/03 - 30/03</td>
+                            <td>Definição da metodologia</td>
+                            <td>Bernardo Moreira</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>9-10</td>
+                            <td>02/04 - 12/04</td>
+                            <td>Consolidação e entrega</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FASE 2: ELABORAÇÃO -->
+        <div class="phase phase-elaboracao">
+            <div class="phase-header elaboracao">
+                🎯 FASE 2: ELABORAÇÃO (13/04/2025 - 10/05/2025)
+            </div>
+            <div class="phase-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Semana</th>
+                            <th>Data</th>
+                            <th>Atividade</th>
+                            <th>Responsável</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>11</td>
+                            <td>13/04 - 19/04</td>
+                            <td>Diagrama de Casos de Uso</td>
+                            <td>Bernardo Lobo</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>20/04 - 26/04</td>
+                            <td>Diagrama de Classes</td>
+                            <td>Guilherme Dias</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>27/04 - 03/05</td>
+                            <td>Documento de Arquitetura (DAS)</td>
+                            <td>Julia Curto</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>04/05 - 10/05</td>
+                            <td>Refinamento e documentação</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FASE 3: CONSTRUÇÃO -->
+        <div class="phase phase-construcao">
+            <div class="phase-header construcao">
+                🔨 FASE 3: CONSTRUÇÃO (11/05/2025 - 31/05/2025)
+            </div>
+            <div class="phase-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Semana</th>
+                            <th>Data</th>
+                            <th>Atividade</th>
+                            <th>Responsável</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15</td>
+                            <td>11/05 - 17/05</td>
+                            <td>Configuração Django</td>
+                            <td>Michel de Melo</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>18/05 - 24/05</td>
+                            <td>Modelos de dados</td>
+                            <td>Bernardo Moreira</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>18/05 - 24/05</td>
+                            <td>API REST (serializers/views)</td>
+                            <td>Guilherme Dias</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>25/05 - 31/05</td>
+                            <td>Interface frontend (SPA)</td>
+                            <td>Julia Curto</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>25/05 - 31/05</td>
+                            <td>Autenticação e permissões</td>
+                            <td>Bernardo Lobo</td>
+                            <td><span class="status concluido">✅ Concluído</span></td>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td>01/06 - 07/06</td>
+                            <td>Dashboard do gerente</td>
+                            <td>Michel de Melo</td>
+                            <td><span class="status em-andamento">🔄 Em andamento</span></td>
+                        </tr>
+                        <tr>
+                            <td>21</td>
+                            <td>01/06 - 07/06</td>
+                            <td>Integração e testes</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status em-andamento">🔄 Em andamento</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FASE 4: TRANSIÇÃO -->
+        <div class="phase phase-transicao">
+            <div class="phase-header transicao">
+                🚀 FASE 4: TRANSIÇÃO (01/06/2025 - 15/06/2025)
+            </div>
+            <div class="phase-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Semana</th>
+                            <th>Data</th>
+                            <th>Atividade</th>
+                            <th>Responsável</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>22</td>
+                            <td>08/06 - 14/06</td>
+                            <td>Testes e correção de bugs</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status planejado">📅 Planejado</span></td>
+                        </tr>
+                        <tr>
+                            <td>23</td>
+                            <td>08/06 - 14/06</td>
+                            <td>Documentação final</td>
+                            <td>Bernardo Moreira</td>
+                            <td><span class="status planejado">📅 Planejado</span></td>
+                        </tr>
+                        <tr>
+                            <td>24</td>
+                            <td>15/06 - 21/06</td>
+                            <td>Preparação da apresentação</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status planejado">📅 Planejado</span></td>
+                        </tr>
+                        <tr>
+                            <td>25</td>
+                            <td>15/06 - 21/06</td>
+                            <td>Entrega final</td>
+                            <td>Toda equipe</td>
+                            <td><span class="status planejado">📅 Planejado</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <h3>📊 Entregas Principais</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+            <div>
+                <strong>📋 Entrega 1 - Iniciação (12/04/2025)</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>✅ Documento de Visão</li>
+                    <li>✅ Brainstorming e requisitos</li>
+                    <li>✅ Mapa Mental</li>
+                    <li>✅ 5W2H</li>
+                    <li>✅ Protótipo de alta fidelidade</li>
+                </ul>
+            </div>
+            <div>
+                <strong>📋 Entrega 2 - Elaboração (10/05/2025)</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>✅ Diagrama de Casos de Uso</li>
+                    <li>✅ Diagrama de Classes</li>
+                    <li>✅ Documento de Arquitetura</li>
+                    <li>✅ Modelagem refinada</li>
+                </ul>
+            </div>
+            <div>
+                <strong>📋 Entrega 3 - Construção (07/06/2025)</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>✅ API REST funcional</li>
+                    <li>✅ Sistema de autenticação</li>
+                    <li>🔄 Interface web completa</li>
+                    <li>🔄 Dashboard administrativo</li>
+                </ul>
+            </div>
+            <div>
+                <strong>📋 Entrega Final (21/06/2025)</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>📅 Sistema completo</li>
+                    <li>📅 Documentação final</li>
+                    <li>📅 Apresentação</li>
+                    <li>📅 Manual de uso</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <h3>📍 Legenda</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+            <div class="legend-item">
+                <span class="legend-color concluido"></span>
+                <strong>Concluído</strong> - Atividade finalizada
+            </div>
+            <div class="legend-item">
+                <span class="legend-color em-andamento"></span>
+                <strong>Em andamento</strong> - Sendo executada
+            </div>
+            <div class="legend-item">
+                <span class="legend-color planejado"></span>
+                <strong>Planejado</strong> - Agendada para execução
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
+        <p><strong>Projeto Simblissima</strong> - Sistema de Gerenciamento de Pedidos</p>
+        <p>Desenvolvido por: Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo</p>
+        <p>Última atualização: 04 de junho de 2025</p>
+    </div>
+</body>
+</html>

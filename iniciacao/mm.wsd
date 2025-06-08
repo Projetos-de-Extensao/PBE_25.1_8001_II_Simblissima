@@ -1,24 +1,79 @@
 @startmindmap
 
-*[#Gray] Aplicativo 
-**[#LightBlue] Morador
-***[#Cyan] Efetuar Login
-****[#Cyan] Cadastrar Entrega
-****[#Cyan] Checar Status da Entrega
-****[#Cyan] Ver Histórico de Entregas
-****[#Cyan] Alterar Informações
-*****[#Cyan] Validar Informações
-****[#Cyan] Pagar
-*****[#Cyan] Verificar Pagamento
-***[#Cyan] Sair da Conta
+*[#Gray] Sistema Simblissima
+**[#LightBlue] Cliente (Morador)
+***[#Cyan] Autenticação
+****[#LightGreen] Realizar Cadastro
+*****[#LightGreen] Informar CPF, Nome, Email, Telefone, Endereço
+****[#LightGreen] Fazer Login
+*****[#LightGreen] Usar CPF como usuário
+****[#LightGreen] Fazer Logout
+***[#Cyan] Gerenciamento de Pedidos
+****[#LightGreen] Criar Novo Pedido
+*****[#LightGreen] Adicionar Múltiplos Itens
+*****[#LightGreen] Definir Descrição e Preço
+*****[#LightGreen] Adicionar Observações
+*****[#LightGreen] Escolher Forma de Pagamento
+****[#LightGreen] Visualizar Meus Pedidos
+*****[#LightGreen] Ver Status em Tempo Real
+*****[#LightGreen] Expandir/Minimizar Detalhes
+****[#LightGreen] Ver Detalhes do Pedido
+*****[#LightGreen] Ver Histórico de Status
+*****[#LightGreen] Ver Valor Total dos Produtos
+*****[#LightGreen] Ver Valor Final Proposto
+****[#LightGreen] Confirmar Valor Final
+****[#LightGreen] Recusar Valor Final
+*****[#LightGreen] Adicionar Motivo da Recusa
+***[#Cyan] Gerenciamento de Perfil
+****[#LightGreen] Visualizar Perfil
+****[#LightGreen] Atualizar Informações
+*****[#LightGreen] Alterar Nome, Email, Telefone, Endereço
+*****[#LightGreen] Alterar Senha
 
-**[#LightBlue] Admin
-***[#Cyan] Criar Conta para Morador
-***[#Cyan] Checar Pagamentos dos Clientes
+**[#LightBlue] Gerente (Staff)
+***[#Cyan] Autenticação
+****[#Orange] Fazer Login
+****[#Orange] Fazer Logout
+***[#Cyan] Dashboard
+****[#Orange] Visualizar Estatísticas
+*****[#Orange] Total de Pedidos
+*****[#Orange] Valor Total Arrecadado
+*****[#Orange] Tempo Médio de Entrega
+*****[#Orange] Pedidos Pendentes
+****[#Orange] Filtrar Pedidos
+*****[#Orange] Por Status
+*****[#Orange] Ordenar por Data, Valor, Status
+***[#Cyan] Gerenciamento de Pedidos
+****[#Orange] Visualizar Todos os Pedidos
+****[#Orange] Ver Detalhes Completos
+*****[#Orange] Informações do Cliente
+*****[#Orange] Itens do Pedido
+*****[#Orange] Histórico de Status
+****[#Orange] Atualizar Status do Pedido
+*****[#Orange] Pendente
+*****[#Orange] Aguardando Pagamento
+*****[#Orange] Confirmado
+*****[#Orange] Em Trânsito
+*****[#Orange] Entregue
+*****[#Orange] Cancelado
+****[#Orange] Definir Valor Final
+*****[#Orange] Incluir Frete e Taxas
+****[#Orange] Adicionar Comentários
+****[#Orange] Expandir/Minimizar Pedidos
 
-**[#LightBlue] Ponto Âncora
-***[#Cyan] Receber Entrega
-****[#Cyan] Alterar Status de Entrega
-***[#Cyan] Efetuar Entrega
+**[#Pink] Sistema
+***[#Yellow] API REST
+****[#Yellow] Endpoints de Autenticação
+****[#Yellow] CRUD de Pedidos
+****[#Yellow] CRUD de Clientes
+****[#Yellow] Histórico de Status
+***[#Yellow] Segurança
+****[#Yellow] Autenticação por Sessão
+****[#Yellow] Controle de Permissões
+****[#Yellow] CSRF Protection
+***[#Yellow] Interface
+****[#Yellow] Single Page Application (SPA)
+****[#Yellow] Interface Responsiva
+****[#Yellow] Atualização em Tempo Real
 
 @endmindmap

@@ -1,0 +1,2113 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../Cronograma/cronograma_resumido/">
+      
+      
+        <link rel="next" href="../../../construcao/construcao/">
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Swagger API Documentation - Final Implementation - Simblissima</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#swagger-api-documentation-final-implementation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Simblissima" class="md-header__button md-logo" aria-label="Simblissima" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Simblissima
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Swagger API Documentation - Final Implementation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Simblissima" class="md-nav__button md-logo" aria-label="Simblissima" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Simblissima
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Projeto Simblissima
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Assets
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Assets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Cronograma
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Cronograma
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Cronograma/cronograma_resumido/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    📅 Cronograma Simples - Projeto Simblissima
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Swagger
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Swagger
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Swagger API Documentation - Final Implementation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Swagger API Documentation - Final Implementation
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-completed-fully-functional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status: ✅ COMPLETED &amp; FULLY FUNCTIONAL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-of-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary of Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary of Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-dependencies-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Dependencies &amp; Installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-swagger-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Swagger Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-url-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. URL Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-api-documentation-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. API Documentation Coverage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. API Documentation Coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#viewsets-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ViewSets Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-functions-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Functions Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-documented-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Documented Endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Documented Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication-user-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication &amp; User Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Client Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-items-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order Items Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-history-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status History Management:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-features-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Features Implemented
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Features Implemented">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requestresponse-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request/Response Schemas:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authentication-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-logic-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Business Logic Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-technical-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Technical Quality
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Technical Quality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Quality:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server Status:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-additional-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Additional Documentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Additional Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-usage-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Usage Guide:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-issue-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Issue Resolution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Issue Resolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swagger-generation-error-resolved" class="md-nav__link">
+    <span class="md-ellipsis">
+      Swagger Generation Error (RESOLVED):
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-implementation-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Implementation Quality:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-final-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Final Verification
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Final Verification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endpoint-testing-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Endpoint Testing Results:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-coverage-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Coverage Verification:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#access-urls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access URLs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits-achieved" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits Achieved
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Construcao
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Construcao
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../construcao/construcao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Documento de Construção
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Elaboracao
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Elaboracao
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../elaboracao/diagrama_de_casos_de_uso/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diagrama de Caso de Uso
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../elaboracao/diagrama_de_classes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diagrama de Classes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Iniciacao
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Iniciacao
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/5w2h/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5W2H
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/Brainstorm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Brainstorm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/cronograma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cronograma do Projeto
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/documento_de_visao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Documento de Visão
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/entrevista/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Entrevista
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/ideias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ideias
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/mapa_mental/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Mapas Mentais
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/metodologia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Metodologia
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../iniciacao/prototipo_alta_fidelidade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protótipo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Interacao
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Interacao
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../interacao/interacao1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Interação 1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Modelagem
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Modelagem
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../modelagem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modelagem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../modelagem/das/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Documento de Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Transicao
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Transicao
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../transicao/transicao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Documento de Transição
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Util
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Util
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../util/doc_template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Template de Documento
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-completed-fully-functional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status: ✅ COMPLETED &amp; FULLY FUNCTIONAL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-of-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary of Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary of Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-dependencies-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Dependencies &amp; Installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-swagger-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Swagger Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-url-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. URL Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-api-documentation-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. API Documentation Coverage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. API Documentation Coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#viewsets-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ViewSets Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-functions-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Functions Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-documented-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Documented Endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Documented Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication-user-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication &amp; User Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Client Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-items-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order Items Management:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-history-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status History Management:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-features-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Features Implemented
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Features Implemented">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requestresponse-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request/Response Schemas:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authentication-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-logic-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Business Logic Documentation:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-technical-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Technical Quality
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Technical Quality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Quality:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server Status:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-additional-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Additional Documentation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Additional Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-usage-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Usage Guide:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-issue-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Issue Resolution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Issue Resolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swagger-generation-error-resolved" class="md-nav__link">
+    <span class="md-ellipsis">
+      Swagger Generation Error (RESOLVED):
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-implementation-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Implementation Quality:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-final-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Final Verification
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Final Verification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#endpoint-testing-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Endpoint Testing Results:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-coverage-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Coverage Verification:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#access-urls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access URLs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits-achieved" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits Achieved
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="swagger-api-documentation-final-implementation">Swagger API Documentation - Final Implementation</h1>
+<h2 id="status-completed-fully-functional">Status: ✅ COMPLETED &amp; FULLY FUNCTIONAL</h2>
+<p>The Swagger API documentation for the Simblissima Django REST Framework project has been successfully implemented, tested, and is now fully functional with all endpoints properly documented and accessible.</p>
+<h2 id="summary-of-implementation">Summary of Implementation</h2>
+<h3 id="1-dependencies-installation">1. Dependencies &amp; Installation</h3>
+<ul>
+<li>✅ Added <code>drf-yasg&gt;=1.21.7</code> to requirements.txt</li>
+<li>✅ Successfully installed drf-yasg package</li>
+<li>✅ Added 'drf_yasg' to INSTALLED_APPS in settings.py</li>
+</ul>
+<h3 id="2-swagger-configuration">2. Swagger Configuration</h3>
+<ul>
+<li>✅ Added comprehensive Swagger settings in settings.py:</li>
+<li>SWAGGER_SETTINGS with authentication and UI customization</li>
+<li>REDOC_SETTINGS for ReDoc interface</li>
+<li>Proper API information (title, version, description, contact)</li>
+</ul>
+<h3 id="3-url-configuration">3. URL Configuration</h3>
+<ul>
+<li>✅ Updated main urls.py with schema view configuration</li>
+<li>✅ Added Swagger endpoints:</li>
+<li><code>/swagger/</code> - Swagger UI interface</li>
+<li><code>/redoc/</code> - ReDoc interface  </li>
+<li><code>/swagger.json</code> - JSON schema</li>
+<li><code>/swagger.yaml</code> - YAML schema</li>
+</ul>
+<h3 id="4-api-documentation-coverage">4. API Documentation Coverage</h3>
+<h4 id="viewsets-documentation">ViewSets Documentation:</h4>
+<ul>
+<li>✅ <strong>ClienteViewSet</strong>: Complete docstring documentation</li>
+<li>✅ <strong>PedidoViewSet</strong>: </li>
+<li>Complete docstring with detailed functionality description</li>
+<li>@swagger_auto_schema for <code>add_item</code> action</li>
+<li>@swagger_auto_schema for <code>update_status</code> action</li>
+<li>@swagger_auto_schema for <code>confirmar_pagamento</code> action</li>
+<li>✅ <strong>ItemPedidoViewSet</strong>: Complete docstring documentation</li>
+<li>✅ <strong>StatusPedidoViewSet</strong>: Complete docstring documentation</li>
+</ul>
+<h4 id="api-functions-documentation">API Functions Documentation:</h4>
+<ul>
+<li>✅ <strong>register_user</strong>: @swagger_auto_schema with request/response schemas</li>
+<li>✅ <strong>current_user</strong>: @swagger_auto_schema with response documentation</li>
+<li>✅ <strong>api_login</strong>: @swagger_auto_schema with authentication details</li>
+<li>✅ <strong>perfil_cliente</strong>: @swagger_auto_schema for GET/PUT operations</li>
+</ul>
+<h3 id="5-documented-endpoints">5. Documented Endpoints</h3>
+<h4 id="authentication-user-management">Authentication &amp; User Management:</h4>
+<ul>
+<li><code>POST /register/</code> - User registration</li>
+<li><code>POST /login/</code> - User login</li>
+<li><code>GET /current_user/</code> - Get current user info</li>
+<li><code>GET|PUT /perfil/</code> - View/update user profile</li>
+</ul>
+<h4 id="client-management">Client Management:</h4>
+<ul>
+<li><code>GET /clientes/</code> - List clients (staff only)</li>
+<li><code>GET /clientes/{id}/</code> - Get specific client</li>
+<li><code>PUT|PATCH /clientes/{id}/</code> - Update client</li>
+<li><code>DELETE /clientes/{id}/</code> - Delete client</li>
+</ul>
+<h4 id="order-management">Order Management:</h4>
+<ul>
+<li><code>GET /pedidos/</code> - List orders (filtered by user/all for staff)</li>
+<li><code>POST /pedidos/</code> - Create new order</li>
+<li><code>GET /pedidos/{id}/</code> - Get specific order</li>
+<li><code>PUT|PATCH /pedidos/{id}/</code> - Update order</li>
+<li><code>DELETE /pedidos/{id}/</code> - Delete order</li>
+<li><code>POST /pedidos/{id}/add_item/</code> - Add item to order</li>
+<li><code>POST /pedidos/{id}/update_status/</code> - Update order status</li>
+<li><code>POST /pedidos/{id}/confirmar_pagamento/</code> - Confirm payment method</li>
+</ul>
+<h4 id="order-items-management">Order Items Management:</h4>
+<ul>
+<li><code>GET /itens-pedido/</code> - List order items</li>
+<li><code>POST /itens-pedido/</code> - Create order item</li>
+<li><code>GET|PUT|PATCH|DELETE /itens-pedido/{id}/</code> - CRUD operations</li>
+</ul>
+<h4 id="status-history-management">Status History Management:</h4>
+<ul>
+<li><code>GET /status-pedido/</code> - List status history</li>
+<li><code>POST /status-pedido/</code> - Create status entry</li>
+<li><code>GET|PUT|PATCH|DELETE /status-pedido/{id}/</code> - CRUD operations</li>
+</ul>
+<h3 id="6-features-implemented">6. Features Implemented</h3>
+<h4 id="requestresponse-schemas">Request/Response Schemas:</h4>
+<ul>
+<li>Detailed input parameter documentation</li>
+<li>Response format specifications</li>
+<li>Error response documentation</li>
+<li>Required field validation</li>
+</ul>
+<h4 id="authentication-documentation">Authentication Documentation:</h4>
+<ul>
+<li>Session-based authentication details</li>
+<li>Permission requirements (IsOwnerOrStaff)</li>
+<li>Access control documentation</li>
+</ul>
+<h4 id="business-logic-documentation">Business Logic Documentation:</h4>
+<ul>
+<li>Order creation workflow</li>
+<li>Status update process</li>
+<li>Payment confirmation flow</li>
+<li>Value calculation logic</li>
+</ul>
+<h3 id="7-technical-quality">7. Technical Quality</h3>
+<h4 id="code-quality">Code Quality:</h4>
+<ul>
+<li>✅ Fixed all syntax errors</li>
+<li>✅ Proper indentation and formatting</li>
+<li>✅ Consistent documentation style</li>
+<li>✅ Error handling documented</li>
+</ul>
+<h4 id="server-status">Server Status:</h4>
+<ul>
+<li>✅ Django server running successfully on http://127.0.0.1:8000/</li>
+<li>✅ Swagger UI accessible at http://127.0.0.1:8000/swagger/</li>
+<li>✅ ReDoc interface accessible at http://127.0.0.1:8000/redoc/</li>
+<li>✅ JSON schema available at http://127.0.0.1:8000/swagger.json</li>
+<li>✅ YAML schema available at http://127.0.0.1:8000/swagger.yaml</li>
+</ul>
+<h3 id="8-additional-documentation">8. Additional Documentation</h3>
+<h4 id="api-usage-guide">API Usage Guide:</h4>
+<ul>
+<li>✅ Created comprehensive API_README.md</li>
+<li>✅ Complete endpoint documentation with examples</li>
+<li>✅ cURL command examples for all endpoints</li>
+<li>✅ Authentication setup instructions</li>
+<li>✅ Error handling and status codes</li>
+</ul>
+<h3 id="9-issue-resolution">9. Issue Resolution</h3>
+<h4 id="swagger-generation-error-resolved">Swagger Generation Error (RESOLVED):</h4>
+<ul>
+<li>✅ <strong>Issue</strong>: <code>request_body can only be applied to (PUT,PATCH,POST,DELETE)</code> error</li>
+<li>✅ <strong>Root Cause</strong>: The <code>perfil_cliente</code> function had <code>@swagger_auto_schema(methods=['get', 'put'])</code> with <code>request_body</code> parameter, which is invalid for GET methods</li>
+<li>✅ <strong>Solution</strong>: Split the decorator into separate <code>@swagger_auto_schema</code> decorators for GET and PUT methods</li>
+<li>✅ <strong>Result</strong>: All endpoints now generate properly without errors</li>
+</ul>
+<h4 id="technical-implementation-quality">Technical Implementation Quality:</h4>
+<ul>
+<li>✅ All syntax errors resolved</li>
+<li>✅ Proper method-specific documentation</li>
+<li>✅ Request/response schemas validated</li>
+<li>✅ Error handling documented</li>
+<li>✅ Server running without issues</li>
+</ul>
+<h3 id="10-final-verification">10. Final Verification</h3>
+<h4 id="endpoint-testing-results">Endpoint Testing Results:</h4>
+<ul>
+<li>✅ <strong>Swagger UI</strong>: http://127.0.0.1:8000/swagger/ - Fully functional</li>
+<li>✅ <strong>ReDoc Interface</strong>: http://127.0.0.1:8000/redoc/ - Fully functional  </li>
+<li>✅ <strong>JSON Schema</strong>: http://127.0.0.1:8000/swagger.json - Valid JSON generated</li>
+<li>✅ <strong>YAML Schema</strong>: http://127.0.0.1:8000/swagger.yaml - Valid YAML generated</li>
+<li>✅ <strong>Server Status</strong>: Django development server running successfully</li>
+</ul>
+<h4 id="documentation-coverage-verification">Documentation Coverage Verification:</h4>
+<ul>
+<li>✅ <strong>15+ API Endpoints</strong>: All properly documented</li>
+<li>✅ <strong>4 ViewSets</strong>: Complete with docstrings and method documentation</li>
+<li>✅ <strong>6 Custom Actions</strong>: All with @swagger_auto_schema decorators</li>
+<li>✅ <strong>4 API Functions</strong>: All with proper request/response schemas</li>
+<li>✅ <strong>Authentication</strong>: Session-based auth documented</li>
+<li>✅ <strong>Permissions</strong>: IsOwnerOrStaff documented</li>
+</ul>
+<h2 id="access-urls">Access URLs</h2>
+<ul>
+<li><strong>Main Application</strong>: http://127.0.0.1:8000/</li>
+<li><strong>Swagger UI</strong>: http://127.0.0.1:8000/swagger/</li>
+<li><strong>ReDoc Interface</strong>: http://127.0.0.1:8000/redoc/</li>
+<li><strong>API Schema (JSON)</strong>: http://127.0.0.1:8000/swagger.json</li>
+<li><strong>API Schema (YAML)</strong>: http://127.0.0.1:8000/swagger.yaml</li>
+</ul>
+<h2 id="benefits-achieved">Benefits Achieved</h2>
+<ol>
+<li><strong>Developer Experience</strong>: Interactive API documentation with try-it-out functionality</li>
+<li><strong>API Discovery</strong>: Easy exploration of all available endpoints and operations</li>
+<li><strong>Integration Support</strong>: Machine-readable API schema for client generation</li>
+<li><strong>Documentation Maintenance</strong>: Auto-generated docs that stay in sync with code</li>
+<li><strong>Testing Capabilities</strong>: Built-in API testing interface</li>
+<li><strong>Professional Presentation</strong>: Clean, organized API documentation interface</li>
+</ol>
+<h2 id="next-steps">Next Steps</h2>
+<p>The Swagger API documentation is now complete and fully functional. Developers can:</p>
+<ol>
+<li>Access the interactive Swagger UI to explore and test API endpoints</li>
+<li>Use the ReDoc interface for a clean documentation reading experience</li>
+<li>Download the API schema (JSON/YAML) for client code generation</li>
+<li>Reference the API_README.md for detailed usage examples</li>
+</ol>
+<p>The implementation follows best practices and provides comprehensive documentation for the entire Simblissima food ordering system API.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
