@@ -115,7 +115,7 @@ class PedidoViewSet(viewsets.ModelViewSet):
             print(f"DEBUG - Status pedido criado com ID: {status_pedido.id}")
             # Se chegarmos aqui, tudo foi criado com sucesso
             print(f"DEBUG - Pedido e status criados com sucesso")
-    
+
     @swagger_auto_schema(
         method='post',
         operation_description="Adiciona um item ao pedido",
@@ -136,7 +136,8 @@ class PedidoViewSet(viewsets.ModelViewSet):
             # Recalcula o valor total do pedido
             total = sum(item.preco for item in pedido.itens.all())
             pedido.valor_total = total
-            pedido.save()            # Retorna o pedido atualizado, incluindo o novo total
+            pedido.save()
+            # Retorna o pedido atualizado, incluindo o novo total
             return Response(PedidoSerializer(pedido).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

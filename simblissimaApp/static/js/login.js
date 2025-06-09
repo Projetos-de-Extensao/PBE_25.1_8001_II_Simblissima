@@ -49,34 +49,31 @@ function getCookie(name) {
 async function handleLogin(event) {
     event.preventDefault();
     const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    try {
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('password', password);
-        
-        const response = await fetch('/api-auth/login/', {
+    const password = document.getElementById('password').value;    try {
+        const response = await fetch('/api/login/', {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken'),
             },
-            body: formData,
+            body: JSON.stringify({
+                username: username,
+                password: password
+            }),
             credentials: 'include'
-        });
-
-        if (response.ok) {
+        });        if (response.ok) {
+            const data = await response.json();
             // Esperamos a navegação ser atualizada antes de continuar
             const success = await updateNavigation();
             if (success) {
-                showMessage('Login realizado com sucesso!');
+                showMessage(data.message || 'Login realizado com sucesso!');
                 loadHome();
             } else {
                 throw new Error('Erro ao verificar usuário após login');
             }
         } else {
             const errorData = await response.json();
-            throw new Error(errorData.detail || 'Credenciais inválidas');
+            throw new Error(errorData.error || errorData.detail || 'Credenciais inválidas');
         }
     } catch (error) {
         console.error('Erro no login:', error);
