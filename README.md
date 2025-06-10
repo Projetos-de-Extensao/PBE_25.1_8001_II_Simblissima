@@ -94,13 +94,13 @@ Para iniciar o servidor de desenvolvimento e acessar a aplicação:
 
 ## Vídeo
 # Parte 1
-[![video pt1](/simblissimaApp/static/video/part1(split-video.com).mp4)](/simblissimaApp/static/video/part1(split-video.com).mp4)
+https://github.com/user-attachments/assets/cea2991d-827e-4b65-8360-5f27cbffabe1
 # Parte 2
-[![video pt2](/simblissimaApp/static/video/part2(split-video.com).mp4)](/simblissimaApp/static/video/part2(split-video.com).mp4)
+https://github.com/user-attachments/assets/4029d291-b9e1-413e-9d7d-94c32485de1e
 # Parte 3
-[![video pt3](/simblissimaApp/static/video/part3(split-video.com).mp4)](/simblissimaApp/static/video/part3(split-video.com).mp4)
+https://github.com/user-attachments/assets/c80df2ea-03ff-4411-9327-86fcd8de1f5a
 # Parte 4
-[![video pt4](/simblissimaApp/static/video/part4(split-video.com).mp4)](/simblissimaApp/static/video/part4(split-video.com).mp4)
+https://github.com/user-attachments/assets/cbcd2fa3-504a-460e-80a5-d240603e9324
 
 
 
