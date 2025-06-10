@@ -17,11 +17,11 @@
 Nosso projeto consiste em desenvolver uma API REST para gerenciamento de pedidos e entregas, focando na logística de produtos do continente para a Ilha Primeira, utilizando um sistema de integração com barcos já existentes.
 
 ## Screenshots
-[![(homeuser)](/simblissimaApp/static/img/homeuser.png)](/simblissimaApp/static/img/homeuser.png)
+[![(homeuser)](/docs/assets/images/homeuser.png)](/docs/assets/images/homeuser.png)
 
-[![(dashboard)](/simblissimaApp/static/img/dashboard.png)](/simblissimaApp/static/img/dashboard.png)
+[![(dashboard)](/docs/assets/images/dashboard.png)](/docs/assets/images/dashboard.png)
 
-[![(login)](/simblissimaApp/static/img/login.png)](/simblissimaApp/static/img/login.png)
+[![(login)](/docs/assets/images/login.png)](/docs/assets/images/login.png)
 
 
 
