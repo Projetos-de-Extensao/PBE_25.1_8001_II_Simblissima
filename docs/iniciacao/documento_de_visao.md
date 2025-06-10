@@ -79,9 +79,6 @@ Gerentes terão acesso a um dashboard para visualizar todos os pedidos, incluind
 A aplicação é uma API REST com uma interface Single Page Application (SPA) para clientes e gerentes, focada exclusivamente no gerenciamento de pedidos e entregas entre o continente e a Ilha Primeira. Ela não será responsável pela realização da entrega física em si, que dependerá da infraestrutura de transporte marítimo existente e dos pontos de ancoragem. Não há um sistema de catálogo de produtos, sendo os itens do pedido descritos manualmente. A comunicação externa (SMS, e-mail direto) para notificações está fora do escopo inicial, sendo as notificações gerenciadas pela própria interface do sistema.
 </p>
 
-## Referências Bibliográficas
-
-> Gemini
 
 ## Versionamento
 | Data | Versão | Descrição | Autor(es) |

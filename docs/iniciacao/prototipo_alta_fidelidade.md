@@ -50,10 +50,10 @@ Iniciamos o projeto através dos levantamentos iniciais da equipe, após discuss
 [![Prototipo meus pedidos](../assets/images/meuspedidos.png)](../assets/images/meuspedidos.png)
  
 ### Tela Django admin
-[![Prototipo django admin](/simblissimaApp/static/img/djangoadmin.png)](/simblissimaApp/static/img/djangoadmin.png)
+[![Prototipo django admin](../assets/images/djangoadmin.png)](../assets/images/djangoadmin.png)
  
 ### Tela da api
-[![Prototipo api](/simblissimaApp/static/img/api.png)](/simblissimaApp/static/img/api.png)
+[![Prototipo api](../assets/images/api.png)](../assets/images/api.png)
  
 link para o <a href="https://www.figma.com/design/Je0JMpAzS7SsLFunWJ7Xmo/BACKEND?node-id=0-1&t=7InLmUGGgfVfj7OJ-1">Protótipo</a>
  
