@@ -52,8 +52,6 @@ Iniciamos o projeto através dos levantamentos iniciais da equipe, após discuss
 ### Tela Django admin
 [![Prototipo django admin](/simblissimaApp/static/img/djangoadmin.png)](/simblissimaApp/static/img/djangoadmin.png)
  
-
- 
 ### Tela da api
 [![Prototipo api](/simblissimaApp/static/img/api.png)](/simblissimaApp/static/img/api.png)
  

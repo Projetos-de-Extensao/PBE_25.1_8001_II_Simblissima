@@ -69,8 +69,8 @@ title: Interação 1
 
 ---
 
-**Histórico de Versão**
+# Histórico de Versão
 | Data | Versão | Descrição | Autor(es) |
-|---|---|---|---|
-| dd/mm/aa | 1.0 | Criação do documento | Autores |
-| 02/06/2025 | 1.1 | Atualização dos links, preenchimento de seções de retrospectiva e inclusão de ferramentas | Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo |
+| -- | -- | -- | -- |
+| 08/11/2020 | 1.0 | Criada estrutura básica do documento | xxx xxx, xxx xx, xxx xx, xxx xxx e xxx xxxx |
+| 02/06/2025 | 1.1 | Atualização completa do documento para refletir o projeto Simblissima, incluindo todas as seções e imagens. | Bernardo Lobo, Bernardo Moreira, Guilherme Dias, Julia Curto e Michel de Melo |

@@ -87,7 +87,7 @@ O mapa mental do sistema Simblissima foi organizado em três principais ramifica
 O mapa mental foi implementado em PlantUML e pode ser encontrado no arquivo <code>mm.wsd</code> na pasta de iniciação. Para visualizar o mapa mental, utilize um renderizador PlantUML ou ferramentas compatíveis.
 </p>
 
-[![MM](/docs/assets/Mapas_mentais/mm.png)](/docs/assets/Mapas_mentais/mm.png)
+
  
 ## Conclusão
  

@@ -64,6 +64,7 @@ Após executar o servidor com `python manage.py runserver`, acesse:
 - **Interface Principal**: http://localhost:8000/
 - **API REST**: http://localhost:8000/api/
 - **Admin Django**: http://localhost:8000/admin/ (necessário superusuário)
+- **Swagger**: http://localhost:8000/swagger/
 
 ### Fluxo de uso:
 1. **Cliente**: Acesse a página inicial, registre-se ou faça login
@@ -71,8 +72,33 @@ Após executar o servidor com `python manage.py runserver`, acesse:
 3. **Acompanhar**: Visualize seus pedidos e status na área "Meus Pedidos"
 4. **Gerente**: Use login de staff para acessar o dashboard de gestão
 
-## Vídeo
-Adicione 1 ou mais vídeos com a execução do projeto final.
 
-## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
+## Demonstração do Sistema
+O vídeo demonstrativo do sistema foi dividido em 4 partes para melhor visualização:
+
+#### Parte 1 
+<video width="100%" controls>
+  <source src="assets/videos/part1(split-video.com).mp4" type="video/mp4">
+  Seu navegador não suporta a tag de vídeo.
+</video>
+
+#### Parte 2 
+<video width="100%" controls>
+  <source src="assets/videos/part2(split-video.com).mp4" type="video/mp4">
+  Seu navegador não suporta a tag de vídeo.
+</video>
+
+#### Parte 3 
+<video width="100%" controls>
+  <source src="assets/videos/part3(split-video.com).mp4" type="video/mp4">
+  Seu navegador não suporta a tag de vídeo.
+</video>
+
+#### Parte 4 
+<video width="100%" controls>
+  <source src="assets/videos/part4(split-video.com).mp4" type="video/mp4">
+  Seu navegador não suporta a tag de vídeo.
+</video>
+
+
+

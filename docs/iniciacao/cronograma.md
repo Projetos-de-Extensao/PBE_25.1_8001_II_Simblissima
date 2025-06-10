@@ -52,15 +52,15 @@ O cronograma foi elaborado seguindo as fases do RUP: Iniciação, Elaboração, 
 | 17 | 18/05 - 24/05 | Desenvolvimento da API REST (serializers/views) | Guilherme Dias | ✅ Concluído |
 | 18 | 25/05 - 31/05 | Implementação da interface frontend (SPA) | Julia Curto | ✅ Concluído |
 | 19 | 25/05 - 31/05 | Sistema de autenticação e permissões | Bernardo Lobo | ✅ Concluído |
-| 20 | 01/06 - 07/06 | Dashboard do gerente e funcionalidades admin | Michel de Melo | 🔄 Em andamento |
-| 21 | 01/06 - 07/06 | Integração frontend-backend e testes | Toda equipe | 🔄 Em andamento |
+| 20 | 01/06 - 07/06 | Dashboard do gerente e funcionalidades admin | Michel de Melo | ✅ Concluído |
+| 21 | 01/06 - 07/06 | Integração frontend-backend e testes | Toda equipe | ✅ Concluído |
 
 ### Fase 4: Transição (01/06/2025 - 15/06/2025)
 
 | Semana | Data | Atividade | Responsável | Status |
 |--------|------|-----------|-------------|---------|
-| 22 | 08/06 - 14/06 | Testes de integração e correção de bugs | Toda equipe | 📅 Planejado |
-| 23 | 08/06 - 14/06 | Documentação final do sistema | Bernardo Moreira | 📅 Planejado |
+| 22 | 08/06 - 14/06 | Testes de integração e correção de bugs | Toda equipe | ✅ Concluído |
+| 23 | 08/06 - 14/06 | Documentação final do sistema | Bernardo Moreira | ✅ Concluído |
 | 24 | 15/06 - 21/06 | Preparação da apresentação final | Toda equipe | 📅 Planejado |
 | 25 | 15/06 - 21/06 | Entrega final do projeto | Toda equipe | 📅 Planejado |
 
@@ -85,12 +85,12 @@ O cronograma foi elaborado seguindo as fases do RUP: Iniciação, Elaboração, 
 - ✅ API REST funcional (Django REST Framework)
 - ✅ Modelos de dados implementados
 - ✅ Sistema de autenticação
-- 🔄 Interface web (SPA) completa
-- 🔄 Dashboard administrativo
+- ✅ Interface web (SPA) completa
+- ✅ Dashboard administrativo
 
 ### 📋 Entrega Final (21/06/2025)
-- 📅 Sistema completo e testado
-- 📅 Documentação final consolidada
+- ✅ Sistema completo e testado
+- ✅ Documentação final consolidada
 - 📅 Apresentação do projeto
 - 📅 Manual de instalação e uso
 
