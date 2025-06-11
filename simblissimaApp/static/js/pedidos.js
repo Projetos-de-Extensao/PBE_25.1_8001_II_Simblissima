@@ -144,6 +144,19 @@ async function atualizarListaPedidos() {
                             <div class="mb-2 text-center text-md-start">
                                 <strong>Pagamento:</strong> ${pedido.metodo_pagamento || 'Não definido'}
                             </div>
+                            ${pedido.status === 'AGUARDANDO_PAGAMENTO' && pedido.valor_final ? `
+                            <div class="mb-3 text-center text-md-start">
+                                <strong>Valor Final:</strong> R$ ${pedido.valor_final}
+                                <div class="mt-2">
+                                    <button class="btn btn-success btn-sm" onclick="event.stopPropagation(); confirmarValorFinal(${pedido.id})">
+                                        Confirmar Valor
+                                    </button>
+                                    <button class="btn btn-danger btn-sm ms-2" onclick="event.stopPropagation(); recusarValorFinal(${pedido.id})">
+                                        Recusar Valor
+                                    </button>
+                                </div>
+                            </div>
+                            ` : ''}
                             <div class="mb-2 text-center text-md-start">
                                 <strong>Histórico:</strong>
                                 <ul class="list-unstyled mb-0">
@@ -324,6 +337,19 @@ async function atualizarListaPedidos() {
                             <div class="mb-2 text-center text-md-start">
                                 <strong>Pagamento:</strong> ${pedido.metodo_pagamento || 'Não definido'}
                             </div>
+                            ${pedido.status === 'AGUARDANDO_PAGAMENTO' && pedido.valor_final ? `
+                            <div class="mb-3 text-center text-md-start">
+                                <strong>Valor Final:</strong> R$ ${pedido.valor_final}
+                                <div class="mt-2">
+                                    <button class="btn btn-success btn-sm" onclick="event.stopPropagation(); confirmarValorFinal(${pedido.id})">
+                                        Confirmar Valor
+                                    </button>
+                                    <button class="btn btn-danger btn-sm ms-2" onclick="event.stopPropagation(); recusarValorFinal(${pedido.id})">
+                                        Recusar Valor
+                                    </button>
+                                </div>
+                            </div>
+                            ` : ''}
                             <div class="mb-2 text-center text-md-start">
                                 <strong>Histórico:</strong>
                                 <ul class="list-unstyled mb-0">
